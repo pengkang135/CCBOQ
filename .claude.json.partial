@@ -1,0 +1,21 @@
+{
+  "_comment": "将此内容合并到 ~/.claude.json 的 projects 字段中。setup 脚本会自动处理。",
+  "_comment2": "Merge this into the projects field of ~/.claude.json. The setup script handles this automatically.",
+  "projects": {
+    "{{HOME}}": {
+      "enabledMcpjsonServers": [
+        "filesystem",
+        "shell",
+        "git",
+        "http",
+        "mongodb",
+        "sqlite",
+        "excel",
+        "playwright",
+        "ssh"
+      ],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true
+    }
+  }
+}

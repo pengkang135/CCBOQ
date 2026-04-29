@@ -1,0 +1,43 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "{{HOME}}"]
+    },
+    "shell": {
+      "command": "npx",
+      "args": ["-y", "@wonderwhy-er/desktop-commander"]
+    },
+    "git": {
+      "command": "npx",
+      "args": ["-y", "github-mcp-server"]
+    },
+    "http": {
+      "command": "npx",
+      "args": ["-y", "mcp-fetch-server"]
+    },
+    "mongodb": {
+      "command": "npx",
+      "args": ["-y", "mongodb-mcp-server"],
+      "env": {
+        "MONGODB_URI": "mongodb://localhost:27017"
+      }
+    },
+    "sqlite": {
+      "command": "npx",
+      "args": ["-y", "mcp-server-sqlite-npx", "{{HOME}}/.claude/data.db"]
+    },
+    "excel": {
+      "command": "npx",
+      "args": ["-y", "@negokaz/excel-mcp-server"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
+    "ssh": {
+      "command": "npx",
+      "args": ["-y", "mcp-server-ssh"]
+    }
+  }
+}

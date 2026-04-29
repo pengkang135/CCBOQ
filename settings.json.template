@@ -1,0 +1,63 @@
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "{{ANTHROPIC_BASE_URL}}",
+    "ANTHROPIC_AUTH_TOKEN": "{{ANTHROPIC_AUTH_TOKEN}}",
+    "ANTHROPIC_MODEL": "{{ANTHROPIC_MODEL}}",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "{{ANTHROPIC_DEFAULT_HAIKU_MODEL}}",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "{{ANTHROPIC_DEFAULT_SONNET_MODEL}}",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "{{ANTHROPIC_DEFAULT_OPUS_MODEL}}"
+  },
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "WebSearch",
+      "WebFetch",
+      "Edit",
+      "Write"
+    ],
+    "additionalDirectories": [],
+    "prompts": {
+      "bash": [
+        "git *",
+        "uvx *",
+        "check *",
+        "show *",
+        "list *",
+        "run test *",
+        "run tests *",
+        "install *",
+        "python *",
+        "pip *",
+        "npm *",
+        "npx *",
+        "build *",
+        "create *",
+        "delete *",
+        "remove *",
+        "clean *",
+        "node *",
+        "curl *"
+      ]
+    }
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{{STOP_HOOK_COMMAND}}"
+          }
+        ]
+      }
+    ]
+  },
+  "language": "{{LANGUAGE}}",
+  "effortLevel": "{{EFFORT_LEVEL}}",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "{{THEME}}"
+}
