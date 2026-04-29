@@ -9,7 +9,7 @@
   },
   "git": {
     "command": "npx",
-    "args": ["-y", "github-mcp-server"]
+    "args": ["-y", "-p", "github-mcp-server", "github-mcp-server-mcp"]
   },
   "http": {
     "command": "npx",
@@ -24,7 +24,7 @@
   },
   "sqlite": {
     "command": "npx",
-    "args": ["-y", "mcp-server-sqlite-npx", "{{HOME}}/.claude/data.db"]
+    "args": ["-y", "@mseep/mcp-server-sqlite-npx", "{{HOME}}/.claude/data.db"]
   },
   "excel": {
     "command": "npx",
