@@ -81,7 +81,7 @@ echo "  已安装: $SETTINGS_PATH"
 
 # ========== 4. 安装 .mcp.json ==========
 echo ""
-echo "[4/5] 安装 MCP 服务器配置..."
+echo "[4/6] 安装全局 MCP 服务器配置..."
 
 MCP_PATH="$CLAUDE_DIR/.mcp.json"
 if [ -f "$MCP_PATH" ]; then
@@ -90,11 +90,24 @@ if [ -f "$MCP_PATH" ]; then
 fi
 
 sed "s|{{HOME}}|$HOME|g" "$SCRIPT_DIR/.mcp.json" > "$MCP_PATH"
-echo "  已安装: $MCP_PATH"
+echo "  已安装 (全局): $MCP_PATH"
 
-# ========== 5. 更新 .claude.json ==========
+# ========== 5. 安装项目级 .mcp.json ==========
 echo ""
-echo "[5/5] 更新 .claude.json 项目配置..."
+echo "[5/6] 安装项目级 MCP 配置 (供 claude mcp list 读取)..."
+
+PROJECT_MCP_PATH="$(pwd)/.mcp.json"
+if [ -f "$PROJECT_MCP_PATH" ]; then
+    cp "$PROJECT_MCP_PATH" "$PROJECT_MCP_PATH.backup.$(date +%Y%m%d%H%M%S)"
+    echo "  已备份原有配置"
+fi
+cp "$MCP_PATH" "$PROJECT_MCP_PATH"
+echo "  已安装 (项目级): $PROJECT_MCP_PATH"
+echo "  (如需在其他项目使用，运行: cp ~/.claude/.mcp.json ./)"
+
+# ========== 6. 更新 .claude.json ==========
+echo ""
+echo "[6/6] 更新 .claude.json 项目配置..."
 
 if [ -f "$CLAUDE_JSON" ]; then
     cp "$CLAUDE_JSON" "$CLAUDE_JSON.backup.$(date +%Y%m%d%H%M%S)"

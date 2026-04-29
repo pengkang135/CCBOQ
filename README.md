@@ -47,6 +47,25 @@ bash setup.sh
 2. 提交并推送到 GitHub
 3. 在目标机器上 `git pull` 后重新运行 setup 脚本
 
+## 两层 MCP 架构
+
+setup 脚本会自动创建两个文件：
+
+| 文件 | 路径 | 作用 |
+|---|---|---|
+| 全局 MCP | `~/.claude/.mcp.json` | Claude Code **会话中**自动加载（所有项目可用） |
+| 项目 MCP | `<项目根>/.mcp.json` | `claude mcp list` CLI 读取，需要手动复制到各项目 |
+
+如果你在某项目中希望 `claude mcp list` 能看到 MCP，把全局配置复制过去即可：
+
+```bash
+# Windows PowerShell
+copy ~/.claude/.mcp.json ./
+
+# macOS / Linux
+cp ~/.claude/.mcp.json ./
+```
+
 ## 添加新 MCP 服务器
 
 1. 编辑 [.mcp.json](.mcp.json)，添加新的 MCP 条目

@@ -100,7 +100,7 @@ Write-Host "  已安装: $settingsPath"
 
 # ========== 4. 安装 .mcp.json ==========
 Write-Host ""
-Write-Host "[4/5] 安装 MCP 服务器配置..." -ForegroundColor Yellow
+Write-Host "[4/6] 安装全局 MCP 服务器配置..." -ForegroundColor Yellow
 
 $homePath = $env:USERPROFILE -replace '\\', '\\'
 $mcpContent = Get-Content "$ScriptDir\.mcp.json" -Raw
@@ -113,11 +113,25 @@ if (Test-Path $mcpPath) {
     Write-Host "  已备份原有配置: $backup"
 }
 Set-Content -Path $mcpPath -Value $mcpContent -Encoding UTF8
-Write-Host "  已安装: $mcpPath"
+Write-Host "  已安装 (全局): $mcpPath"
 
-# ========== 5. 更新 .claude.json ==========
+# ========== 5. 安装项目级 .mcp.json ==========
 Write-Host ""
-Write-Host "[5/5] 更新 .claude.json 项目配置..." -ForegroundColor Yellow
+Write-Host "[5/6] 安装项目级 MCP 配置 (供 claude mcp list 读取)..." -ForegroundColor Yellow
+
+$projectMcpPath = "$(Get-Location)\.mcp.json"
+if (Test-Path $projectMcpPath) {
+    $backup = "$projectMcpPath.backup.$(Get-Date -Format 'yyyyMMddHHmmss')"
+    Copy-Item $projectMcpPath $backup
+    Write-Host "  已备份原有配置: $backup"
+}
+Set-Content -Path $projectMcpPath -Value $mcpContent -Encoding UTF8
+Write-Host "  已安装 (项目级): $projectMcpPath"
+Write-Host "  (如需在其他项目使用，运行: copy ~/.claude/.mcp.json ./)"
+
+# ========== 6. 更新 .claude.json ==========
+Write-Host ""
+Write-Host "[6/6] 更新 .claude.json 项目配置..." -ForegroundColor Yellow
 
 if (Test-Path $ClaudeJson) {
     $backup = "$ClaudeJson.backup.$(Get-Date -Format 'yyyyMMddHHmmss')"
