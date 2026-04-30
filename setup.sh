@@ -156,7 +156,7 @@ servers = {
     'sqlite': {
         'type': 'stdio',
         'command': 'npx',
-        'args': ['-y', '@mseep/mcp-server-sqlite-npx', claude_dir + '/data.db'],
+        'args': ['-y', 'mcp-sqlite', claude_dir + '/data.db'],
         'env': {}
     },
     'excel': {
@@ -179,6 +179,8 @@ servers = {
     }
 }
 
+config['mcpServers'] = servers
+
 if 'projects' not in config:
     config['projects'] = {}
 config['projects'][home] = {
@@ -187,8 +189,7 @@ config['projects'][home] = {
         'sqlite', 'excel', 'playwright', 'ssh'
     ],
     'disabledMcpjsonServers': [],
-    'hasTrustDialogAccepted': True,
-    'mcpServers': servers
+    'hasTrustDialogAccepted': True
 }
 
 with open(os.environ['CLAUDE_JSON'], 'w') as f:

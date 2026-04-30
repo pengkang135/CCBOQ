@@ -177,7 +177,7 @@ servers = {
     'sqlite': {
         'type': 'stdio',
         'command': 'npx',
-        'args': ['-y', '@mseep/mcp-server-sqlite-npx', r'$env:USERPROFILE\\.claude\\data.db'],
+        'args': ['-y', 'mcp-sqlite', r'$env:USERPROFILE\\.claude\\data.db'],
         'env': {}
     },
     'excel': {
@@ -200,6 +200,8 @@ servers = {
     }
 }
 
+config['mcpServers'] = servers
+
 home_key = r'$env:USERPROFILE'.replace('\\\\', '/')
 if 'projects' not in config:
     config['projects'] = {}
@@ -209,8 +211,7 @@ config['projects'][home_key] = {
         'sqlite', 'excel', 'playwright', 'ssh'
     ],
     'disabledMcpjsonServers': [],
-    'hasTrustDialogAccepted': True,
-    'mcpServers': servers
+    'hasTrustDialogAccepted': True
 }
 
 with open(r'$ClaudeJson', 'w', encoding='utf-8') as f:

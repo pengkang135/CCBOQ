@@ -24,7 +24,7 @@
   },
   "sqlite": {
     "command": "npx",
-    "args": ["-y", "@mseep/mcp-server-sqlite-npx", "{{HOME}}/.claude/data.db"]
+    "args": ["-y", "mcp-sqlite", "{{HOME}}/.claude/data.db"]
   },
   "excel": {
     "command": "npx",
