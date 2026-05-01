@@ -1,21 +1,106 @@
 {
-  "_comment": "将此内容合并到 ~/.claude.json 的 projects 字段中。setup 脚本会自动处理。",
-  "_comment2": "Merge this into the projects field of ~/.claude.json. The setup script handles this automatically.",
-  "projects": {
-    "{{HOME}}": {
-      "enabledMcpjsonServers": [
-        "filesystem",
-        "shell",
-        "git",
-        "http",
-        "mongodb",
-        "sqlite",
-        "excel",
-        "playwright",
-        "ssh"
+  "mcpServers": {
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:\\Users\\Kevin"
       ],
-      "disabledMcpjsonServers": [],
-      "hasTrustDialogAccepted": true
+      "env": {}
+    },
+    "shell": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@wonderwhy-er/desktop-commander"
+      ],
+      "env": {}
+    },
+    "git": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "-p",
+        "github-mcp-server",
+        "github-mcp-server-mcp"
+      ],
+      "env": {}
+    },
+    "http": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-fetch-server"
+      ],
+      "env": {}
+    },
+    "mongodb": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "mongodb-mcp-server"
+      ],
+      "env": {
+        "MONGODB_URI": "mongodb://localhost:27017"
+      }
+    },
+    "sqlite": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-sqlite",
+        "C:\\Users\\Kevin\\.claude\\data.db"
+      ],
+      "env": {}
+    },
+    "excel": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@negokaz/excel-mcp-server"
+      ],
+      "env": {}
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest"
+      ],
+      "env": {}
+    },
+    "ssh": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-server-ssh"
+      ],
+      "env": {}
     }
+  },
+  "project": {
+    "enabledMcpjsonServers": [
+      "filesystem",
+      "shell",
+      "git",
+      "http",
+      "mongodb",
+      "sqlite",
+      "excel",
+      "playwright",
+      "ssh"
+    ],
+    "disabledMcpjsonServers": [],
+    "hasTrustDialogAccepted": true
   }
 }

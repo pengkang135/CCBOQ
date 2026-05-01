@@ -7,7 +7,6 @@
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "{{ANTHROPIC_DEFAULT_SONNET_MODEL}}",
     "ANTHROPIC_DEFAULT_OPUS_MODEL": "{{ANTHROPIC_DEFAULT_OPUS_MODEL}}"
   },
-  "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
       "Read",
@@ -16,9 +15,28 @@
       "WebSearch",
       "WebFetch",
       "Edit",
-      "Write"
+      "Write",
+      "mcp__playwright__*",
+      "mcp__filesystem__*",
+      "mcp__git__*",
+      "mcp__http__*",
+      "mcp__sqlite__*",
+      "mcp__excel__*",
+      "mcp__shell__*",
+      "mcp__ssh__*",
+      "mcp__rapid-ocr__*",
+      "mcp__mongodb__*",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:6173/)",
+      "Bash(curl -s http://localhost:6173/)",
+      "Bash(.venv/Scripts/pip.exe install *)",
+      "Bash(pandoc \"e:/Code/FeynmanLibrary/DocWork/工作/2026-4 孟加拉Laldia项目/3 询价/询价函参考资料/FM-QS-02.docx\" -t markdown --track-changes=all)",
+      "Bash(node -e \"require\\('docx'\\); console.log\\('docx available'\\)\")",
+      "Bash(npm install *)"
     ],
-    "additionalDirectories": [],
+    "additionalDirectories": [
+      "c:\\Users\\Kevin\\AppData\\Roaming\\Trae\\User",
+      "{{HOME}}\\.claude"
+    ],
     "prompts": {
       "bash": [
         "git *",
@@ -38,8 +56,33 @@
         "delete *",
         "remove *",
         "clean *",
-        "node *",
-        "curl *"
+        "powershell *",
+        "dir *",
+        "type *",
+        "findstr *",
+        "where *",
+        "tasklist *",
+        "taskkill *",
+        "choco *",
+        "winget *",
+        "scoop *",
+        "Get-*",
+        "Set-*",
+        "New-*",
+        "Remove-*",
+        "Write-*",
+        "Copy-*",
+        "Move-*",
+        "Start-*",
+        "Stop-*",
+        "mkdir *",
+        "rmdir *",
+        "del *",
+        "ren *",
+        "echo *",
+        "set *",
+        "setx *",
+        "reg *"
       ]
     }
   },
@@ -50,14 +93,37 @@
         "hooks": [
           {
             "type": "command",
-            "command": "{{STOP_HOOK_COMMAND}}"
+            "command": "powershell -STA -File \"E:/Code/FeynmanLibrary/.claude/sounds/play-mp3.ps1\" -Path \"E:/Code/FeynmanLibrary/.claude/sounds/command-complete-fantasy_ui_button.mp3\"",
+            "timeout": 15,
+            "statusMessage": "🔊",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -STA -File \"E:/Code/FeynmanLibrary/.claude/sounds/play-mp3.ps1\" -Path \"E:/Code/FeynmanLibrary/.claude/sounds/permission-prompt-ship-bell-two-chimes.mp3\"",
+            "timeout": 10,
+            "statusMessage": "🔔",
+            "async": true
           }
         ]
       }
     ]
   },
-  "language": "{{LANGUAGE}}",
-  "effortLevel": "{{EFFORT_LEVEL}}",
+  "language": "chinese",
+  "theme": "dark",
+  "effortLevel": "xhigh",
+  "includeCoAuthoredBy": false,
   "skipDangerousModePermissionPrompt": true,
-  "theme": "{{THEME}}"
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true
+  }
 }
