@@ -74,5 +74,21 @@
     "args": [
       "{{HOME}}\\.claude\\mcp-servers\\rapid-ocr\\server.py"
     ]
+  },
+  "chrome-devtools": {
+    "command": "npx",
+    "args": [
+      "-y",
+      "chrome-devtools-mcp@latest"
+    ]
+  },
+  "serena": {
+    "command": "uvx",
+    "args": [
+      "--from",
+      "git+https://github.com/oraios/serena",
+      "serena",
+      "start-mcp-server"
+    ]
   }
 }
