@@ -27,6 +27,19 @@
       "Bash(node -e \"require\\('docx'\\); console.log\\('docx available'\\)\")",
       "Bash(npm install *)"
     ],
+    "ask": [
+      "mcp__mongodb__drop-database",
+      "mcp__mongodb__drop-collection",
+      "mcp__mongodb__delete-many",
+      "mcp__sqlite__delete_records",
+      "mcp__git__git-reset",
+      "mcp__git__git-push",
+      "mcp__git__git-branch",
+      "mcp__ssh__sftp_rm",
+      "mcp__ssh__ssh_exec",
+      "mcp__shell__start_process",
+      "mcp__shell__force_terminate"
+    ],
     "additionalDirectories": [
       "c:\\Users\\Kevin\\AppData\\Roaming\\Trae\\User",
       "{{HOME}}\\.claude"
