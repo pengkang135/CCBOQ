@@ -123,7 +123,7 @@
   },
   "language": "chinese",
   "theme": "dark",
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
   "includeCoAuthoredBy": false,
   "skipDangerousModePermissionPrompt": true,
   "enabledPlugins": {
@@ -139,6 +139,7 @@
     "code-modernization@claude-plugins-official": true,
     "pr-review-toolkit@claude-plugins-official": true,
     "hookify@claude-plugins-official": true,
-    "session-report@claude-plugins-official": true
+    "session-report@claude-plugins-official": true,
+    "chrome-devtools-mcp@claude-plugins-official": true
   }
 }
