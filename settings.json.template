@@ -20,6 +20,7 @@
       "Edit",
       "Write",
       "mcp__playwright__*",
+      "mcp__plugin_playwright_playwright__*",
       "mcp__filesystem__*",
       "mcp__git__*",
       "mcp__http__*",
