@@ -14,3 +14,34 @@ desktop.ini
 # IDE
 .vscode/
 .idea/
+
+# 运行时缓存和临时文件
+backups/
+cache/
+file-history/
+history.jsonl
+ide/
+plans/
+session-env/
+sessions/
+shell-snapshots/
+tasks/
+telemetry/
+tmp/
+
+# 数据库文件（含会话数据）
+*.db
+
+# 插件运行时（仅保存配置 JSON，不保存缓存代码）
+plugins/cache/
+plugins/marketplaces/
+
+# MCP 服务器环境
+mcp-servers/*/.venv/
+mcp-servers/*/node_modules/
+
+# Python 虚拟环境
+venv/
+
+# 项目自动记忆
+projects/

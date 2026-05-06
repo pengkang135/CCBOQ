@@ -2,47 +2,47 @@
   "mcpServers": {
     "filesystem": {
       "type": "stdio",
-      "command": "npx",
+      "command": "cmd",
       "args": [
+        "/c",
+        "npx",
         "-y",
         "@modelcontextprotocol/server-filesystem",
         "C:\\Users\\Kevin"
       ],
       "env": {}
     },
-    "shell": {
+    "librarian": {
       "type": "stdio",
-      "command": "npx",
+      "command": "cmd",
       "args": [
-        "-y",
-        "@wonderwhy-er/desktop-commander"
+        "/c",
+        "E:\\Code\\FeynmanLibrary\\.venv\\Scripts\\python.exe",
+        "-m",
+        "librarian_mcp.server"
       ],
-      "env": {}
+      "env": {
+        "PYTHONPATH": "E:\\Code\\FeynmanLibrary\\.trae",
+        "PYTHONUNBUFFERED": "1"
+      }
     },
-    "git": {
+    "excel": {
       "type": "stdio",
-      "command": "npx",
+      "command": "cmd",
       "args": [
+        "/c",
+        "npx",
         "-y",
-        "-p",
-        "github-mcp-server",
-        "github-mcp-server-mcp"
-      ],
-      "env": {}
-    },
-    "http": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "mcp-fetch-server"
+        "@negokaz/excel-mcp-server"
       ],
       "env": {}
     },
     "mongodb": {
       "type": "stdio",
-      "command": "npx",
+      "command": "cmd",
       "args": [
+        "/c",
+        "npx",
         "-y",
         "mongodb-mcp-server"
       ],
@@ -50,29 +50,23 @@
         "MONGODB_URI": "mongodb://localhost:27017"
       }
     },
-    "sqlite": {
+    "http": {
       "type": "stdio",
-      "command": "npx",
+      "command": "cmd",
       "args": [
+        "/c",
+        "npx",
         "-y",
-        "mcp-sqlite",
-        "C:\\Users\\Kevin\\.claude\\data.db"
-      ],
-      "env": {}
-    },
-    "excel": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "@negokaz/excel-mcp-server"
+        "mcp-fetch-server"
       ],
       "env": {}
     },
     "playwright": {
       "type": "stdio",
-      "command": "npx",
+      "command": "cmd",
       "args": [
+        "/c",
+        "npx",
         "-y",
         "@playwright/mcp@latest"
       ],
@@ -80,10 +74,48 @@
     },
     "ssh": {
       "type": "stdio",
-      "command": "npx",
+      "command": "cmd",
       "args": [
+        "/c",
+        "npx",
         "-y",
         "mcp-server-ssh"
+      ],
+      "env": {}
+    },
+    "shell": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@wonderwhy-er/desktop-commander"
+      ],
+      "env": {}
+    },
+    "sqlite": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "mcp-sqlite",
+        "C:\\Users\\Kevin\\.claude\\data.db"
+      ],
+      "env": {}
+    },
+    "git": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "-p",
+        "github-mcp-server",
+        "github-mcp-server-mcp"
       ],
       "env": {}
     }

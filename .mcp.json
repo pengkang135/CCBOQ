@@ -59,8 +59,23 @@
     "command": "npx",
     "args": [
       "-y",
-      "@playwright/mcp@latest"
+      "@playwright/mcp@latest",
+      "--output-dir",
+      "temp/playwright-mcp"
     ]
+  },
+  "librarian": {
+    "command": "cmd",
+    "args": [
+      "/c",
+      "E:\\Code\\FeynmanLibrary\\.venv\\Scripts\\python.exe",
+      "-m",
+      "librarian_mcp.server"
+    ],
+    "env": {
+      "PYTHONPATH": "E:\\Code\\FeynmanLibrary\\.trae",
+      "PYTHONUNBUFFERED": "1"
+    }
   },
   "ssh": {
     "command": "npx",
