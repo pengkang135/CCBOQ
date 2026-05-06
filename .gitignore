@@ -40,8 +40,9 @@ plugins/marketplaces/
 mcp-servers/*/.venv/
 mcp-servers/*/node_modules/
 
-# Python 虚拟环境
+# Python
 venv/
+__pycache__/
 
 # 项目自动记忆
 projects/
