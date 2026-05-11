@@ -2,6 +2,8 @@
 
 17 个 MCP 服务器 + 11 个技能 + 17 个插件 + 声音提示 Hook，一键部署。
 
+中文 | [English](README_EN.md)
+
 ## 快速开始
 
 ### Windows (PowerShell)
