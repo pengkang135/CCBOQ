@@ -7,7 +7,9 @@ try {
   $tool = $data.tool_name
   # Read-only tools + safe edit tools: always allow
   $safeTools = @("Read", "Glob", "Grep", "WebSearch", "WebFetch", "Edit", "Write", "NotebookEdit")
-  if ($tool -in $safeTools) {
+  # Bash and all MCP tools (already in settings.json allow list; workaround for VSCE bug #36884)
+  $allow = ($tool -in $safeTools) -or ($tool -eq "Bash") -or ($tool -like "mcp__*") -or ($tool -like "Skill") -or ($tool -like "Agent") -or ($tool -like "TaskOutput") -or ($tool -like "TodoWrite")
+  if ($allow) {
     $output = @{
       hookSpecificOutput = @{
         hookEventName = "PermissionRequest"
