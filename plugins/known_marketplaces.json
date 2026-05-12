@@ -4,7 +4,7 @@
       "source": "github",
       "repo": "anthropics/claude-plugins-official"
     },
-    "installLocation": "C:\\Users\\Kevin\\.claude\\plugins\\marketplaces\\claude-plugins-official",
+    "installLocation": "{{HOME}}\\.claude\\plugins\\marketplaces\\claude-plugins-official",
     "lastUpdated": "2026-05-06T14:50:46.798Z"
   }
 }

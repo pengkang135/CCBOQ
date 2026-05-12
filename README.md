@@ -98,7 +98,7 @@ bash setup.sh
 | Stop | 任务完成 | 播放提示音 |
 | PermissionRequest | 权限请求弹窗 | 播放提示音 |
 
-提示音文件位于 `sounds/` 目录，由 `C:/Users/Kevin/claude-code-config/sounds/play-mp3.ps1` 播放。
+提示音文件位于 `sounds/` 目录，由 `~/claude-code-config/sounds/play-mp3.ps1` 播放。
 
 ## 权限模型
 
@@ -110,7 +110,7 @@ bash setup.sh
 ## 配置架构
 
 ```
-C:\Users\Kevin\
+~
   ├── claude-code-config/     ← 本仓库（Git 版本控制）
   │   ├── settings.json.template
   │   ├── settings.local.json
@@ -134,9 +134,9 @@ C:\Users\Kevin\
 
 | 文件 | 用途 |
 |---|---|
-| `C:\Users\Kevin\.mcp.json` | 源格式定义 |
-| `C:\Users\Kevin\claude-code-config\.mcp.json` | Git 模板副本 |
-| `C:\Users\Kevin\.claude.json` → `mcpServers` | 运行时状态（User + Local 两处） |
+| `~/.mcp.json` | 源格式定义 |
+| `~/claude-code-config/.mcp.json` | Git 模板副本 |
+| `~/.claude.json` → `mcpServers` | 运行时状态（User + Local 两处） |
 
 ## 更新配置
 

@@ -1,10 +1,12 @@
 import json
+import os
 
-with open('C:/Users/Kevin/.claude.json', 'r', encoding='utf-8') as f:
+HOME = os.path.expanduser('~')
+CLAUDE_DIR = os.path.join(HOME, '.claude')
+CLAUDE_JSON = os.path.join(HOME, '.claude.json')
+
+with open(CLAUDE_JSON, 'r', encoding='utf-8') as f:
     config = json.load(f)
-
-HOME = 'C:\\Users\\Kevin'
-CLAUDE_DIR = HOME + '\\.claude'
 
 servers = {
     'filesystem': {
@@ -40,7 +42,7 @@ servers = {
     'sqlite': {
         'type': 'stdio',
         'command': 'npx',
-        'args': ['-y', 'mcp-sqlite', CLAUDE_DIR + '\\data.db'],
+        'args': ['-y', 'mcp-sqlite', os.path.join(CLAUDE_DIR, 'data.db')],
         'env': {}
     },
     'excel': {
@@ -63,10 +65,9 @@ servers = {
     }
 }
 
-# 写入顶层 = USER scope (全局)
 config['mcpServers'] = servers
 
-with open('C:/Users/Kevin/.claude.json', 'w', encoding='utf-8') as f:
+with open(CLAUDE_JSON, 'w', encoding='utf-8') as f:
     json.dump(config, f, indent=2, ensure_ascii=False)
 
 print('Done: 9 MCPs registered at USER scope (global)')

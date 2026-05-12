@@ -98,7 +98,7 @@ bash setup.sh
 | Stop | Task completion | Play notification sound |
 | PermissionRequest | Permission request popup | Play notification sound |
 
-Sound files are located in the `sounds/` directory, played by `C:/Users/Kevin/claude-code-config/sounds/play-mp3.ps1`.
+Sound files are located in the `sounds/` directory, played by `~/claude-code-config/sounds/play-mp3.ps1`.
 
 ## Permission Model
 
@@ -110,7 +110,7 @@ Sound files are located in the `sounds/` directory, played by `C:/Users/Kevin/cl
 ## Configuration Architecture
 
 ```
-C:\Users\Kevin\
+~
   ├── claude-code-config/     ← This repository (Git version control)
   │   ├── settings.json.template
   │   ├── settings.local.json
@@ -134,9 +134,9 @@ When adding, removing, or modifying MCP services, three files must be kept in sy
 
 | File | Purpose |
 |---|---|
-| `C:\Users\Kevin\.mcp.json` | Source format definition |
-| `C:\Users\Kevin\claude-code-config\.mcp.json` | Git template copy |
-| `C:\Users\Kevin\.claude.json` → `mcpServers` | Runtime state (User + Local scopes) |
+| `~/.mcp.json` | Source format definition |
+| `~/claude-code-config/.mcp.json` | Git template copy |
+| `~/.claude.json` → `mcpServers` | Runtime state (User + Local scopes) |
 
 ## Updating Configuration
 

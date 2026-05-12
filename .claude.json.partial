@@ -8,7 +8,7 @@
         "npx",
         "-y",
         "@modelcontextprotocol/server-filesystem",
-        "C:\\Users\\Kevin"
+        "{{HOME}}"
       ],
       "env": {}
     },
@@ -17,12 +17,12 @@
       "command": "cmd",
       "args": [
         "/c",
-        "E:\\Code\\FeynmanLibrary\\.venv\\Scripts\\python.exe",
+        "{{FEYNMAN_LIBRARY}}\\.venv\\Scripts\\python.exe",
         "-m",
         "librarian_mcp.server"
       ],
       "env": {
-        "PYTHONPATH": "E:\\Code\\FeynmanLibrary\\.trae",
+        "PYTHONPATH": "{{FEYNMAN_LIBRARY}}\\.trae",
         "PYTHONUNBUFFERED": "1"
       }
     },
@@ -102,7 +102,7 @@
         "npx",
         "-y",
         "mcp-sqlite",
-        "C:\\Users\\Kevin\\.claude\\data.db"
+        "{{HOME}}\\.claude\\data.db"
       ],
       "env": {}
     },
