@@ -1,21 +1,8 @@
-# 备份文件
-*.backup.*
+# === 凭证 - 绝不入库 ===
+env.ps1
 
-# 敏感信息 - 千万不要提交!
-settings.json
-.claude.json
-*.auth.env
-
-# 系统文件
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# IDE
-.vscode/
-.idea/
-
-# 运行时缓存和临时文件
+# === 运行时缓存和日志 ===
+*.log
 backups/
 cache/
 file-history/
@@ -27,22 +14,53 @@ sessions/
 shell-snapshots/
 tasks/
 telemetry/
+temp/
 tmp/
+.last-cleanup
+.last-good
+security_warnings_state_*.json
+data.db
+.library/
+index-errors.log
+maintenance_last_run
+maintenance_ref
 
-# 数据库文件（含会话数据）
-*.db
-
-# 插件运行时（仅保存配置 JSON，不保存缓存代码）
-plugins/cache/
-plugins/marketplaces/
-
-# MCP 服务器环境
-mcp-servers/*/.venv/
-mcp-servers/*/node_modules/
-
-# Python
+# === venv 和包管理 ===
+.venv/
 venv/
 __pycache__/
+*.pyc
+node_modules/
+*.egg-info/
 
-# 项目自动记忆
+# === 插件缓存 ===
+plugins/cache/
+plugins/marketplaces/
+plugins/data/
+
+# === 会话数据 ===
 projects/
+scheduled_tasks.json
+
+# === OpenClaw 运行时 ===
+openclaw/cron/jobs-state.json
+openclaw/cron/runs/
+openclaw/flows/registry.sqlite*
+openclaw/memory/
+openclaw/crash-reports/
+openclaw/health-logs/
+openclaw/logs/
+openclaw/agents/
+openclaw/canvas/
+openclaw/tasks/
+openclaw/media/
+openclaw/openclaw-weixin/
+openclaw/npm/
+openclaw/gateway-restart-intent.json
+openclaw/exec-approvals.json
+openclaw/*.last-good
+
+# === 系统 ===
+.DS_Store
+Thumbs.db
+desktop.ini

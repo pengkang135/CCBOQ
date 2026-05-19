@@ -1,0 +1,129 @@
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "{{ANTHROPIC_BASE_URL}}",
+    "ANTHROPIC_AUTH_TOKEN": "{{ANTHROPIC_AUTH_TOKEN}}",
+    "ANTHROPIC_MODEL": "{{ANTHROPIC_MODEL}}",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "{{ANTHROPIC_DEFAULT_HAIKU_MODEL}}",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "{{ANTHROPIC_DEFAULT_SONNET_MODEL}}",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "{{ANTHROPIC_DEFAULT_OPUS_MODEL}}",
+    "GITHUB_PERSONAL_ACCESS_TOKEN": "{{GITHUB_PERSONAL_ACCESS_TOKEN}}",
+    "DISABLE_TELEMETRY": "1",
+    "DISABLE_FEEDBACK_COMMAND": "1",
+    "DISABLE_ERROR_REPORTING": "1"
+  },
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "Read",
+      "Glob",
+      "Grep",
+      "Edit",
+      "Write",
+      "NotebookEdit",
+      "WebSearch",
+      "WebFetch",
+      "Skill(*)",
+      "Agent",
+      "TaskOutput",
+      "TodoWrite",
+      "AskUserQuestion",
+      "EnterPlanMode",
+      "ExitPlanMode",
+      "ListMcpResourcesTool",
+      "ReadMcpResourceTool",
+      "mcp__filesystem__*",
+      "mcp__shell__*",
+      "mcp__git__*",
+      "mcp__http__*",
+      "mcp__mongodb__*",
+      "mcp__sqlite__*",
+      "mcp__excel__*",
+      "mcp__playwright__*",
+      "mcp__ssh__*",
+      "mcp__librarian__*",
+      "mcp__rapid-ocr__*",
+      "mcp__pdf2md__*",
+      "mcp__docker__*",
+      "mcp__pandoc__*",
+      "mcp__chrome-devtools__*",
+      "mcp__sequential-thinking__*",
+      "mcp__serena__*",
+      "mcp__plugin_context7_context7__*",
+      "mcp__plugin_playwright_playwright__*"
+    ],
+    "ask": [
+      "mcp__mongodb__drop-database",
+      "mcp__mongodb__drop-collection",
+      "mcp__mongodb__delete-many",
+      "mcp__mongodb__drop-index",
+      "mcp__sqlite__delete_records",
+      "mcp__ssh__sftp_rm",
+      "mcp__git__git-reset",
+      "mcp__git__git-rebase",
+      "Bash(rm *)",
+      "Bash(del *)",
+      "Bash(rmdir *)"
+    ],
+    "defaultMode": "dontAsk",
+    "additionalDirectories": [
+      "c:\\Users\\Kevin\\AppData\\Roaming\\Trae\\User",
+      "{{HOME}}\\.claude",
+      "{{HOME}}\\.claude\\skills",
+      "F:\\FeynmanLibrary\\.claude",
+      "{{HOME}}"
+    ]
+  },
+  "model": "opus",
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -STA -File \"{{HOME}}/.claude/sounds/play-mp3.ps1\" -Path \"{{HOME}}/.claude/sounds/command-complete-fantasy_ui_button.mp3\"",
+            "timeout": 15,
+            "statusMessage": "🔊",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -STA -File \"{{HOME}}/.claude/sounds/play-mp3.ps1\" -Path \"{{HOME}}/.claude/sounds/permission-prompt-ship-bell-two-chimes.mp3\"",
+            "timeout": 10,
+            "statusMessage": "🔔",
+            "async": true
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "code-modernization@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true,
+    "hookify@claude-plugins-official": true,
+    "session-report@claude-plugins-official": true,
+    "chrome-devtools-mcp@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true
+  },
+  "language": "chinese",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark"
+}

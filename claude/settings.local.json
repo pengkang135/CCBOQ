@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__serena__activate_project",
+      "mcp__filesystem__list_directory",
+      "mcp__shell__create_directory",
+      "mcp__shell__list_directory",
+      "mcp__shell__start_process",
+      "mcp__shell__interact_with_process",
+      "mcp__serena__find_file",
+      "mcp__shell__start_search",
+      "mcp__shell__get_more_search_results",
+      "Skill(hookify:writing-rules)",
+      "mcp__shell__edit_block",
+      "mcp__serena__list_dir",
+      "mcp__filesystem__directory_tree",
+      "mcp__filesystem__write_file",
+      "mcp__filesystem__create_directory",
+      "mcp__shell__get_file_info",
+      "mcp__librarian__memory_list",
+      "mcp__librarian__list_vaults",
+      "mcp__librarian__search_sessions",
+      "mcp__librarian__search_summaries",
+      "mcp__filesystem__edit_file",
+      "mcp__chrome-devtools__navigate_page",
+      "mcp__chrome-devtools__take_snapshot",
+      "Bash(/c/Users/Kevin/AppData/Local/Programs/Python/Python313/python.exe *)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('messages',{}\\).get\\('tts',{}\\), indent=2\\)\\)\")",
+      "Bash(netstat -ano)"
+    ]
+  }
+}

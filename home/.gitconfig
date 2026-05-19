@@ -1,0 +1,7 @@
+[safe]
+	directory = *
+[credential "https://gitee.com"]
+	provider = generic
+[user]
+	name = 彭康
+	email = pkxyzkk@gmail.com

@@ -1,0 +1,45 @@
+# Public subset manifest - sync-public.ps1 uses this to filter files for CCBOQ
+# Syntax: one path per line, /* means recursively include all files in directory
+# Lines starting with # are comments
+
+claude/settings.json.template
+claude/settings.local.json
+claude/CLAUDE.md
+claude/keybindings.json
+claude/.mcp.json
+claude/skills/baoyu-format-markdown/*
+claude/skills/docx/*
+claude/skills/excel-ast/*
+claude/skills/material-price-inquiry/*
+claude/skills/mcp-builder/*
+claude/skills/pdf/*
+claude/skills/pk-boq/*
+claude/skills/pk-boq-inquiry/*
+claude/skills/pk-boq-quotation/*
+claude/skills/pptx/*
+claude/skills/skill-creator/*
+claude/skills/thinking-in-files/*
+claude/skills/translation-agent/*
+claude/skills/wx-cli/*
+claude/skills/xlsx/*
+claude/plugins/installed_plugins.json
+claude/plugins/known_marketplaces.json
+claude/mcp-servers/librarian/requirements.txt
+claude/mcp-servers/librarian/librarian_mcp/*
+claude/mcp-servers/rapid-ocr/requirements.txt
+claude/mcp-servers/rapid-ocr/server.py
+claude/mcp-servers/pdf2md/*
+claude/scripts/mcp_launcher.py
+claude/scripts/register_global_mcp.py
+claude/scripts/play-sound.ps1
+claude/sounds/*
+claude/knowledge/claude-code-settings-guide.md
+home/.mcp.json
+home/.gitconfig
+README.md
+.gitignore
+deploy.ps1
+sync-public.ps1
+public-manifest.txt
+env.ps1.template
+notes/*
