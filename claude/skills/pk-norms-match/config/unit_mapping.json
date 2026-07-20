@@ -1,0 +1,21 @@
+{
+  "_comment": "BOQ unit normalization — maps variant spellings to canonical forms for comparison.",
+  "_usage": "nunit() in matcher.py uses this to normalize both BOQ units and quota phys_units.",
+  "m3": ["m3", "m³", "cum", "cubic metre", "cubic meter", "cu.m", "cu m"],
+  "m2": ["m2", "m²", "sqm", "square metre", "square meter", "sq.m", "sq m"],
+  "m": ["m", "lm", "lin.m", "linear metre", "linear meter"],
+  "t": ["t", "ton", "tonne", "mt", "metric ton"],
+  "kg": ["kg", "kilogram", "kilo"],
+  "项": ["ls", "l.s.", "lump sum", "item", "lot", "allow", "allowance"],
+  "个": ["no", "nos", "number", "each", "ea", "pcs", "piece", "nr"],
+  "套": ["set", "pair"],
+  "mm": ["mm", "millimetre", "millimeter"],
+  "cm": ["cm", "centimetre", "centimeter"],
+  "根": ["根"],
+  "件": ["件"],
+  "台班": ["台班", "machine shift"],
+  "工日": ["工日", "man day", "manday"],
+  "个接头": ["个接头", "joint"],
+  "m桩长": ["m桩长", "m pile length"],
+  "m³桩孔": ["m³桩孔", "m3 pile hole"]
+}

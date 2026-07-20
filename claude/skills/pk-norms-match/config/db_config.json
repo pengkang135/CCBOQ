@@ -1,0 +1,159 @@
+{
+  "_comment": "SGA (主定额) + SGB (参考定额) 双数据库配置。修改此文件适配不同定额标准。",
+  "_current_standard": "JTS/T 276-1-2019 (SGA) + JTS/T 276-3-2019 (SGB) 沿海港口水工建筑工程定额",
+
+  "databases": {
+    "sga": {
+      "name": "水工定额 SGA",
+      "path": "f:/BaiduSyncdisk/2.清单定额/Norms-AI/db/norms_jts276-1-2019_excel.sqlite",
+      "role": "primary",
+      "description": "JTS/T 276-1-2019 沿海港口水工建筑工程定额 (34024条, 810表, 6章)",
+      "code_prefix": "SGA",
+      "tables": {
+        "chapter": {
+          "name": "chapter",
+          "columns": {
+            "id": "id",
+            "parent_id": "parent_id",
+            "level": "level",
+            "title": "title",
+            "sort_order": "sort_order"
+          },
+          "level1_filter": "parent_id IS NULL"
+        },
+        "norms_table": {
+          "name": "norms_table",
+          "columns": {
+            "id": "id",
+            "chapter_id": "chapter_id",
+            "section_title": "section_title",
+            "subsection_title": "subsection_title",
+            "work_content": "work_content",
+            "unit": "unit"
+          }
+        },
+        "norms_item": {
+          "name": "norms_item",
+          "columns": {
+            "id": "id",
+            "table_id": "table_id",
+            "norms_code": "norms_code",
+            "attr_level1": "attr_level1",
+            "attr_level2": "attr_level2",
+            "attr_level3": "attr_level3",
+            "attr_level4": "attr_level4",
+            "cost_item": "cost_item",
+            "cost_item_unit": "cost_item_unit",
+            "amount": "amount",
+            "ocr_source": "ocr_source",
+            "data_quality": "data_quality"
+          }
+        }
+      }
+    },
+    "sgb": {
+      "name": "参考定额 SGB",
+      "path": "f:/BaiduSyncdisk/2.清单定额/Norms-AI/db/norms_jts276-3-2019_excel.sqlite",
+      "role": "reference",
+      "description": "JTS/T 276-3-2019 船舶机械艘（台）班费用定额 / 参考水工定额 (1898条)",
+      "code_prefix": "SGB",
+      "tables": {
+        "chapter": {
+          "name": "chapter",
+          "columns": {
+            "id": "id",
+            "parent_id": "parent_id",
+            "level": "level",
+            "title": "title",
+            "sort_order": "sort_order"
+          },
+          "level1_filter": "parent_id IS NULL"
+        },
+        "norms_table": {
+          "name": "norms_table",
+          "columns": {
+            "id": "id",
+            "chapter_id": "chapter_id",
+            "section_title": "section_title",
+            "subsection_title": "subsection_title",
+            "work_content": "work_content",
+            "unit": "unit"
+          }
+        },
+        "norms_item": {
+          "name": "norms_item",
+          "columns": {
+            "id": "id",
+            "table_id": "table_id",
+            "norms_code": "norms_code",
+            "attr_level1": "attr_level1",
+            "attr_level2": "attr_level2",
+            "attr_level3": "attr_level3",
+            "attr_level4": "attr_level4",
+            "cost_item": "cost_item",
+            "cost_item_unit": "cost_item_unit",
+            "amount": "amount",
+            "ocr_source": "ocr_source",
+            "data_quality": "data_quality"
+          }
+        }
+      }
+    }
+  },
+
+  "matching_strategy": {
+    "primary_db": "sga",
+    "fallback_threshold": 30,
+    "fallback_to": "sgb",
+    "code_separator": "+",
+    "description": "优先SGA匹配, 得分<30时追加SGB检索, 组合时用+连接编号"
+  },
+
+  "code_rules": {
+    "description": "定额编号→章节对应规则",
+    "sga": {
+      "prefix": "SGA",
+      "first_digit_after_prefix_is_chapter": true,
+      "chapter_from_code": {
+        "1": "第一章 土石方工程",
+        "2": "第二章 基础工程",
+        "3": "第三章 混凝土及钢筋混凝土构件预制安装工程",
+        "4": "第四章 现浇混凝土及钢筋混凝土工程",
+        "5": "第五章 钢结构制作及安装工程",
+        "6": "第六章 其他工程"
+      }
+    },
+    "sgb": {
+      "prefix": "SGB",
+      "chapter_from_code": {
+        "1": "第一章 土石方工程",
+        "2": "第二章 基础工程",
+        "3": "第三章 混凝土工程",
+        "4": "第四章 钢结构制作及安装工程",
+        "5": "第五章 其他工程",
+        "6": "第六章 静载试桩工程的计费方法"
+      }
+    }
+  },
+
+  "unit_extraction": {
+    "description": "解析定额单位字符串, 如 '100m³混凝土' → factor=100, phys_unit=m³",
+    "match_number_plus_letters": "([\\d.]+)\\s*([a-zA-Z²³¹⁰⁴⁵⁶⁷⁸⁹0-9]+)",
+    "strip_leading_number": "^[\\d.]+",
+    "strip_trailing_chinese": "[\\u4e00-\\u9fff\\u3400-\\u4dbf].*$",
+    "fallback_chinese_unit": "([一-鿿]+)\\s*$"
+  },
+
+  "search_columns": {
+    "description": "全文搜索涵盖的列",
+    "full_text": [
+      "nt.section_title",
+      "nt.work_content",
+      "ni.attr_level1",
+      "ni.attr_level2",
+      "ni.attr_level3",
+      "ni.attr_level4",
+      "ni.cost_item"
+    ]
+  }
+}

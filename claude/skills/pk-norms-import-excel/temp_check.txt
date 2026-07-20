@@ -1,0 +1,44 @@
+一、爆破挤淤法防波堤填石 | unit=100m³ | items=35 | notes=0
+二、陆上吹填袋装砂堤心 | unit=100m³ | items=16 | notes=1
+三、码头基床爆破夯实 | unit=100m³ | items=14 | notes=1
+四、专业作业船基床抛石整平 | unit=100m³ | items=18 | notes=0
+五、水上抛筑袋装碎石（砂）护底 | unit=100m³ | items=26 | notes=0
+六、水上铺排船充填袋装砂堤心（砂被） | unit=- | items=26 | notes=0
+七、余排砂肋软体排护底 | unit=- | items=34 | notes=0
+八、堤身砂肋软体排护底 | unit=- | items=34 | notes=0
+九、混凝土联锁块软体排护底 | unit=- | items=20 | notes=0
+十、格形钢板桩码头基床抛砂 | unit=100m³ | items=7 | notes=0
+一、水上打大直径钢管桩 | unit=根 | items=450 | notes=3
+2.  桩径 φ200cm | unit=根 | items=299 | notes=2
+3.  桩径 φ250cm | unit=根 | items=150 | notes=1
+4.  桩径 φ300cm | unit=根 | items=75 | notes=1
+5.  大直径钢管桩桩头处理（截桩） | unit=根 | items=44 | notes=0
+二、水上水冲打钢筋混凝土大头方桩 | unit=根 | items=50 | notes=1
+三、格形钢板桩陆上整体拼装 | unit=根 | items=17 | notes=0
+四、主格体整体沉放 | unit=根 | items=18 | notes=0
+五、水上插打付格体钢板桩 | unit=根 | items=18 | notes=0
+六、陆上钻孔灌注桩旋挖钻机成孔 | unit=- | items=33 | notes=0
+七、水上独立工作平台上灌注型嵌岩桩 | unit=- | items=11 | notes=0
+2.  嵌岩桩成孔 | unit=10m | items=44 | notes=0
+3.  钢筋笼制作安装 | unit=- | items=21 | notes=0
+4.  混凝土浇筑 | unit=- | items=13 | notes=0
+八、灌注型锚杆嵌岩桩 | unit=10m | items=24 | notes=0
+2.  锚杆制作、安装 | unit=- | items=8 | notes=0
+3.  注浆 | unit=- | items=8 | notes=0
+九、灌注桩检测管制作安装 | unit=- | items=8 | notes=0
+十、真空预压（浅层） | unit=- | items=20 | notes=1
+十一、单点振冲密实砂 | unit=100m³ | items=14 | notes=1
+十二、强夯置换墩 | unit=- | items=18 | notes=1
+2.  墩体夯坑料回填 | unit=100m³ | items=6 | notes=0
+一、混凝土联锁块软体排块体预制 | unit=- | items=26 | notes=0
+二、模袋混凝土（h=40cm） | unit=- | items=17 | notes=0
+一、防汛钢闸门制作安装 | unit=- | items=37 | notes=0
+二、钢制护舷支架制作安装 | unit=- | items=32 | notes=1
+一、钢管桩涂环氧重防腐涂料 | unit=- | items=14 | notes=0
+二、钢管桩牺牲阳极安装 | unit=块 | items=23 | notes=0
+三、钢管桩外加电流阴极防腐材料安装 | unit=- | items=32 | notes=1
+四、金刚石链锯切割钢筋混凝土 | unit=- | items=22 | notes=1
+五、混凝土结构裂缝修补 | unit=- | items=30 | notes=1
+六、混凝土结构破损面修补 | unit=- | items=24 | notes=1
+七、混凝土电化学脱盐 | unit=- | items=10 | notes=1
+八、钢筋混凝土结构外加电流阴极防护材料安装 | unit=- | items=24 | notes=0

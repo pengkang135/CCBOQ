@@ -1,0 +1,99 @@
+{
+  "unit_cleaning": {
+    "description": "清洗 norms_table.unit 字段：去除中文描述、修正OCR误识别",
+    "ocr_fixes": [
+      {"pattern": "(?<![a-zA-Z])l(?=\\d)", "replacement": "1", "description": "OCR将小写L误识别为1: l000m2→1000m2"},
+      {"pattern": "(?<=\\d)l(?=\\d)", "replacement": "1", "description": "同上，数字间"}
+    ],
+    "latin_unit_pattern": "([\\d.]+\\s*[a-zA-Z²³¹⁰⁴⁵⁶⁷⁸⁹0-9]+)",
+    "multi_char_cn_units": ["延米", "试段"],
+    "single_char_cn_pattern": "([\\d.]+\\s*[一-鿿])"
+  },
+
+  "unit_validation": {
+    "description": "验证单位字段质量",
+    "allowed_patterns": [
+      "^[\\d.]+\\s*m[²³23]?$",
+      "^[\\d.]+\\s*t$",
+      "^[\\d.]+\\s*个$",
+      "^[\\d.]+\\s*根$",
+      "^[\\d.]+\\s*件$",
+      "^[\\d.]+\\s*块$",
+      "^[\\d.]+\\s*套$",
+      "^[\\d.]+\\s*延米$",
+      "^[\\d.]+\\s*孔$",
+      "^[\\d.]+\\s*榀$",
+      "^[\\d.]+\\s*次$",
+      "^[\\d.]+\\s*试段$",
+      "^[\\d.]+\\s*只$",
+      "^[\\d.]+\\s*条$",
+      "^[\\d.]+\\s*支$",
+      "^[\\d.]+\\s*组$",
+      "^[\\d.]+\\s*对$",
+      "^[\\d.]+\\s*付$",
+      "^[\\d.]+\\s*m$",
+      "^[\\d.]+\\s*km$",
+      "^[\\d.]+\\s*座$",
+      "^[\\d.]+\\s*处$"
+    ],
+    "max_null_pct": 60,
+    "warn_chinese_chars": true
+  },
+
+  "view_rebuild": {
+    "description": "重建 v_quota_name 视图，确保列名和结构一致",
+    "views": {
+      "v_quota_name": "CREATE VIEW IF NOT EXISTS v_quota_name AS SELECT ni.norms_code AS quota_code, ni.attr_level1 AS work_item, ni.attr_level1, ni.attr_level2, ni.attr_level3, ni.attr_level4, ni.attr1_label, ni.attr2_label, ni.attr3_label, ni.attr4_label, nt.section_title, ch2.title AS l2_section, ch1.title AS chapter_title, nt.work_content, nt.unit AS table_unit FROM norms_item ni JOIN norms_table nt ON ni.table_id = nt.id LEFT JOIN chapter ch2 ON nt.chapter_id = ch2.id LEFT JOIN chapter ch1 ON ch2.parent_id = ch1.id"
+    }
+  },
+
+  "integrity_checks": {
+    "description": "数据库完整性检查规则",
+    "expected_tables": ["document", "chapter", "page_index", "section_text", "norms_table", "norms_item", "appendix_table", "appendix_row"],
+    "min_chapter_count": 1,
+    "min_norms_table_count": 1,
+    "min_norms_item_count": 1,
+    "code_length_distribution": {
+      "expected": [5],
+      "warn_on": [10]
+    }
+  },
+
+  "unit_inference": {
+    "description": "为空单位表推断定额单位。按section_title关键词匹配，续表从page_index继承。",
+    "keyword_rules": [
+      {"keywords": ["抛石", "抛填", "填砂", "填石", "填筑", "抛砂石", "抛倒滤层", "抛填垫层", "抛填块石", "抛填砂石", "水下混凝土"], "unit": "100m³"},
+      {"keywords": ["理坡", "整平", "夯实", "夯实理坡"], "unit": "100m²"},
+      {"keywords": ["土工布", "土工材料", "编织布", "土工合成材料", "土工合成"], "unit": "100m²"},
+      {"keywords": ["倒滤层"], "unit": "100m²", "note": "非'抛倒滤层'的倒滤层为面积单位"},
+      {"keywords": ["护坡", "护底"], "unit": "100m²"},
+      {"keywords": ["垫层"], "unit": "100m²", "note": "垫层石和土工垫层应为面积"},
+      {"keywords": ["脚手架", "排水"], "unit": "100m²"},
+      {"keywords": ["止水缝", "变形缝", "防水层"], "unit": "100m"},
+      {"keywords": ["除锈", "防腐涂料", "涂装"], "unit": "100m²"},
+      {"keywords": ["钻孔", "灌浆", "灌注桩", "灌注桩混凝土", "灌注桩桩头"], "unit": "10m"},
+      {"keywords": ["打桩", "打钢筋", "拔钢板桩", "拔桩"], "unit": "10根"},
+      {"keywords": ["预制构件", "运输安装", "驳运安装", "构件安装", "安装构件", "安装拆除"], "unit": "10件"},
+      {"keywords": ["钢轨安装"], "unit": "100m"},
+      {"keywords": ["地下连续墙", "导墙"], "unit": "10m³"},
+      {"keywords": ["桩头处理", "桩头"], "unit": "10个"},
+      {"keywords": ["堆载预压", "真空预压"], "unit": "100m²"},
+      {"keywords": ["淤泥搅拌桩", "搅拌桩"], "unit": "10m"},
+      {"keywords": ["软基泥面铺设"], "unit": "100m²"},
+      {"keywords": ["钻灌浆孔", "灌浆孔"], "unit": "100m"},
+      {"keywords": ["沉箱", "拖运"], "unit": "10个"},
+      {"keywords": ["护筒埋设", "施工平台"], "unit": "10个"},
+      {"keywords": ["人工挖孔"], "unit": "10m"},
+      {"keywords": ["基础"], "unit": "100m³"},
+      {"keywords": ["陆上铺筑棱体块石", "陆上铺筑防波堤", "陆上安放"], "unit": "100m³"},
+      {"keywords": ["围堰", "袋装土"], "unit": "100m³"},
+      {"keywords": ["水下基床", "基床抛石", "棱体抛石"], "unit": "100m³"},
+      {"keywords": ["钢梁制作", "钢撑杆制作", "钢拉杆制作", "钢结构制作"], "unit": "t"},
+      {"keywords": ["钢木护舷", "护舷"], "unit": "10套"},
+      {"keywords": ["浮鼓锚坠"], "unit": "10个"},
+      {"keywords": ["拆除混凝土", "拆除"], "unit": "10m³"},
+      {"keywords": ["预应力钢绞线"], "unit": "t"},
+      {"keywords": ["锚碇桩", "锚碇"], "unit": "10根"}
+    ]
+  }
+}

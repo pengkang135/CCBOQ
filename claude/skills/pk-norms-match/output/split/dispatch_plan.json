@@ -1,0 +1,102 @@
+{
+  "agents": [
+    {
+      "id": "ancillary",
+      "name": "附属设施/防腐/涂装",
+      "item_count": 240,
+      "split_file": "output/split\\split_ancillary.json",
+      "sga_chapters": [
+        "第六章 其他工程"
+      ],
+      "sgb_chapters": [
+        "第五章 其他工程"
+      ],
+      "boq_sections": [
+        "F",
+        "J"
+      ]
+    },
+    {
+      "id": "cast-in-situ-concrete",
+      "name": "现浇混凝土结构",
+      "item_count": 203,
+      "split_file": "output/split\\split_cast-in-situ-concrete.json",
+      "sga_chapters": [
+        "第四章 现浇混凝土及钢筋混凝土工程"
+      ],
+      "sgb_chapters": [
+        "第三章 混凝土工程"
+      ],
+      "boq_sections": [
+        "E",
+        "F",
+        "J"
+      ]
+    },
+    {
+      "id": "earthwork",
+      "name": "土石方/疏浚/回填",
+      "item_count": 387,
+      "split_file": "output/split\\split_earthwork.json",
+      "sga_chapters": [
+        "第一章 土石方工程"
+      ],
+      "sgb_chapters": [
+        "第一章 土石方工程"
+      ],
+      "boq_sections": [
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "id": "foundation",
+      "name": "地基处理/桩基",
+      "item_count": 132,
+      "split_file": "output/split\\split_foundation.json",
+      "sga_chapters": [
+        "第二章 基础工程"
+      ],
+      "sgb_chapters": [
+        "第二章 基础工程"
+      ],
+      "boq_sections": [
+        "D",
+        "E"
+      ]
+    },
+    {
+      "id": "precast-concrete",
+      "name": "预制混凝土构件",
+      "item_count": 10,
+      "split_file": "output/split\\split_precast-concrete.json",
+      "sga_chapters": [
+        "第三章 混凝土及钢筋混凝土构件预制安装工程"
+      ],
+      "sgb_chapters": [
+        "第三章 混凝土工程"
+      ],
+      "boq_sections": [
+        "E"
+      ]
+    },
+    {
+      "id": "steel-structure",
+      "name": "钢结构/金属工程",
+      "item_count": 20,
+      "split_file": "output/split\\split_steel-structure.json",
+      "sga_chapters": [
+        "第五章 钢结构制作及安装工程"
+      ],
+      "sgb_chapters": [
+        "第四章 钢结构制作及安装工程"
+      ],
+      "boq_sections": [
+        "E",
+        "F"
+      ]
+    }
+  ],
+  "total_items": 992
+}

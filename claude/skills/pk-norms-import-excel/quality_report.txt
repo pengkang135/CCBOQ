@@ -1,0 +1,11 @@
+Tables: 44 | Items: 1914 | Codes: 86
+With unit: 37/44 | With attrs: 25/44
+Null amount: 0.1% | Bad codes: 0 (none)
+
+Chapter distribution:
+  第一章 土石方工程 -> 10 tables, 230 items
+  第二章 基础工程 -> 22 tables, 1393 items
+  第三章 混凝土工程 -> 2 tables, 43 items
+  第四章 钢结构制作及安装工程 -> 2 tables, 69 items
+  第五章 其他工程 -> 8 tables, 179 items
+  第六章 静载试桩工程的计费方法 -> 0 tables, None items

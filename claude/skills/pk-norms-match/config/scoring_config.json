@@ -1,0 +1,74 @@
+{
+  "_comment": "Scoring weights and thresholds for Phase 3 matching. Tune here, not in code.",
+
+  "thresholds": {
+    "min_score": 30,
+    "min_score_description": "Items scoring below this are marked '得分不足' and not written to Excel",
+    "top_n_candidates": 200,
+    "top_n_output": 5
+  },
+
+  "weights": {
+    "keyword_match": 30,
+    "keyword_match_description": "Per matched Chinese keyword from category_map",
+    "no_keyword_penalty": -15,
+    "no_keyword_penalty_description": "Applied when category has keywords but none matched",
+    "exclude_keyword_penalty": -50,
+    "exclude_keyword_penalty_description": "Per matched exclude keyword",
+    "chapter_match": 15,
+    "chapter_match_description": "Candidate chapter is in target_chapters",
+    "unit_exact_match": 30,
+    "unit_exact_match_description": "BOQ unit == quota phys_unit (after normalization)",
+    "unit_compatible_match": 20,
+    "unit_compatible_match_description": "kg↔t, mm↔cm etc.",
+    "unit_type_mismatch": -30,
+    "unit_type_mismatch_description": "项/LS vs physical unit (m/m2/m3/t) — different measurement concept",
+    "unit_hard_mismatch": -100,
+    "unit_hard_mismatch_description": "Completely different physical units (m vs m3, etc.)",
+    "no_quota_unit_penalty": -20,
+    "no_quota_unit_penalty_description": "Quota item has empty unit field (often a data quality issue)",
+    "manual_labor_penalty": -30,
+    "manual_labor_penalty_description": "人力 items penalized for earthwork categories (prefer mechanical)",
+    "cost_item_concrete_hit": 40,
+    "cost_item_concrete_hit_description": "BOQ mentions 砼/混凝土 AND quota cost_item has concrete materials",
+    "cost_item_concrete_miss": -50,
+    "cost_item_concrete_miss_description": "BOQ mentions 砼/混凝土 BUT quota cost_item lacks concrete materials",
+    "cost_item_rebar_hit": 40,
+    "cost_item_rebar_hit_description": "BOQ mentions 钢筋 AND quota cost_item has rebar materials",
+    "cost_item_rebar_miss": -50,
+    "cost_item_rebar_miss_description": "BOQ mentions 钢筋 BUT quota cost_item lacks rebar materials",
+    "cost_item_formwork_hit": 20,
+    "cost_item_formwork_hit_description": "BOQ mentions 模板 AND quota cost_item has formwork materials",
+    "cost_item_formwork_miss": -30,
+    "cost_item_formwork_miss_description": "BOQ mentions 模板 BUT quota cost_item lacks formwork materials",
+    "cost_item_steel_structure_hit": 30,
+    "cost_item_steel_structure_hit_description": "BOQ mentions 钢结构 AND quota cost_item has steel materials",
+    "cost_item_steel_structure_miss": -40,
+    "cost_item_steel_structure_miss_description": "BOQ mentions 钢结构 BUT quota cost_item lacks steel materials",
+    "work_content_match": 20,
+    "work_content_match_description": "Process verb overlap between BOQ description and quota work_content",
+    "attribute_match": 10,
+    "attribute_match_description": "Spec/grade info from BOQ (e.g. C40, diameter) matches attr_level fields"
+  },
+
+  "unit_compatibility": {
+    "compatible_pairs": [
+      ["kg", "t"],
+      ["mm", "cm"],
+      ["m", "cm"]
+    ],
+    "conceptual_mismatch_groups": [
+      ["项", "ls", "lump sum", "item", "lot"],
+      ["m", "m2", "m3", "t", "kg", "个", "套"]
+    ]
+  },
+
+  "chapter_specific_rules": {
+    "earthwork_prefer_mechanical": {
+      "description": "土石方工程优先机械定额，匹配到人力定额时扣分",
+      "chapter_keywords": ["开挖", "挖", "填筑", "回填", "压实", "碾压", "推土", "清理"],
+      "manual_indicator": "人力",
+      "penalty": -30
+    }
+  }
+}

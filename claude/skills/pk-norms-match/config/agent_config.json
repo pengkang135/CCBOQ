@@ -1,0 +1,167 @@
+{
+  "_comment": "Agent分发配置 — 定义BOQ分部如何分配到匹配Agent。每个Agent负责特定章节范围。",
+
+  "agents": [
+    {
+      "id": "earthwork",
+      "name": "土石方/疏浚/回填",
+      "sga_chapters": ["第一章 土石方工程"],
+      "sgb_chapters": ["第一章 土石方工程"],
+      "boq_sections": ["B", "C", "D"],
+      "category_keywords": [
+        "dredg", "berthing pocket", "site clearance", "reclamation",
+        "excavation", "backfill", "fill volume", "fill material",
+        "embankment", "demolish", "sand fill", "sand compensation",
+        "sand", "crushed stone", "gravel", "aggregate", "subbase",
+        "open channel cleaning", "controlled fill", "surcharge placement",
+        "relocation of surcharge", "surcharge material", "compaction",
+        "compaction subgrade", "subgrade", "sand blanket", "gravel blanket",
+        "drainage blanket", "scour protection", "mattress"
+      ],
+      "coverage_note": "开挖、回填、疏浚、填筑、压实、垫层、护底"
+    },
+    {
+      "id": "foundation",
+      "name": "地基处理/桩基",
+      "sga_chapters": ["第二章 基础工程"],
+      "sgb_chapters": ["第二章 基础工程"],
+      "boq_sections": ["D", "E"],
+      "category_keywords": [
+        "ground improvement", "deep cement mixing", "dcm",
+        "vibroflotation", "vibro", "tamping", "sand compaction",
+        "prefabricated vertical drain", "pvd", "geotextile",
+        "curtain wall", "vertical containment",
+        "pile test", "pile test static", "pile test dynamic",
+        "plate loading test", "test and inspect", "sonic logging",
+        "sonic logging tube", "monitoring", "instrumentation",
+        "testing", "anchor", "grout", "pile head",
+        "steel tubular pile", "bored pile",
+        "cast-in-situ concrete pile", "pile concrete",
+        "pile cap concrete"
+      ],
+      "coverage_note": "地基处理、桩基工程、检测试验"
+    },
+    {
+      "id": "precast-concrete",
+      "name": "预制混凝土构件",
+      "sga_chapters": ["第三章 混凝土及钢筋混凝土构件预制安装工程"],
+      "sgb_chapters": ["第三章 混凝土工程"],
+      "boq_sections": ["E"],
+      "category_keywords": [
+        "precast concrete sheet pile", "precast concrete pile",
+        "precast slab installation", "precast slab", "precast beam",
+        "precast mooring", "precast block", "precast concrete",
+        "precast"
+      ],
+      "coverage_note": "预制桩、预制梁板、预制方块"
+    },
+    {
+      "id": "cast-in-situ-concrete",
+      "name": "现浇混凝土结构",
+      "sga_chapters": ["第四章 现浇混凝土及钢筋混凝土工程"],
+      "sgb_chapters": ["第三章 混凝土工程"],
+      "boq_sections": ["E", "F", "J"],
+      "category_keywords": [
+        "casting in-situ top layer", "casting in-situ slab",
+        "cast-in-situ concrete", "cast in-situ", "concrete",
+        "cement", "pile cap", "cap beam", "blinding",
+        "concrete slab", "concrete repair", "concrete barrier",
+        "deck structure", "deck slab", "deck on pile",
+        "high-pile", "abutment", "relieving slab", "transition slab",
+        "kerb", "cope edging", "box culvert", "culvert",
+        "duct bank", "substation", "light tower", "cctv",
+        "street light", "light foundation",
+        "shore power pit", "shore power", "sump", "tank",
+        "stormwater", "slot drain", "linear drain", "manhole", "gully",
+        "electrical trench", "trench", "conduit",
+        "communications pit", "hinged edge",
+        "reinforcement", "rebar", "steel mesh",
+        "tie rod", "storm anchor", "windproof anchor",
+        "cast-in fitting", "embed",
+        "lashing", "reefer rack"
+      ],
+      "coverage_note": "现浇砼结构、钢筋、预埋件、排水、涵洞、基础"
+    },
+    {
+      "id": "steel-structure",
+      "name": "钢结构/金属工程",
+      "sga_chapters": ["第五章 钢结构制作及安装工程"],
+      "sgb_chapters": ["第四章 钢结构制作及安装工程"],
+      "boq_sections": ["E", "F"],
+      "category_keywords": [
+        "frabrication of steel", "driving of steel",
+        "transportation, storage and installation",
+        "steel member", "steel structure", "steel access platform",
+        "metal grating", "steel grating", "crane rail",
+        "ladder", "handrail", "railing",
+        "storm tie down"
+      ],
+      "coverage_note": "钢结构制作安装、钢轨、栏杆、格栅"
+    },
+    {
+      "id": "ancillary",
+      "name": "附属设施/防腐/涂装",
+      "sga_chapters": ["第六章 其他工程"],
+      "sgb_chapters": ["第五章 其他工程"],
+      "boq_sections": ["F", "J"],
+      "category_keywords": [
+        "fender", "bollard", "signage", "sign board", "module number",
+        "pedestrian gate", "isps gate", "internal fence", "fence",
+        "barrier", "insulation", "paint", "coating", "galvanised",
+        "polythene sheet", "water bar", "waterstop", "waterproof",
+        "joint seal", "sealant", "expansion joint",
+        "cable trench cover", "frame and cover", "cover",
+        "ductile iron", "cast iron", "pvc pipe", "di pipe",
+        "grp pipe", "rc pipe", "pipe",
+        "cable", "earth rod", "earth pit", "earthing",
+        "bypass separator", "separator",
+        "leakage collection", "warning tape",
+        "sacrificial anode", "crane buffer"
+      ],
+      "coverage_note": "护舷、防腐、管道、接地、围栏、止水"
+    },
+    {
+      "id": "no-match",
+      "name": "无对应定额",
+      "sga_chapters": [],
+      "sgb_chapters": [],
+      "boq_sections": ["A", "ADD", "G", "H", "I"],
+      "category_keywords": [
+        "charting", "mobilisation", "demobilisation", "survey",
+        "sounding", "submarine cable", "linemarking",
+        "lane division line", "edge line marking",
+        "road centre line", "diagonal hatching",
+        "traffic flow arrow", "give way triangle",
+        "lane number", "fender number", "bollard number",
+        "container corner marking", "truck park marking",
+        "car park marking", "rtg track", "traffic speed marking",
+        "pedestrian walkway", "chainage marking",
+        "storm pin marking", "speed limit", "text marking",
+        "painted", "block number", "column and row number",
+        "marking", "arrow", "spare", "supply only"
+      ],
+      "coverage_note": "开办费、电气、建筑、标线等无对应水工定额项"
+    }
+  ],
+
+  "dispatch_rules": {
+    "min_items_for_parallel": 200,
+    "max_agents_in_parallel": 7,
+    "agent_timeout_seconds": 600,
+    "merge_strategy": "by_boq_row",
+    "description": ">200项启用并行模式, 最多7个Agent同时运行, 每个Agent超时600s, 按BOQ原始行号合并"
+  },
+
+  "review_rules": {
+    "low_score_threshold": 60,
+    "very_low_score_threshold": 30,
+    "close_candidates_threshold": 10,
+    "required_checks": [
+      "score_too_low",
+      "unit_mismatch",
+      "cost_item_contradiction",
+      "work_content_mismatch",
+      "multiple_close_candidates"
+    ]
+  }
+}

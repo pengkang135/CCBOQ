@@ -1,0 +1,2824 @@
+{
+  "_comment": "BOQ English keywords -> Chinese quota search terms. Accumulated from match_boq_v4.py pipeline.",
+  "_usage": "Used by matcher.py Phase 1 to scope chapters and Phase 2 to build search keywords.",
+  "categories": [
+    {
+      "english_key": "dredg",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "挖泥",
+        "抓斗"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "疏浚挖泥",
+      "aliases": []
+    },
+    {
+      "english_key": "berthing pocket",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "挖泥"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "港池挖泥",
+      "aliases": []
+    },
+    {
+      "english_key": "charting",
+      "target_chapters": [],
+      "keywords": [],
+      "exclude_keywords": [],
+      "note": "扫海(无对应定额)",
+      "aliases": [
+        "mobilisation",
+        "demobilisation",
+        "survey",
+        "sounding",
+        "submarine cable",
+        "linemarking",
+        "lane division line",
+        "edge line marking",
+        "road centre line",
+        "diagonal hatching",
+        "traffic flow arrow",
+        "give way triangle",
+        "lane number",
+        "fender number",
+        "bollard number",
+        "container corner marking",
+        "truck park marking",
+        "car park marking",
+        "rtg track",
+        "traffic speed marking",
+        "pedestrian walkway",
+        "chainage marking",
+        "storm pin marking",
+        "speed limit",
+        "text marking",
+        "painted",
+        "block number",
+        "column and row number",
+        "marking",
+        "arrow",
+        "spare",
+        "supply only"
+      ]
+    },
+    {
+      "english_key": "site clearance",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "开挖",
+        "清理",
+        "推土"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "场地清理",
+      "aliases": []
+    },
+    {
+      "english_key": "reclamation",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "填筑",
+        "抛填",
+        "回填"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "回填/填筑",
+      "aliases": [
+        "imported material"
+      ]
+    },
+    {
+      "english_key": "vertical containment",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "连续墙",
+        "地下连续墙"
+      ],
+      "exclude_keywords": [],
+      "note": "围护墙",
+      "aliases": []
+    },
+    {
+      "english_key": "stabilisation of slope",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "护坡",
+        "砌筑"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "边坡稳定",
+      "aliases": []
+    },
+    {
+      "english_key": "prefabricated vertical drain",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "塑料排水板"
+      ],
+      "exclude_keywords": [],
+      "note": "塑料排水板",
+      "aliases": [
+        "pvd"
+      ]
+    },
+    {
+      "english_key": "drainage blanket",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "砂垫层",
+        "碎石垫层",
+        "垫层"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "排水垫层",
+      "aliases": []
+    },
+    {
+      "english_key": "geotextile",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "土工布",
+        "土工材料"
+      ],
+      "exclude_keywords": [],
+      "note": "土工布",
+      "aliases": []
+    },
+    {
+      "english_key": "sand blanket",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "砂垫层",
+        "垫层",
+        "填砂"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "砂垫层",
+      "aliases": [
+        "sand bed"
+      ]
+    },
+    {
+      "english_key": "gravel blanket",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "碎石垫层",
+        "垫层"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "碎石垫层",
+      "aliases": []
+    },
+    {
+      "english_key": "controlled fill",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "填筑",
+        "压实",
+        "碾压"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "控制填筑",
+      "aliases": []
+    },
+    {
+      "english_key": "surcharge placement",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "堆载预压",
+        "堆载"
+      ],
+      "exclude_keywords": [],
+      "note": "堆载",
+      "aliases": []
+    },
+    {
+      "english_key": "relocation of surcharge",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "堆载预压",
+        "堆载",
+        "倒运"
+      ],
+      "exclude_keywords": [],
+      "note": "堆载倒运",
+      "aliases": []
+    },
+    {
+      "english_key": "surcharge material",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "填筑",
+        "填方"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "堆载料",
+      "aliases": []
+    },
+    {
+      "english_key": "compaction",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "压实",
+        "碾压"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "压实",
+      "aliases": []
+    },
+    {
+      "english_key": "compaction subgrade",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "压实",
+        "碾压",
+        "原地面"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "路基压实",
+      "aliases": []
+    },
+    {
+      "english_key": "ground improvement",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "深层水泥搅拌",
+        "搅拌桩",
+        "地基处理",
+        "振冲",
+        "强夯"
+      ],
+      "exclude_keywords": [
+        "墙顶处理"
+      ],
+      "note": "地基处理",
+      "aliases": []
+    },
+    {
+      "english_key": "deep cement mixing",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "深层水泥搅拌",
+        "搅拌桩",
+        "粉喷桩",
+        "淤泥搅拌桩"
+      ],
+      "exclude_keywords": [
+        "回填",
+        "垫层",
+        "基层",
+        "墙顶",
+        "凿除"
+      ],
+      "note": "DCM(需确认单位)",
+      "aliases": [
+        "dcm"
+      ]
+    },
+    {
+      "english_key": "vibroflotation",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "振冲"
+      ],
+      "exclude_keywords": [],
+      "note": "振冲",
+      "aliases": []
+    },
+    {
+      "english_key": "vibro",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "振冲",
+        "振动"
+      ],
+      "exclude_keywords": [],
+      "note": "振冲/振动",
+      "aliases": [
+        "vibratory"
+      ]
+    },
+    {
+      "english_key": "tamping",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "强夯"
+      ],
+      "exclude_keywords": [],
+      "note": "强夯",
+      "aliases": []
+    },
+    {
+      "english_key": "sand compaction",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "砂桩",
+        "挤密砂桩"
+      ],
+      "exclude_keywords": [],
+      "note": "砂桩",
+      "aliases": []
+    },
+    {
+      "english_key": "monitoring",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "监测",
+        "观测"
+      ],
+      "exclude_keywords": [],
+      "note": "监测",
+      "aliases": []
+    },
+    {
+      "english_key": "instrumentation",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "监测",
+        "观测",
+        "仪器"
+      ],
+      "exclude_keywords": [],
+      "note": "仪器监测",
+      "aliases": []
+    },
+    {
+      "english_key": "testing",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "检测",
+        "试桩",
+        "试验"
+      ],
+      "exclude_keywords": [],
+      "note": "检测",
+      "aliases": []
+    },
+    {
+      "english_key": "steel tubular pile",
+      "target_chapters": [
+        "第二章",
+        "第五章"
+      ],
+      "keywords": [
+        "钢管桩",
+        "钢桩"
+      ],
+      "exclude_keywords": [],
+      "note": "钢管桩",
+      "aliases": []
+    },
+    {
+      "english_key": "frabrication of steel",
+      "target_chapters": [
+        "第五章"
+      ],
+      "keywords": [
+        "制作",
+        "钢结构",
+        "钢管桩制作"
+      ],
+      "exclude_keywords": [],
+      "note": "钢结构制作",
+      "aliases": []
+    },
+    {
+      "english_key": "driving of steel",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "打桩",
+        "打入",
+        "打钢管桩"
+      ],
+      "exclude_keywords": [],
+      "note": "打桩",
+      "aliases": []
+    },
+    {
+      "english_key": "transportation, storage and installation",
+      "target_chapters": [
+        "第二章",
+        "第五章"
+      ],
+      "keywords": [
+        "打桩",
+        "运输",
+        "安装"
+      ],
+      "exclude_keywords": [],
+      "note": "运输安装",
+      "aliases": []
+    },
+    {
+      "english_key": "pile test",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "试桩",
+        "静载",
+        "检测"
+      ],
+      "exclude_keywords": [],
+      "note": "试桩",
+      "aliases": []
+    },
+    {
+      "english_key": "crane beam",
+      "target_chapters": [
+        "第三章",
+        "第四章"
+      ],
+      "keywords": [
+        "轨道梁",
+        "梁",
+        "起重机梁"
+      ],
+      "exclude_keywords": [],
+      "note": "轨道梁",
+      "aliases": []
+    },
+    {
+      "english_key": "runway beam",
+      "target_chapters": [
+        "第三章",
+        "第四章"
+      ],
+      "keywords": [
+        "轨道梁",
+        "跑道梁",
+        "梁"
+      ],
+      "exclude_keywords": [],
+      "note": "跑道梁/轨道梁",
+      "aliases": []
+    },
+    {
+      "english_key": "landside crane",
+      "target_chapters": [
+        "第三章",
+        "第四章"
+      ],
+      "keywords": [
+        "轨道梁",
+        "梁"
+      ],
+      "exclude_keywords": [],
+      "note": "陆侧轨道梁",
+      "aliases": [
+        "waterside crane"
+      ]
+    },
+    {
+      "english_key": "longitudinal beam",
+      "target_chapters": [
+        "第三章",
+        "第四章"
+      ],
+      "keywords": [
+        "纵梁",
+        "梁"
+      ],
+      "exclude_keywords": [],
+      "note": "纵梁",
+      "aliases": []
+    },
+    {
+      "english_key": "headstock",
+      "target_chapters": [
+        "第三章",
+        "第四章"
+      ],
+      "keywords": [
+        "横梁",
+        "桩帽"
+      ],
+      "exclude_keywords": [],
+      "note": "横梁",
+      "aliases": [
+        "transverse beam"
+      ]
+    },
+    {
+      "english_key": "deck structure",
+      "target_chapters": [
+        "第三章",
+        "第四章"
+      ],
+      "keywords": [
+        "面板",
+        "码头面板",
+        "承台",
+        "叠合板"
+      ],
+      "exclude_keywords": [
+        "挡土板"
+      ],
+      "note": "面板结构",
+      "aliases": [
+        "deck slab"
+      ]
+    },
+    {
+      "english_key": "abutment",
+      "target_chapters": [
+        "第三章",
+        "第四章"
+      ],
+      "keywords": [
+        "挡土墙",
+        "桥台",
+        "胸墙"
+      ],
+      "exclude_keywords": [],
+      "note": "桥台/挡墙",
+      "aliases": []
+    },
+    {
+      "english_key": "relieving slab",
+      "target_chapters": [
+        "第三章",
+        "第四章"
+      ],
+      "keywords": [
+        "卸荷板"
+      ],
+      "exclude_keywords": [],
+      "note": "卸荷板",
+      "aliases": []
+    },
+    {
+      "english_key": "transition slab",
+      "target_chapters": [
+        "第三章",
+        "第四章"
+      ],
+      "keywords": [
+        "过渡板"
+      ],
+      "exclude_keywords": [],
+      "note": "过渡板",
+      "aliases": []
+    },
+    {
+      "english_key": "casting in-situ top layer",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "码头面层",
+        "磨耗层",
+        "面层",
+        "叠合板"
+      ],
+      "exclude_keywords": [],
+      "note": "现浇面层(第四章)",
+      "aliases": []
+    },
+    {
+      "english_key": "casting in-situ slab",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "面板",
+        "码头面层",
+        "叠合板",
+        "承台",
+        "底板"
+      ],
+      "exclude_keywords": [
+        "挡土板"
+      ],
+      "note": "现浇板(第四章)",
+      "aliases": [
+        "cast-in-situ slab"
+      ]
+    },
+    {
+      "english_key": "cast-in-situ concrete",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "梁",
+        "板",
+        "桩帽",
+        "面板",
+        "胸墙",
+        "墩台",
+        "基础"
+      ],
+      "exclude_keywords": [
+        "挡土板",
+        "挡浪墙"
+      ],
+      "note": "现浇混凝土(第四章通用)",
+      "aliases": []
+    },
+    {
+      "english_key": "cast in-situ",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "梁",
+        "板",
+        "桩帽",
+        "面板",
+        "承台"
+      ],
+      "exclude_keywords": [
+        "挡土板",
+        "挡浪墙"
+      ],
+      "note": "现浇(第四章通用)",
+      "aliases": [
+        "casting in-situ"
+      ]
+    },
+    {
+      "english_key": "pile cap",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "桩帽",
+        "帽梁"
+      ],
+      "exclude_keywords": [],
+      "note": "桩帽",
+      "aliases": []
+    },
+    {
+      "english_key": "reinforcement",
+      "target_chapters": [
+        "第三章",
+        "第四章"
+      ],
+      "keywords": [
+        "钢筋"
+      ],
+      "exclude_keywords": [],
+      "note": "钢筋",
+      "aliases": [
+        "rebar",
+        "reinforcements",
+        "pile reinforcement"
+      ]
+    },
+    {
+      "english_key": "crane rail",
+      "target_chapters": [
+        "第五章",
+        "第六章"
+      ],
+      "keywords": [
+        "钢轨",
+        "起重机轨"
+      ],
+      "exclude_keywords": [],
+      "note": "钢轨",
+      "aliases": []
+    },
+    {
+      "english_key": "fender",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "护舷"
+      ],
+      "exclude_keywords": [],
+      "note": "护舷",
+      "aliases": []
+    },
+    {
+      "english_key": "bollard",
+      "target_chapters": [
+        "第四章",
+        "第六章"
+      ],
+      "keywords": [
+        "系船柱"
+      ],
+      "exclude_keywords": [],
+      "note": "系船柱",
+      "aliases": []
+    },
+    {
+      "english_key": "scour protection",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "护底",
+        "抛石",
+        "防冲刷"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "护底",
+      "aliases": []
+    },
+    {
+      "english_key": "mattress",
+      "target_chapters": [
+        "第一章",
+        "第六章"
+      ],
+      "keywords": [
+        "土工垫",
+        "护底",
+        "软体排",
+        "混凝土"
+      ],
+      "exclude_keywords": [],
+      "note": "护底垫层",
+      "aliases": []
+    },
+    {
+      "english_key": "curtain wall",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "地下连续墙",
+        "遮帘桩"
+      ],
+      "exclude_keywords": [],
+      "note": "连续墙",
+      "aliases": []
+    },
+    {
+      "english_key": "signage",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "标志",
+        "标识"
+      ],
+      "exclude_keywords": [
+        "挡土板"
+      ],
+      "note": "标志牌",
+      "aliases": []
+    },
+    {
+      "english_key": "sign board",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "标志牌",
+        "标牌"
+      ],
+      "exclude_keywords": [
+        "挡土板"
+      ],
+      "note": "标志牌",
+      "aliases": []
+    },
+    {
+      "english_key": "module number",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "标志",
+        "编号"
+      ],
+      "exclude_keywords": [
+        "挡土板"
+      ],
+      "note": "编号标志",
+      "aliases": []
+    },
+    {
+      "english_key": "heavy container yard",
+      "target_chapters": [
+        "第一章",
+        "第四章"
+      ],
+      "keywords": [
+        "路面",
+        "铺面",
+        "基层",
+        "堆场"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "重型集装箱堆场",
+      "aliases": [
+        "container yard"
+      ]
+    },
+    {
+      "english_key": "container yard road",
+      "target_chapters": [
+        "第一章",
+        "第四章"
+      ],
+      "keywords": [
+        "路面",
+        "铺面",
+        "基层"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "堆场道路",
+      "aliases": []
+    },
+    {
+      "english_key": "pavement type",
+      "target_chapters": [
+        "第一章",
+        "第四章"
+      ],
+      "keywords": [
+        "路面",
+        "铺面",
+        "基层"
+      ],
+      "exclude_keywords": [
+        "人力",
+        "挡土板"
+      ],
+      "note": "路面类型",
+      "aliases": [
+        "pavement"
+      ]
+    },
+    {
+      "english_key": "subgrade",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "压实",
+        "碾压",
+        "原地面",
+        "路基"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "路基处理",
+      "aliases": []
+    },
+    {
+      "english_key": "polythene sheet",
+      "target_chapters": [
+        "第二章",
+        "第六章"
+      ],
+      "keywords": [
+        "土工膜",
+        "塑料薄膜",
+        "土工材料"
+      ],
+      "exclude_keywords": [],
+      "note": "聚乙烯膜",
+      "aliases": []
+    },
+    {
+      "english_key": "steel mesh",
+      "target_chapters": [
+        "第三章",
+        "第四章"
+      ],
+      "keywords": [
+        "钢筋网",
+        "钢筋"
+      ],
+      "exclude_keywords": [],
+      "note": "钢筋网",
+      "aliases": []
+    },
+    {
+      "english_key": "wearing course",
+      "target_chapters": [
+        "第一章",
+        "第四章"
+      ],
+      "keywords": [
+        "面层",
+        "磨耗层"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "磨耗层/面层",
+      "aliases": []
+    },
+    {
+      "english_key": "blinding",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "垫层",
+        "找平",
+        "混凝土垫层"
+      ],
+      "exclude_keywords": [],
+      "note": "找平层/垫层",
+      "aliases": []
+    },
+    {
+      "english_key": "bedding stone",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "碎石垫层",
+        "垫层",
+        "抛石"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "碎石垫层",
+      "aliases": []
+    },
+    {
+      "english_key": "block pav",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "块料",
+        "连锁块",
+        "铺砌"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "块料铺面",
+      "aliases": []
+    },
+    {
+      "english_key": "concrete slab",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "混凝土板",
+        "码头面层",
+        "面层",
+        "刚性面层",
+        "叠合板"
+      ],
+      "exclude_keywords": [],
+      "note": "混凝土板/面层",
+      "aliases": []
+    },
+    {
+      "english_key": "concrete repair",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "修补",
+        "混凝土"
+      ],
+      "exclude_keywords": [],
+      "note": "混凝土修补",
+      "aliases": []
+    },
+    {
+      "english_key": "pedestrian block",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "块料",
+        "铺砌",
+        "人行"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "人行道铺面",
+      "aliases": []
+    },
+    {
+      "english_key": "concrete barrier",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "护栏",
+        "混凝土",
+        "防撞"
+      ],
+      "exclude_keywords": [],
+      "note": "混凝土护栏",
+      "aliases": []
+    },
+    {
+      "english_key": "kerb",
+      "target_chapters": [
+        "第四章",
+        "第一章"
+      ],
+      "keywords": [
+        "路缘石",
+        "缘石"
+      ],
+      "exclude_keywords": [],
+      "note": "路缘石",
+      "aliases": [
+        "edge restraint"
+      ]
+    },
+    {
+      "english_key": "cope edging",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "缘石",
+        "护轮坎",
+        "路缘石"
+      ],
+      "exclude_keywords": [],
+      "note": "护轮坎/缘石",
+      "aliases": []
+    },
+    {
+      "english_key": "stormwater",
+      "target_chapters": [
+        "第四章",
+        "第六章"
+      ],
+      "keywords": [
+        "排水",
+        "雨水"
+      ],
+      "exclude_keywords": [
+        "挡土板"
+      ],
+      "note": "雨水排水",
+      "aliases": []
+    },
+    {
+      "english_key": "slot drain",
+      "target_chapters": [
+        "第四章",
+        "第六章"
+      ],
+      "keywords": [
+        "排水沟",
+        "线性排水"
+      ],
+      "exclude_keywords": [],
+      "note": "排水沟",
+      "aliases": []
+    },
+    {
+      "english_key": "linear drain",
+      "target_chapters": [
+        "第四章",
+        "第六章"
+      ],
+      "keywords": [
+        "排水沟"
+      ],
+      "exclude_keywords": [],
+      "note": "线性排水沟",
+      "aliases": []
+    },
+    {
+      "english_key": "manhole",
+      "target_chapters": [
+        "第四章",
+        "第六章"
+      ],
+      "keywords": [
+        "检查井",
+        "井"
+      ],
+      "exclude_keywords": [],
+      "note": "检查井",
+      "aliases": []
+    },
+    {
+      "english_key": "gully",
+      "target_chapters": [
+        "第四章",
+        "第六章"
+      ],
+      "keywords": [
+        "雨水口",
+        "集水井"
+      ],
+      "exclude_keywords": [],
+      "note": "雨水口",
+      "aliases": []
+    },
+    {
+      "english_key": "bypass separator",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "隔油池",
+        "分离器"
+      ],
+      "exclude_keywords": [],
+      "note": "隔油池",
+      "aliases": [
+        "oil separator"
+      ]
+    },
+    {
+      "english_key": "leakage collection",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "水池",
+        "集水"
+      ],
+      "exclude_keywords": [],
+      "note": "集水池",
+      "aliases": []
+    },
+    {
+      "english_key": "electrical trench",
+      "target_chapters": [
+        "第一章",
+        "第四章"
+      ],
+      "keywords": [
+        "沟槽",
+        "电缆沟"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "电缆沟",
+      "aliases": []
+    },
+    {
+      "english_key": "trench",
+      "target_chapters": [
+        "第一章",
+        "第四章"
+      ],
+      "keywords": [
+        "沟槽",
+        "开挖"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "沟槽",
+      "aliases": []
+    },
+    {
+      "english_key": "conduit",
+      "target_chapters": [
+        "第四章",
+        "第六章"
+      ],
+      "keywords": [
+        "管道",
+        "导管"
+      ],
+      "exclude_keywords": [],
+      "note": "导管",
+      "aliases": [
+        "duct"
+      ]
+    },
+    {
+      "english_key": "duct bank",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "混凝土",
+        "管"
+      ],
+      "exclude_keywords": [],
+      "note": "导管组",
+      "aliases": []
+    },
+    {
+      "english_key": "communications trench",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "沟槽"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "通信沟槽",
+      "aliases": []
+    },
+    {
+      "english_key": "communications pit",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "检查井",
+        "人孔",
+        "手孔"
+      ],
+      "exclude_keywords": [],
+      "note": "通信人孔",
+      "aliases": []
+    },
+    {
+      "english_key": "substation",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "基础",
+        "混凝土"
+      ],
+      "exclude_keywords": [],
+      "note": "变电站基础",
+      "aliases": []
+    },
+    {
+      "english_key": "light tower",
+      "target_chapters": [
+        "第四章",
+        "第五章"
+      ],
+      "keywords": [
+        "灯塔",
+        "基础",
+        "钢结构"
+      ],
+      "exclude_keywords": [],
+      "note": "灯塔基础",
+      "aliases": []
+    },
+    {
+      "english_key": "cctv",
+      "target_chapters": [
+        "第四章",
+        "第五章"
+      ],
+      "keywords": [
+        "基础",
+        "钢结构"
+      ],
+      "exclude_keywords": [],
+      "note": "监控塔基础",
+      "aliases": []
+    },
+    {
+      "english_key": "street light",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "基础",
+        "路灯"
+      ],
+      "exclude_keywords": [],
+      "note": "路灯基础",
+      "aliases": []
+    },
+    {
+      "english_key": "light foundation",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "基础"
+      ],
+      "exclude_keywords": [],
+      "note": "灯具基础",
+      "aliases": []
+    },
+    {
+      "english_key": "pedestrian gate",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "大门",
+        "门",
+        "围栏"
+      ],
+      "exclude_keywords": [],
+      "note": "人行门",
+      "aliases": []
+    },
+    {
+      "english_key": "isps gate",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "大门",
+        "门"
+      ],
+      "exclude_keywords": [],
+      "note": "ISPS大门",
+      "aliases": [
+        "non-isps gate",
+        "gate"
+      ]
+    },
+    {
+      "english_key": "internal fence",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "围栏",
+        "围墙",
+        "栅栏"
+      ],
+      "exclude_keywords": [],
+      "note": "内部围栏",
+      "aliases": []
+    },
+    {
+      "english_key": "fence",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "围栏",
+        "围墙",
+        "栅栏",
+        "护栏"
+      ],
+      "exclude_keywords": [],
+      "note": "围栏",
+      "aliases": []
+    },
+    {
+      "english_key": "barrier",
+      "target_chapters": [
+        "第六章",
+        "第四章"
+      ],
+      "keywords": [
+        "护栏",
+        "栏杆",
+        "屏障"
+      ],
+      "exclude_keywords": [
+        "挡土板"
+      ],
+      "note": "护栏",
+      "aliases": []
+    },
+    {
+      "english_key": "reefer rack",
+      "target_chapters": [
+        "第四章",
+        "第五章"
+      ],
+      "keywords": [
+        "支架",
+        "钢结构",
+        "基础"
+      ],
+      "exclude_keywords": [],
+      "note": "冷藏箱架",
+      "aliases": []
+    },
+    {
+      "english_key": "lashing",
+      "target_chapters": [
+        "第四章",
+        "第五章"
+      ],
+      "keywords": [
+        "系留",
+        "预埋件",
+        "环"
+      ],
+      "exclude_keywords": [],
+      "note": "系留设施",
+      "aliases": []
+    },
+    {
+      "english_key": "sewage",
+      "target_chapters": [
+        "第四章",
+        "第六章"
+      ],
+      "keywords": [
+        "污水",
+        "排水",
+        "管道"
+      ],
+      "exclude_keywords": [],
+      "note": "污水",
+      "aliases": []
+    },
+    {
+      "english_key": "box culvert",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "箱涵",
+        "涵洞"
+      ],
+      "exclude_keywords": [],
+      "note": "箱涵",
+      "aliases": []
+    },
+    {
+      "english_key": "culvert",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "涵洞",
+        "箱涵"
+      ],
+      "exclude_keywords": [],
+      "note": "涵洞",
+      "aliases": []
+    },
+    {
+      "english_key": "deck on pile",
+      "target_chapters": [
+        "第三章",
+        "第四章"
+      ],
+      "keywords": [
+        "桩基",
+        "面板",
+        "承台"
+      ],
+      "exclude_keywords": [],
+      "note": "桩基结构",
+      "aliases": []
+    },
+    {
+      "english_key": "high-pile",
+      "target_chapters": [
+        "第二章",
+        "第三章",
+        "第四章"
+      ],
+      "keywords": [
+        "高桩",
+        "桩基",
+        "面板"
+      ],
+      "exclude_keywords": [],
+      "note": "高桩结构",
+      "aliases": []
+    },
+    {
+      "english_key": "water bar",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "止水带",
+        "止水",
+        "止水缝"
+      ],
+      "exclude_keywords": [],
+      "note": "止水带",
+      "aliases": [
+        "waterstop"
+      ]
+    },
+    {
+      "english_key": "waterproof",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "防水",
+        "止水"
+      ],
+      "exclude_keywords": [],
+      "note": "防水",
+      "aliases": []
+    },
+    {
+      "english_key": "concrete",
+      "target_chapters": [
+        "第四章",
+        "第三章"
+      ],
+      "keywords": [
+        "混凝土"
+      ],
+      "exclude_keywords": [],
+      "note": "混凝土",
+      "aliases": []
+    },
+    {
+      "english_key": "cement",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "混凝土",
+        "水泥"
+      ],
+      "exclude_keywords": [],
+      "note": "水泥/混凝土",
+      "aliases": []
+    },
+    {
+      "english_key": "excavation",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "开挖",
+        "挖"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "开挖",
+      "aliases": [
+        "excavate"
+      ]
+    },
+    {
+      "english_key": "backfill",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "回填",
+        "填筑"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "回填",
+      "aliases": []
+    },
+    {
+      "english_key": "fill volume",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "填筑",
+        "回填",
+        "填方"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "填方",
+      "aliases": [
+        "filling"
+      ]
+    },
+    {
+      "english_key": "fill material",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "填筑",
+        "回填"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "填筑料",
+      "aliases": []
+    },
+    {
+      "english_key": "embankment",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "填筑",
+        "路堤"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "路堤",
+      "aliases": []
+    },
+    {
+      "english_key": "demolish",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "拆除",
+        "凿除"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "拆除",
+      "aliases": []
+    },
+    {
+      "english_key": "tie rod",
+      "target_chapters": [
+        "第五章"
+      ],
+      "keywords": [
+        "拉杆",
+        "钢拉杆",
+        "锚杆"
+      ],
+      "exclude_keywords": [],
+      "note": "拉杆",
+      "aliases": []
+    },
+    {
+      "english_key": "storm anchor",
+      "target_chapters": [
+        "第四章",
+        "第五章"
+      ],
+      "keywords": [
+        "锚固",
+        "预埋件"
+      ],
+      "exclude_keywords": [],
+      "note": "防风锚固",
+      "aliases": [
+        "windproof"
+      ]
+    },
+    {
+      "english_key": "windproof anchor",
+      "target_chapters": [
+        "第四章",
+        "第五章"
+      ],
+      "keywords": [
+        "锚固",
+        "基础",
+        "预埋件"
+      ],
+      "exclude_keywords": [],
+      "note": "防风锚固基础",
+      "aliases": []
+    },
+    {
+      "english_key": "anchor",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "锚杆",
+        "锚碇"
+      ],
+      "exclude_keywords": [],
+      "note": "锚杆",
+      "aliases": []
+    },
+    {
+      "english_key": "grout",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "灌浆",
+        "注浆"
+      ],
+      "exclude_keywords": [],
+      "note": "灌浆",
+      "aliases": []
+    },
+    {
+      "english_key": "aggregate",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "碎石",
+        "骨料",
+        "基层"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "骨料/基层",
+      "aliases": []
+    },
+    {
+      "english_key": "subbase",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "碎石",
+        "基层",
+        "垫层"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "底基层",
+      "aliases": [
+        "sub-base"
+      ]
+    },
+    {
+      "english_key": "sand fill",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "填砂",
+        "砂垫层",
+        "回填砂"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "填砂",
+      "aliases": []
+    },
+    {
+      "english_key": "sand compensation",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "填砂",
+        "砂垫层",
+        "回填砂",
+        "砂"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "填砂补偿",
+      "aliases": []
+    },
+    {
+      "english_key": "sand",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "砂",
+        "填砂"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "砂",
+      "aliases": []
+    },
+    {
+      "english_key": "crushed stone",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "碎石",
+        "基层"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "碎石",
+      "aliases": []
+    },
+    {
+      "english_key": "gravel",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "碎石",
+        "砾石",
+        "垫层"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "碎石/砾石",
+      "aliases": []
+    },
+    {
+      "english_key": "steel member",
+      "target_chapters": [
+        "第五章"
+      ],
+      "keywords": [
+        "钢结构",
+        "制作",
+        "安装"
+      ],
+      "exclude_keywords": [],
+      "note": "钢结构",
+      "aliases": [
+        "miscellaneous steel"
+      ]
+    },
+    {
+      "english_key": "steel structure",
+      "target_chapters": [
+        "第五章"
+      ],
+      "keywords": [
+        "钢结构",
+        "制作"
+      ],
+      "exclude_keywords": [],
+      "note": "钢结构",
+      "aliases": []
+    },
+    {
+      "english_key": "metal grating",
+      "target_chapters": [
+        "第五章",
+        "第六章"
+      ],
+      "keywords": [
+        "钢",
+        "格栅",
+        "盖板"
+      ],
+      "exclude_keywords": [],
+      "note": "金属格栅",
+      "aliases": []
+    },
+    {
+      "english_key": "steel grating",
+      "target_chapters": [
+        "第五章",
+        "第六章"
+      ],
+      "keywords": [
+        "钢",
+        "格栅"
+      ],
+      "exclude_keywords": [],
+      "note": "钢格栅",
+      "aliases": []
+    },
+    {
+      "english_key": "ductile iron",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "铸铁",
+        "盖板",
+        "井盖"
+      ],
+      "exclude_keywords": [],
+      "note": "铸铁件",
+      "aliases": []
+    },
+    {
+      "english_key": "cast iron",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "铸铁",
+        "盖板"
+      ],
+      "exclude_keywords": [],
+      "note": "铸铁件",
+      "aliases": []
+    },
+    {
+      "english_key": "pvc pipe",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "管道",
+        "塑料管",
+        "安装"
+      ],
+      "exclude_keywords": [],
+      "note": "PVC管",
+      "aliases": [
+        "hdpe pipe"
+      ]
+    },
+    {
+      "english_key": "di pipe",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "管道",
+        "铸铁管",
+        "安装"
+      ],
+      "exclude_keywords": [],
+      "note": "铸铁管",
+      "aliases": []
+    },
+    {
+      "english_key": "grp pipe",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "管道",
+        "玻璃钢管",
+        "安装"
+      ],
+      "exclude_keywords": [],
+      "note": "GRP管",
+      "aliases": []
+    },
+    {
+      "english_key": "rc pipe",
+      "target_chapters": [
+        "第四章",
+        "第六章"
+      ],
+      "keywords": [
+        "混凝土管",
+        "钢筋混凝土管"
+      ],
+      "exclude_keywords": [],
+      "note": "钢筋混凝土管",
+      "aliases": []
+    },
+    {
+      "english_key": "pipe ",
+      "target_chapters": [
+        "第四章",
+        "第六章"
+      ],
+      "keywords": [
+        "管道安装",
+        "管道铺设"
+      ],
+      "exclude_keywords": [],
+      "note": "管道",
+      "aliases": []
+    },
+    {
+      "english_key": "bored pile",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "钻孔灌注桩",
+        "灌注桩"
+      ],
+      "exclude_keywords": [],
+      "note": "钻孔灌注桩",
+      "aliases": []
+    },
+    {
+      "english_key": "cast-in-situ concrete pile",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "灌注桩",
+        "钻孔"
+      ],
+      "exclude_keywords": [],
+      "note": "灌注桩",
+      "aliases": [
+        "cast-in place concrete pile"
+      ]
+    },
+    {
+      "english_key": "pile cap concrete",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "桩帽",
+        "混凝土桩帽"
+      ],
+      "exclude_keywords": [],
+      "note": "桩帽混凝土",
+      "aliases": []
+    },
+    {
+      "english_key": "pile concrete",
+      "target_chapters": [
+        "第二章",
+        "第四章"
+      ],
+      "keywords": [
+        "灌注桩",
+        "混凝土桩",
+        "桩混凝土",
+        "桩基混凝土"
+      ],
+      "exclude_keywords": [],
+      "note": "桩混凝土",
+      "aliases": []
+    },
+    {
+      "english_key": "pile head",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "桩头",
+        "凿除",
+        "截桩"
+      ],
+      "exclude_keywords": [],
+      "note": "桩头处理",
+      "aliases": []
+    },
+    {
+      "english_key": "pile test static",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "静载",
+        "试桩",
+        "检测"
+      ],
+      "exclude_keywords": [],
+      "note": "静载试桩",
+      "aliases": []
+    },
+    {
+      "english_key": "pile test dynamic",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "高应变",
+        "检测",
+        "试桩"
+      ],
+      "exclude_keywords": [],
+      "note": "高应变检测",
+      "aliases": []
+    },
+    {
+      "english_key": "pile test",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "试桩",
+        "静载",
+        "检测"
+      ],
+      "exclude_keywords": [],
+      "note": "试桩",
+      "aliases": []
+    },
+    {
+      "english_key": "pile ",
+      "target_chapters": [
+        "第二章",
+        "第三章"
+      ],
+      "keywords": [
+        "打桩",
+        "沉桩"
+      ],
+      "exclude_keywords": [],
+      "note": "桩",
+      "aliases": []
+    },
+    {
+      "english_key": "plate loading test",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "检测",
+        "试验",
+        "静载"
+      ],
+      "exclude_keywords": [],
+      "note": "平板载荷试验",
+      "aliases": [
+        "plate load test"
+      ]
+    },
+    {
+      "english_key": "test and inspect",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "检测",
+        "试验",
+        "检验"
+      ],
+      "exclude_keywords": [],
+      "note": "检测检验",
+      "aliases": [
+        "testing and inspection"
+      ]
+    },
+    {
+      "english_key": "sonic logging",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "检测",
+        "声测"
+      ],
+      "exclude_keywords": [],
+      "note": "声测管",
+      "aliases": [
+        "crosshole"
+      ]
+    },
+    {
+      "english_key": "sonic logging tube",
+      "target_chapters": [
+        "第二章"
+      ],
+      "keywords": [
+        "声测管",
+        "检测管"
+      ],
+      "exclude_keywords": [],
+      "note": "声测管",
+      "aliases": []
+    },
+    {
+      "english_key": "insulation",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "保温",
+        "隔热",
+        "绝缘"
+      ],
+      "exclude_keywords": [],
+      "note": "保温/绝缘",
+      "aliases": []
+    },
+    {
+      "english_key": "paint",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "刷油",
+        "油漆",
+        "防腐",
+        "涂装"
+      ],
+      "exclude_keywords": [],
+      "note": "油漆/涂装",
+      "aliases": []
+    },
+    {
+      "english_key": "coating",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "防腐",
+        "涂装",
+        "涂层"
+      ],
+      "exclude_keywords": [],
+      "note": "防腐涂层",
+      "aliases": []
+    },
+    {
+      "english_key": "galvanised",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "镀锌",
+        "防腐"
+      ],
+      "exclude_keywords": [],
+      "note": "镀锌",
+      "aliases": [
+        "galvanized"
+      ]
+    },
+    {
+      "english_key": "ladder",
+      "target_chapters": [
+        "第五章",
+        "第六章"
+      ],
+      "keywords": [
+        "爬梯",
+        "梯子",
+        "钢梯"
+      ],
+      "exclude_keywords": [],
+      "note": "爬梯",
+      "aliases": []
+    },
+    {
+      "english_key": "handrail",
+      "target_chapters": [
+        "第五章",
+        "第六章"
+      ],
+      "keywords": [
+        "栏杆",
+        "扶手"
+      ],
+      "exclude_keywords": [],
+      "note": "栏杆",
+      "aliases": [
+        "railing"
+      ]
+    },
+    {
+      "english_key": "cast-in fitting",
+      "target_chapters": [
+        "第四章",
+        "第五章"
+      ],
+      "keywords": [
+        "预埋件",
+        "预埋"
+      ],
+      "exclude_keywords": [],
+      "note": "预埋件",
+      "aliases": [
+        "embed"
+      ]
+    },
+    {
+      "english_key": "cable",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "电缆"
+      ],
+      "exclude_keywords": [],
+      "note": "电缆",
+      "aliases": []
+    },
+    {
+      "english_key": "earth rod",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "接地",
+        "接地极"
+      ],
+      "exclude_keywords": [],
+      "note": "接地",
+      "aliases": []
+    },
+    {
+      "english_key": "earth pit",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "接地",
+        "接地井"
+      ],
+      "exclude_keywords": [],
+      "note": "接地井",
+      "aliases": []
+    },
+    {
+      "english_key": "earthing",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "接地"
+      ],
+      "exclude_keywords": [],
+      "note": "接地",
+      "aliases": []
+    },
+    {
+      "english_key": "joint seal",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "止水",
+        "密封",
+        "填缝"
+      ],
+      "exclude_keywords": [],
+      "note": "接缝密封",
+      "aliases": []
+    },
+    {
+      "english_key": "sealant",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "密封",
+        "填缝"
+      ],
+      "exclude_keywords": [],
+      "note": "密封",
+      "aliases": []
+    },
+    {
+      "english_key": "expansion joint",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "伸缩缝",
+        "止水缝",
+        "变形缝"
+      ],
+      "exclude_keywords": [],
+      "note": "伸缩缝",
+      "aliases": []
+    },
+    {
+      "english_key": "precast concrete sheet pile",
+      "target_chapters": [
+        "第三章"
+      ],
+      "keywords": [
+        "板桩",
+        "锚碇桩",
+        "预制"
+      ],
+      "exclude_keywords": [],
+      "note": "预制混凝土板桩",
+      "aliases": []
+    },
+    {
+      "english_key": "precast concrete pile",
+      "target_chapters": [
+        "第三章"
+      ],
+      "keywords": [
+        "大管桩",
+        "预制",
+        "方桩",
+        "管桩"
+      ],
+      "exclude_keywords": [],
+      "note": "预制混凝土桩",
+      "aliases": []
+    },
+    {
+      "english_key": "precast slab installation",
+      "target_chapters": [
+        "第三章"
+      ],
+      "keywords": [
+        "平板",
+        "空心板",
+        "走道板",
+        "实心平板",
+        "板梁",
+        "预制"
+      ],
+      "exclude_keywords": [
+        "挡土板",
+        "挡浪墙"
+      ],
+      "note": "预制板安装",
+      "aliases": []
+    },
+    {
+      "english_key": "precast slab",
+      "target_chapters": [
+        "第三章"
+      ],
+      "keywords": [
+        "平板",
+        "空心板",
+        "走道板",
+        "实心平板",
+        "板梁",
+        "镶面板",
+        "预制"
+      ],
+      "exclude_keywords": [
+        "挡土板",
+        "挡浪墙"
+      ],
+      "note": "预制板",
+      "aliases": []
+    },
+    {
+      "english_key": "precast beam",
+      "target_chapters": [
+        "第三章"
+      ],
+      "keywords": [
+        "梁",
+        "预制",
+        "叠合梁",
+        "形梁"
+      ],
+      "exclude_keywords": [
+        "爆破"
+      ],
+      "note": "预制梁",
+      "aliases": []
+    },
+    {
+      "english_key": "precast mooring",
+      "target_chapters": [
+        "第三章"
+      ],
+      "keywords": [
+        "系船柱",
+        "系留",
+        "预制"
+      ],
+      "exclude_keywords": [],
+      "note": "预制系泊构件",
+      "aliases": []
+    },
+    {
+      "english_key": "precast block",
+      "target_chapters": [
+        "第三章"
+      ],
+      "keywords": [
+        "方块",
+        "卸荷板",
+        "实心方块",
+        "空心方块",
+        "预制"
+      ],
+      "exclude_keywords": [],
+      "note": "预制方块",
+      "aliases": []
+    },
+    {
+      "english_key": "precast concrete",
+      "target_chapters": [
+        "第三章"
+      ],
+      "keywords": [
+        "预制"
+      ],
+      "exclude_keywords": [],
+      "note": "预制混凝土(通用)",
+      "aliases": [
+        "precast"
+      ]
+    },
+    {
+      "english_key": "sump",
+      "target_chapters": [
+        "第四章",
+        "第六章"
+      ],
+      "keywords": [
+        "集水坑",
+        "水池"
+      ],
+      "exclude_keywords": [],
+      "note": "集水坑",
+      "aliases": []
+    },
+    {
+      "english_key": "tank",
+      "target_chapters": [
+        "第四章",
+        "第六章"
+      ],
+      "keywords": [
+        "水池",
+        "水箱",
+        "池"
+      ],
+      "exclude_keywords": [],
+      "note": "水箱/水池",
+      "aliases": []
+    },
+    {
+      "english_key": "separator",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "分离器",
+        "隔油池"
+      ],
+      "exclude_keywords": [],
+      "note": "分离器",
+      "aliases": []
+    },
+    {
+      "english_key": "sign board",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "标志牌",
+        "标牌"
+      ],
+      "exclude_keywords": [
+        "挡土板"
+      ],
+      "note": "标志牌",
+      "aliases": []
+    },
+    {
+      "english_key": "cable trench cover",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "盖板",
+        "沟盖板"
+      ],
+      "exclude_keywords": [],
+      "note": "电缆沟盖板",
+      "aliases": []
+    },
+    {
+      "english_key": "frame and cover",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "井盖",
+        "盖板"
+      ],
+      "exclude_keywords": [],
+      "note": "井盖",
+      "aliases": []
+    },
+    {
+      "english_key": "cover",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "盖板",
+        "井盖"
+      ],
+      "exclude_keywords": [],
+      "note": "盖板/井盖",
+      "aliases": []
+    },
+    {
+      "english_key": "steel access platform",
+      "target_chapters": [
+        "第五章"
+      ],
+      "keywords": [
+        "钢结构",
+        "平台",
+        "制作"
+      ],
+      "exclude_keywords": [],
+      "note": "钢平台",
+      "aliases": []
+    },
+    {
+      "english_key": "storm tie down",
+      "target_chapters": [
+        "第四章",
+        "第五章"
+      ],
+      "keywords": [
+        "系留",
+        "预埋件",
+        "锚固"
+      ],
+      "exclude_keywords": [],
+      "note": "防风系留",
+      "aliases": []
+    },
+    {
+      "english_key": "sacrificial anode",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "牺牲阳极",
+        "阴极保护"
+      ],
+      "exclude_keywords": [],
+      "note": "牺牲阳极",
+      "aliases": []
+    },
+    {
+      "english_key": "warning tape",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "标志带",
+        "警示带"
+      ],
+      "exclude_keywords": [],
+      "note": "警示带",
+      "aliases": []
+    },
+    {
+      "english_key": "cable trench",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "沟槽",
+        "电缆沟"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "电缆沟",
+      "aliases": []
+    },
+    {
+      "english_key": "hinged edge",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "护轮坎",
+        "护边",
+        "缘石",
+        "混凝土"
+      ],
+      "exclude_keywords": [],
+      "note": "铰接护边",
+      "aliases": []
+    },
+    {
+      "english_key": "crane buffer",
+      "target_chapters": [
+        "第六章"
+      ],
+      "keywords": [
+        "缓冲器",
+        "防撞"
+      ],
+      "exclude_keywords": [],
+      "note": "起重机缓冲器",
+      "aliases": []
+    },
+    {
+      "english_key": "shore power pit",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "基础",
+        "坑",
+        "井"
+      ],
+      "exclude_keywords": [],
+      "note": "岸电坑",
+      "aliases": []
+    },
+    {
+      "english_key": "shore power",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "基础",
+        "设备基础"
+      ],
+      "exclude_keywords": [],
+      "note": "岸电设施基础",
+      "aliases": []
+    },
+    {
+      "english_key": "open channel cleaning",
+      "target_chapters": [
+        "第一章"
+      ],
+      "keywords": [
+        "清淤",
+        "挖泥",
+        "清理"
+      ],
+      "exclude_keywords": [
+        "人力"
+      ],
+      "note": "渠道清淤",
+      "aliases": []
+    },
+    {
+      "english_key": "cap beam",
+      "target_chapters": [
+        "第四章"
+      ],
+      "keywords": [
+        "帽梁",
+        "桩帽",
+        "混凝土"
+      ],
+      "exclude_keywords": [],
+      "note": "帽梁/桩帽",
+      "aliases": []
+    }
+  ]
+}
