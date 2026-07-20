@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code 记忆与进化架构</title>
+<style>
+  :root {
+    --exec: #2563eb;
+    --exec-light: #dbeafe;
+    --exec-glow: #3b82f6;
+    --data: #64748b;
+    --data-light: #f1f5f9;
+    --pipeline: #0d9488;
+    --pipeline-light: #ccfbf1;
+    --pipeline-glow: #14b8a6;
+    --evolve: #d97706;
+    --evolve-light: #fef3c7;
+    --store: #059669;
+    --store-light: #d1fae5;
+    --inject: #7c3aed;
+    --inject-light: #ede9fe;
+    --wechat: #16a34a;
+    --wechat-light: #dcfce7;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+    --radius: 10px;
+    --radius-sm: 6px;
+    --radius-lg: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #f0f9ff 0%, #f8fafc 30%, #f0fdf4 70%, #faf5ff 100%);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #1e40af 0%, #2563eb 40%, #0d9488 100%);
+    color: white;
+    padding: 48px 0 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 50%, rgba(255,255,255,0.05) 0%, transparent 50%);
+    animation: headerPulse 8s ease-in-out infinite;
+  }
+  @keyframes headerPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  .header h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 1;
+  }
+  .header .subtitle {
+    font-size: 1.05rem;
+    opacity: 0.85;
+    margin-top: 8px;
+    position: relative;
+    z-index: 1;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+  .header .badges {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+    position: relative;
+    z-index: 1;
+    flex-wrap: wrap;
+  }
+  .badge {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    letter-spacing: 0.03em;
+  }
+
+  .container { max-width: 1440px; margin: 0 auto; padding: 40px 32px; }
+
+  .diagram-wrapper {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .diagram-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 20px 32px;
+    background: #fafafa;
+    border-top: 1px solid var(--border);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  .legend-dot {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  /* Cards below diagram */
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    margin-top: 40px;
+  }
+  .detail-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .detail-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+  .detail-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .detail-card .card-subtitle {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+  .detail-card .flow-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .detail-card .flow-list li {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+    background: #f8fafc;
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .flow-list .arrow-icon {
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    flex-shrink: 0;
+  }
+  .flow-list .file-path {
+    font-family: 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
+    font-size: 0.75rem;
+    color: var(--exec);
+    background: var(--exec-light);
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 500;
+  }
+  .tag-new { background: #dcfce7; color: #166534; }
+  .tag-existing { background: #f1f5f9; color: #475569; }
+  .tag-core { background: #dbeafe; color: #1e40af; }
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 48px 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-title .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #2563eb, #0d9488);
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .hard-ceilings {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .ceiling-card {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .ceiling-card h4 {
+    font-size: 0.9rem;
+    color: #c2410c;
+    margin-bottom: 6px;
+  }
+  .ceiling-card p {
+    font-size: 0.8rem;
+    color: #9a3412;
+    line-height: 1.5;
+  }
+
+  .advantages {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .advantage-card {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .advantage-card h4 {
+    font-size: 0.9rem;
+    color: #166534;
+    margin-bottom: 6px;
+  }
+  .advantage-card p {
+    font-size: 0.8rem;
+    color: #14532d;
+    line-height: 1.5;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Claude Code 记忆与进化架构</h1>
+  <p class="subtitle">外部记忆管道 + 离线进化引擎 &mdash; 不修改 Claude Code，补上跨会话记忆与技能进化能力</p>
+  <div class="badges">
+    <span class="badge">IDE 主场景</span>
+    <span class="badge">16 MCP 服务器</span>
+    <span class="badge">多 Vault 无上限记忆</span>
+    <span class="badge">跨会话模式发现</span>
+    <span class="badge">离线技能提炼</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ==================== MAIN SVG DIAGRAM ==================== -->
+  <div class="diagram-wrapper">
+    <svg class="diagram-svg" viewBox="0 0 1400 1180" xmlns="http://www.w3.org/2000/svg">
+
+      <defs>
+        <!-- Gradients -->
+        <linearGradient id="gradExec" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#2563eb"/>
+          <stop offset="100%" stop-color="#1d4ed8"/>
+        </linearGradient>
+        <linearGradient id="gradPipeline" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#0d9488"/>
+          <stop offset="100%" stop-color="#0f766e"/>
+        </linearGradient>
+        <linearGradient id="gradEvolve" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#d97706"/>
+          <stop offset="100%" stop-color="#b45309"/>
+        </linearGradient>
+        <linearGradient id="gradStore" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#059669"/>
+          <stop offset="100%" stop-color="#047857"/>
+        </linearGradient>
+        <linearGradient id="gradInject" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#7c3aed"/>
+          <stop offset="100%" stop-color="#6d28d9"/>
+        </linearGradient>
+        <linearGradient id="gradWechat" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#16a34a"/>
+          <stop offset="100%" stop-color="#15803d"/>
+        </linearGradient>
+        <linearGradient id="gradHeader" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#1e40af"/>
+          <stop offset="100%" stop-color="#0d9488"/>
+        </linearGradient>
+
+        <!-- Shadows -->
+        <filter id="shadowSm" x="-5%" y="-5%" width="110%" height="115%">
+          <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.06"/>
+        </filter>
+        <filter id="shadowMd" x="-5%" y="-5%" width="110%" height="115%">
+          <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.08"/>
+        </filter>
+        <filter id="shadowGlow" x="-10%" y="-10%" width="120%" height="130%">
+          <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#3b82f6" flood-opacity="0.15"/>
+        </filter>
+        <filter id="shadowGlowTeal" x="-10%" y="-10%" width="120%" height="130%">
+          <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#14b8a6" flood-opacity="0.12"/>
+        </filter>
+
+        <!-- Arrow markers -->
+        <marker id="arrowBlue" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+          <path d="M0,0 L10,4 L0,8 L3,4 Z" fill="#2563eb"/>
+        </marker>
+        <marker id="arrowTeal" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+          <path d="M0,0 L10,4 L0,8 L3,4 Z" fill="#0d9488"/>
+        </marker>
+        <marker id="arrowAmber" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+          <path d="M0,0 L10,4 L0,8 L3,4 Z" fill="#d97706"/>
+        </marker>
+        <marker id="arrowEmerald" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+          <path d="M0,0 L10,4 L0,8 L3,4 Z" fill="#059669"/>
+        </marker>
+        <marker id="arrowViolet" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+          <path d="M0,0 L10,4 L0,8 L3,4 Z" fill="#7c3aed"/>
+        </marker>
+        <marker id="arrowGreen" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+          <path d="M0,0 L10,4 L0,8 L3,4 Z" fill="#16a34a"/>
+        </marker>
+        <marker id="arrowGray" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+          <path d="M0,0 L10,4 L0,8 L3,4 Z" fill="#94a3b8"/>
+        </marker>
+      </defs>
+
+      <!-- ===== BACKGROUND GRID ===== -->
+      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f1f5f9" stroke-width="0.5"/>
+      </pattern>
+      <rect x="0" y="0" width="1400" height="1180" fill="url(#grid)" opacity="0.6"/>
+
+      <!-- ================================================================ -->
+      <!-- LAYER 1: CLAUDE CODE IDE (EXECUTION LAYER) -->
+      <!-- ================================================================ -->
+
+      <!-- Main IDE box -->
+      <rect x="60" y="24" width="1090" height="194" rx="16" fill="white" stroke="#bfdbfe" stroke-width="1.5" filter="url(#shadowGlow)"/>
+      <rect x="60" y="24" width="1090" height="194" rx="16" fill="url(#gradHeader)" opacity="0.03"/>
+
+      <!-- Layer label -->
+      <rect x="60" y="24" width="240" height="38" rx="16" fill="url(#gradHeader)"/>
+      <text x="180" y="49" text-anchor="middle" fill="white" font-size="0.85rem" font-weight="600" letter-spacing="0.04em">LAYER 1 &middot; 执行层</text>
+
+      <!-- IDE Mode card -->
+      <rect x="86" y="80" width="340" height="78" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="106" y="104" fill="#1e293b" font-size="0.88rem" font-weight="700">Claude Code IDE</text>
+      <text x="106" y="124" fill="#64748b" font-size="0.72rem">交互式 Agent Loop &middot; 编辑 / 终端 / 调试</text>
+      <text x="106" y="143" fill="#64748b" font-size="0.72rem">完整 16 MCP 服务器 &middot; 权限模型保护</text>
+
+      <!-- MCP badge -->
+      <rect x="300" y="80" width="112" height="24" rx="12" fill="#dbeafe"/>
+      <text x="356" y="96" text-anchor="middle" fill="#1e40af" font-size="0.68rem" font-weight="600">16 MCP Servers</text>
+
+      <!-- CLAUDE.md card -->
+      <rect x="444" y="80" width="220" height="78" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="464" y="104" fill="#1e293b" font-size="0.88rem" font-weight="700">CLAUDE.md</text>
+      <text x="464" y="124" fill="#64748b" font-size="0.72rem">行为准则 + 记忆系统指令</text>
+      <text x="464" y="143" fill="#64748b" font-size="0.72rem">引用 SESSION_CONTEXT.md</text>
+
+      <!-- SESSION_CONTEXT card (inject) -->
+      <rect x="682" y="80" width="230" height="78" rx="10" fill="#ede9fe" stroke="#c4b5fd" stroke-width="1" stroke-dasharray="4,2"/>
+      <text x="702" y="104" fill="#5b21b6" font-size="0.88rem" font-weight="700">SESSION_CONTEXT.md</text>
+      <text x="702" y="124" fill="#7c3aed" font-size="0.72rem">cwd-based 预注入</text>
+      <text x="702" y="143" fill="#7c3aed" font-size="0.72rem">&lt; 200 token &middot; 2 记忆 + 1 技能</text>
+
+      <!-- WeChat bridge (optional, right side) -->
+      <rect x="948" y="68" width="186" height="132" rx="10" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1" stroke-dasharray="5,3" opacity="0.85"/>
+      <text x="1041" y="92" text-anchor="middle" fill="#166534" font-size="0.8rem" font-weight="700">微信薄桥接 (可选)</text>
+      <text x="968" y="114" fill="#15803d" font-size="0.68rem">微信消息</text>
+      <text x="1035" y="114" fill="#64748b" font-size="0.62rem">→</text>
+      <text x="1055" y="114" fill="#15803d" font-size="0.68rem">wx-cli</text>
+      <text x="968" y="134" fill="#15803d" font-size="0.68rem">Claude CLI --bare -p</text>
+      <text x="968" y="154" fill="#15803d" font-size="0.68rem">stream-json → 回复</text>
+      <text x="968" y="174" fill="#94a3b8" font-size="0.62rem">不注入人设 &middot; 不阉割 MCP</text>
+      <text x="968" y="190" fill="#94a3b8" font-size="0.62rem">旁路写 tool event JSONL</text>
+
+      <!-- JSONL output arrow from IDE -->
+      <line x1="256" y1="168" x2="256" y2="258" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrowBlue)" stroke-dasharray="8,3"/>
+      <text x="268" y="218" fill="#2563eb" font-size="0.7rem" font-weight="600">每轮增量写入 JSONL</text>
+
+      <!-- JSONL output arrow from WeChat -->
+      <line x1="1005" y1="200" x2="1005" y2="258" stroke="#16a34a" stroke-width="1.8" marker-end="url(#arrowGreen)" stroke-dasharray="6,3"/>
+      <text x="1017" y="234" fill="#16a34a" font-size="0.65rem">tool event JSONL</text>
+
+      <!-- SessionStart hook label -->
+      <rect x="686" y="178" width="200" height="22" rx="6" fill="#ede9fe" opacity="0.7"/>
+      <text x="786" y="193" text-anchor="middle" fill="#7c3aed" font-size="0.62rem" font-weight="500">SessionStart Hook 触发</text>
+
+      <!-- ================================================================ -->
+      <!-- LAYER 2: DATA COLLECTION -->
+      <!-- ================================================================ -->
+
+      <rect x="60" y="240" width="1090" height="90" rx="12" fill="white" stroke="#cbd5e1" stroke-width="1" filter="url(#shadowSm)"/>
+
+      <rect x="60" y="240" width="220" height="32" rx="12" fill="#64748b"/>
+      <text x="170" y="261" text-anchor="middle" fill="white" font-size="0.78rem" font-weight="600" letter-spacing="0.04em">LAYER 2 &middot; 数据采集层</text>
+
+      <rect x="100" y="288" width="310" height="28" rx="6" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="255" y="307" text-anchor="middle" fill="#334155" font-size="0.72rem" font-family="Consolas, monospace">~/.claude/projects/{session_id}.jsonl</text>
+      <text x="420" y="307" fill="#64748b" font-size="0.65rem">← 完整 tool_use / tool_result 序列</text>
+
+      <rect x="100" y="322" width="310" height="22" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.5"/>
+      <text x="255" y="337" text-anchor="middle" fill="#64748b" font-size="0.68rem" font-family="Consolas, monospace">~/.openclaw/staging/cc-*.json</text>
+      <text x="420" y="337" fill="#64748b" font-size="0.65rem">← CLAUDE.md 归档流程 (Stop Hook + 手动)</text>
+
+      <!-- Arrow down to pipeline -->
+      <line x1="340" y1="330" x2="340" y2="375" stroke="#0d9488" stroke-width="2.5" marker-end="url(#arrowTeal)"/>
+
+      <!-- WeChat tool events -->
+      <rect x="900" y="282" width="234" height="38" rx="6" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1" stroke-dasharray="4,2"/>
+      <text x="1017" y="298" text-anchor="middle" fill="#166534" font-size="0.7rem" font-family="Consolas, monospace">~/.openclaw/tool-events/</text>
+      <text x="1017" y="314" text-anchor="middle" fill="#64748b" font-size="0.62rem">旁路采集 &middot; append-only JSONL</text>
+      <!-- Arrow to pipeline -->
+      <line x1="1017" y1="320" x2="1017" y2="345" stroke="#0d9488" stroke-width="1.8" marker-end="url(#arrowTeal)" stroke-dasharray="4,2"/>
+      <line x1="1017" y1="345" x2="700" y2="375" stroke="#0d9488" stroke-width="1.2" stroke-dasharray="4,2"/>
+
+      <!-- ================================================================ -->
+      <!-- LAYER 3: MEMORY PIPELINE -->
+      <!-- ================================================================ -->
+
+      <rect x="60" y="358" width="1090" height="198" rx="12" fill="white" stroke="#99f6e4" stroke-width="1.5" filter="url(#shadowGlowTeal)"/>
+
+      <rect x="60" y="358" width="260" height="32" rx="12" fill="url(#gradPipeline)"/>
+      <text x="190" y="379" text-anchor="middle" fill="white" font-size="0.78rem" font-weight="600" letter-spacing="0.04em">LAYER 3 &middot; 记忆管道 (cron 30min)</text>
+
+      <!-- Pipeline stages -->
+      <!-- Stage 1: fetch -->
+      <rect x="86" y="406" width="136" height="80" rx="10" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+      <text x="154" y="428" text-anchor="middle" fill="#0f766e" font-size="0.8rem" font-weight="700">fetch/</text>
+      <line x1="106" y1="438" x2="202" y2="438" stroke="#ccfbf1" stroke-width="1"/>
+      <text x="154" y="455" text-anchor="middle" fill="#64748b" font-size="0.67rem">claude_code.py</text>
+      <text x="154" y="472" text-anchor="middle" fill="#64748b" font-size="0.67rem">tool_events.py</text>
+      <text x="154" y="485" text-anchor="middle" fill="#64748b" font-size="0.62rem">staging.py</text>
+
+      <!-- Arrow 1→2 -->
+      <line x1="222" y1="446" x2="258" y2="446" stroke="#0d9488" stroke-width="2" marker-end="url(#arrowTeal)"/>
+
+      <!-- Stage 2: canonicalize -->
+      <rect x="266" y="406" width="136" height="80" rx="10" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+      <text x="334" y="428" text-anchor="middle" fill="#0f766e" font-size="0.8rem" font-weight="700">canonicalize/</text>
+      <line x1="286" y1="438" x2="382" y2="438" stroke="#ccfbf1" stroke-width="1"/>
+      <text x="334" y="455" text-anchor="middle" fill="#64748b" font-size="0.67rem">router.py</text>
+      <text x="334" y="472" text-anchor="middle" fill="#64748b" font-size="0.67rem">→ Threaded JSON</text>
+      <text x="334" y="485" text-anchor="middle" fill="#64748b" font-size="0.62rem">按 source 类型分发</text>
+
+      <!-- Arrow 2→3 -->
+      <line x1="402" y1="446" x2="438" y2="446" stroke="#0d9488" stroke-width="2" marker-end="url(#arrowTeal)"/>
+
+      <!-- Stage 3: chunk -->
+      <rect x="446" y="406" width="136" height="80" rx="10" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+      <text x="514" y="428" text-anchor="middle" fill="#0f766e" font-size="0.8rem" font-weight="700">chunk/</text>
+      <line x1="466" y1="438" x2="562" y2="438" stroke="#ccfbf1" stroke-width="1"/>
+      <text x="514" y="455" text-anchor="middle" fill="#64748b" font-size="0.67rem">chunker.py</text>
+      <text x="514" y="472" text-anchor="middle" fill="#64748b" font-size="0.67rem">SHA-256 去重</text>
+      <text x="514" y="485" text-anchor="middle" fill="#64748b" font-size="0.62rem">幂等 &middot; 无重复写入</text>
+
+      <!-- Arrow 3→4 -->
+      <line x1="582" y1="446" x2="618" y2="446" stroke="#0d9488" stroke-width="2" marker-end="url(#arrowTeal)"/>
+
+      <!-- Stage 4: write -->
+      <rect x="626" y="406" width="136" height="80" rx="10" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+      <text x="694" y="428" text-anchor="middle" fill="#0f766e" font-size="0.8rem" font-weight="700">store/</text>
+      <line x1="646" y1="438" x2="742" y2="438" stroke="#ccfbf1" stroke-width="1"/>
+      <text x="694" y="455" text-anchor="middle" fill="#64748b" font-size="0.67rem">writer.py</text>
+      <text x="694" y="472" text-anchor="middle" fill="#64748b" font-size="0.67rem">→ Librarian vault</text>
+      <text x="694" y="485" text-anchor="middle" fill="#64748b" font-size="0.62rem">Memory/ 目录</text>
+
+      <!-- Arrow 4→5 -->
+      <line x1="762" y1="446" x2="798" y2="446" stroke="#0d9488" stroke-width="2" marker-end="url(#arrowTeal)"/>
+
+      <!-- Stage 5: bucket-seal -->
+      <rect x="806" y="406" width="152" height="80" rx="10" fill="#ccfbf1" stroke="#5eead4" stroke-width="1"/>
+      <text x="882" y="428" text-anchor="middle" fill="#0f766e" font-size="0.8rem" font-weight="700">bucket-seal</text>
+      <line x1="826" y1="438" x2="938" y2="438" stroke="#99f6e4" stroke-width="1"/>
+      <text x="882" y="455" text-anchor="middle" fill="#64748b" font-size="0.67rem">阈值触发:</text>
+      <text x="882" y="472" text-anchor="middle" fill="#64748b" font-size="0.67rem">10 msgs / 5000 tokens</text>
+      <text x="882" y="485" text-anchor="middle" fill="#64748b" font-size="0.67rem">/ 60 min</text>
+
+      <!-- Arrow 5→6 (vertical down) -->
+      <path d="M882,486 L882,508" stroke="#0d9488" stroke-width="2" fill="none" marker-end="url(#arrowTeal)"/>
+
+      <!-- Stage 6: evaluate -->
+      <rect x="806" y="510" width="152" height="34" rx="10" fill="#0d9488" opacity="0.1" stroke="#0d9488" stroke-width="1"/>
+      <text x="882" y="532" text-anchor="middle" fill="#0f766e" font-size="0.82rem" font-weight="700">evaluate/ (DeepSeek)</text>
+
+      <!-- Tool context label near evaluate -->
+      <rect x="970" y="510" width="166" height="34" rx="8" fill="#fef3c7" stroke="#fcd34d" stroke-width="0.8"/>
+      <text x="1053" y="525" text-anchor="middle" fill="#92400e" font-size="0.65rem">附带 tool context</text>
+      <text x="1053" y="538" text-anchor="middle" fill="#92400e" font-size="0.6rem">LLM 理解"做了什么"</text>
+
+      <!-- ================================================================ -->
+      <!-- LAYER 4: EVOLUTION -->
+      <!-- ================================================================ -->
+
+      <rect x="60" y="576" width="780" height="148" rx="12" fill="white" stroke="#fcd34d" stroke-width="1.5" filter="url(#shadowMd)"/>
+
+      <rect x="60" y="576" width="240" height="32" rx="12" fill="url(#gradEvolve)"/>
+      <text x="180" y="597" text-anchor="middle" fill="white" font-size="0.78rem" font-weight="600" letter-spacing="0.04em">LAYER 4 &middot; 进化引擎</text>
+
+      <!-- Pattern Analyzer -->
+      <rect x="86" y="622" width="216" height="88" rx="10" fill="#fffbeb" stroke="#fcd34d" stroke-width="1"/>
+      <text x="194" y="646" text-anchor="middle" fill="#92400e" font-size="0.82rem" font-weight="700">Pattern Analyzer</text>
+      <line x1="106" y1="654" x2="282" y2="654" stroke="#fef3c7" stroke-width="1"/>
+      <text x="194" y="672" text-anchor="middle" fill="#64748b" font-size="0.67rem">编辑距离聚类工具名序列</text>
+      <text x="194" y="690" text-anchor="middle" fill="#64748b" font-size="0.67rem">检测高频模式 (≥3次)</text>
+      <rect x="136" y="697" width="116" height="18" rx="5" fill="#dcfce7"/>
+      <text x="194" y="710" text-anchor="middle" fill="#166534" font-size="0.62rem" font-weight="600">零 LLM 成本 &middot; 纯算法</text>
+
+      <!-- Arrow PA → SE -->
+      <path d="M302,666 L318,666" stroke="#d97706" stroke-width="2" fill="none" marker-end="url(#arrowAmber)"/>
+      <text x="310" y="660" fill="#d97706" font-size="0.6rem">≥5次</text>
+
+      <!-- Skill Extractor -->
+      <rect x="326" y="622" width="216" height="88" rx="10" fill="#fffbeb" stroke="#fcd34d" stroke-width="1"/>
+      <text x="434" y="646" text-anchor="middle" fill="#92400e" font-size="0.82rem" font-weight="700">Skill Extractor</text>
+      <line x1="346" y1="654" x2="522" y2="654" stroke="#fef3c7" stroke-width="1"/>
+      <text x="434" y="672" text-anchor="middle" fill="#64748b" font-size="0.67rem">LLM 批量生成技能描述</text>
+      <text x="434" y="690" text-anchor="middle" fill="#64748b" font-size="0.67rem">→ SKILL.md (status: draft)</text>
+      <rect x="376" y="697" width="116" height="18" rx="5" fill="#dbeafe"/>
+      <text x="434" y="710" text-anchor="middle" fill="#1e40af" font-size="0.62rem" font-weight="600">DeepSeek &middot; 夜间批量</text>
+
+      <!-- Arrow SE → Dreaming -->
+      <path d="M542,666 L558,666" stroke="#d97706" stroke-width="2" fill="none" marker-end="url(#arrowAmber)"/>
+
+      <!-- Dreaming -->
+      <rect x="566" y="622" width="216" height="88" rx="10" fill="#fffbeb" stroke="#fcd34d" stroke-width="1"/>
+      <text x="674" y="646" text-anchor="middle" fill="#92400e" font-size="0.82rem" font-weight="700">Dreaming System</text>
+      <line x1="586" y1="654" x2="762" y2="654" stroke="#fef3c7" stroke-width="1"/>
+      <text x="674" y="672" text-anchor="middle" fill="#64748b" font-size="0.67rem">light / deep / REM</text>
+      <text x="674" y="690" text-anchor="middle" fill="#64748b" font-size="0.67rem">记忆精炼 + 技能发现 reflector</text>
+
+      <!-- Skill lifecycle badge (right side of header, no overlap) -->
+      <rect x="610" y="585" width="210" height="18" rx="5" fill="#fef3c7" opacity="0.8" stroke="#fcd34d" stroke-width="0.5"/>
+      <text x="715" y="598" text-anchor="middle" fill="#92400e" font-size="0.62rem" font-weight="500">draft → review → active → archived</text>
+
+      <!-- Storage destination arrows from evolution to Layer 5 -->
+      <!-- Skill Extractor → Skills Index -->
+      <path d="M434,710 L434,730 Q434,740 424,750 L416,796" stroke="#d97706" stroke-width="1.5" fill="none" stroke-dasharray="5,3" marker-end="url(#arrowAmber)"/>
+      <text x="445" y="755" fill="#d97706" font-size="0.6rem">技能写入</text>
+
+      <!-- Pattern Analyzer → state.sqlite (intermediate) -->
+      <path d="M194,710 L194,730 Q194,738 200,745 L196,796" stroke="#d97706" stroke-width="1.2" fill="none" stroke-dasharray="4,3" marker-end="url(#arrowAmber)"/>
+      <text x="195" y="760" fill="#b45309" font-size="0.58rem">模式缓存</text>
+
+      <!-- evaluate → Vaults (记忆写入) -->
+      <path d="M882,544 L882,730 Q882,745 860,760 L330,884" stroke="#0d9488" stroke-width="1.8" fill="none" stroke-dasharray="6,3" marker-end="url(#arrowTeal)"/>
+      <text x="895" y="750" fill="#0f766e" font-size="0.62rem" font-weight="500">记忆写入 Vaults</text>
+
+      <!-- ================================================================ -->
+      <!-- LAYER 5: LIBRARIAN STORAGE -->
+      <!-- ================================================================ -->
+
+      <rect x="60" y="750" width="1090" height="204" rx="12" fill="white" stroke="#a7f3d0" stroke-width="1.5" filter="url(#shadowMd)"/>
+
+      <rect x="60" y="750" width="260" height="32" rx="12" fill="url(#gradStore)"/>
+      <text x="190" y="771" text-anchor="middle" fill="white" font-size="0.78rem" font-weight="600" letter-spacing="0.04em">LAYER 5 &middot; Librarian 存储层</text>
+
+      <!-- Core engine -->
+      <rect x="86" y="796" width="220" height="72" rx="10" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="1"/>
+      <text x="196" y="818" text-anchor="middle" fill="#065f46" font-size="0.85rem" font-weight="700">Librarian CLI</text>
+      <text x="196" y="838" text-anchor="middle" fill="#64748b" font-size="0.7rem">直接 SQLite 访问 (无 MCP 协议栈)</text>
+      <text x="196" y="856" text-anchor="middle" fill="#64748b" font-size="0.7rem" font-weight="500">FTS5 + 向量检索 + Decay 衰减评分</text>
+
+      <!-- Skills Index (进化产物) -->
+      <rect x="326" y="788" width="210" height="70" rx="10" fill="#d1fae5" stroke="#6ee7b7" stroke-width="1.5" stroke-dasharray="4,2"/>
+      <text x="431" y="810" text-anchor="middle" fill="#065f46" font-size="0.82rem" font-weight="700">Skills Index</text>
+      <text x="431" y="828" text-anchor="middle" fill="#64748b" font-size="0.65rem">技能模板库 (Skill Extractor 输出)</text>
+      <text x="431" y="846" text-anchor="middle" fill="#64748b" font-size="0.65rem">Librarian/AgentSkills/*.md</text>
+
+      <!-- state.sqlite (模式数据) -->
+      <rect x="554" y="788" width="210" height="70" rx="10" fill="#fff7ed" stroke="#fcd34d" stroke-width="1" stroke-dasharray="3,3"/>
+      <text x="659" y="810" text-anchor="middle" fill="#92400e" font-size="0.82rem" font-weight="700">state.sqlite</text>
+      <text x="659" y="828" text-anchor="middle" fill="#64748b" font-size="0.65rem">Pattern Analyzer 模式缓存</text>
+      <text x="659" y="846" text-anchor="middle" fill="#64748b" font-size="0.65rem">memory-pipeline/db/state.sqlite</text>
+
+      <!-- 进化产物存储总结 -->
+      <rect x="792" y="788" width="258" height="70" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+      <text x="921" y="808" text-anchor="middle" fill="#475569" font-size="0.68rem" font-weight="600">进化产物存储映射</text>
+      <text x="808" y="826" fill="#d97706" font-size="0.62rem">模式</text>
+      <text x="850" y="826" fill="#64748b" font-size="0.62rem">→ state.sqlite (临时)</text>
+      <text x="808" y="842" fill="#d97706" font-size="0.62rem">技能</text>
+      <text x="850" y="842" fill="#64748b" font-size="0.62rem">→ Skills Index (Librarian)</text>
+      <text x="808" y="858" fill="#0d9488" font-size="0.62rem">记忆</text>
+      <text x="850" y="858" fill="#64748b" font-size="0.62rem">→ 下方 4 Vaults (Librarian)</text>
+
+      <!-- Vaults -->
+      <rect x="86" y="884" width="240" height="56" rx="8" fill="white" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="206" y="906" text-anchor="middle" fill="#1e293b" font-size="0.75rem" font-weight="600">FeynmanLibrary</text>
+      <text x="206" y="924" text-anchor="middle" fill="#64748b" font-size="0.65rem">造价知识主库 &middot; 定额标准 &middot; 项目数据</text>
+
+      <rect x="344" y="884" width="176" height="56" rx="8" fill="white" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="432" y="906" text-anchor="middle" fill="#1e293b" font-size="0.75rem" font-weight="600">knowledge</text>
+      <text x="432" y="924" text-anchor="middle" fill="#64748b" font-size="0.65rem">通用知识 &middot; 技术文档</text>
+
+      <rect x="538" y="884" width="176" height="56" rx="8" fill="white" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="626" y="906" text-anchor="middle" fill="#1e293b" font-size="0.75rem" font-weight="600">business-cards</text>
+      <text x="626" y="924" text-anchor="middle" fill="#64748b" font-size="0.65rem">联系人 &middot; 名片库</text>
+
+      <rect x="732" y="884" width="176" height="56" rx="8" fill="white" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="820" y="906" text-anchor="middle" fill="#1e293b" font-size="0.75rem" font-weight="600">BaiduSyncdisk</text>
+      <text x="820" y="924" text-anchor="middle" fill="#64748b" font-size="0.65rem">百度同步盘 &middot; 文件索引</text>
+
+      <!-- Property badges -->
+      <rect x="920" y="884" width="200" height="24" rx="6" fill="#f8fafc"/>
+      <text x="1020" y="900" text-anchor="middle" fill="#64748b" font-size="0.65rem">多 Vault 无上限 &middot; Decay 自动淘汰</text>
+
+      <!-- ================================================================ -->
+      <!-- FEEDBACK LOOP: CONTEXT INJECTION (left side, upward) -->
+      <!-- ================================================================ -->
+
+      <!-- From Librarian back up to Context Injection -->
+      <path d="M86,832 L32,832 L32,200 L682,200" stroke="#7c3aed" stroke-width="2.2" fill="none" stroke-dasharray="8,4" marker-end="url(#arrowViolet)"/>
+
+      <!-- Label on feedback loop -->
+      <rect x="-10" y="500" width="100" height="56" rx="8" fill="#ede9fe" transform="rotate(-90, 40, 528)"/>
+      <text x="40" y="520" text-anchor="middle" fill="#7c3aed" font-size="0.7rem" font-weight="700" transform="rotate(-90, 40, 528)">上下文注入</text>
+      <text x="40" y="538" text-anchor="middle" fill="#7c3aed" font-size="0.65rem" transform="rotate(-90, 40, 528)">Feedback Loop</text>
+
+      <!-- Resolver box on the feedback path -->
+      <rect x="530" y="200" width="170" height="38" rx="8" fill="#ede9fe" stroke="#c4b5fd" stroke-width="1"/>
+      <text x="615" y="217" text-anchor="middle" fill="#5b21b6" font-size="0.72rem" font-weight="600">context/resolver.py</text>
+      <text x="615" y="232" text-anchor="middle" fill="#7c3aed" font-size="0.65rem">关键字提取 → FTS5/向量检索</text>
+
+      <!-- Small annotation: IDE flow -->
+      <rect x="60" y="964" width="1090" height="52" rx="8" fill="#faf5ff" stroke="#e9d5ff" stroke-width="1" stroke-dasharray="4,2"/>
+      <text x="90" y="986" fill="#5b21b6" font-size="0.72rem" font-weight="600">IDE 注入路径:</text>
+      <text x="220" y="986" fill="#64748b" font-size="0.7rem">SessionStart Hook</text>
+      <text x="380" y="986" fill="#a78bfa" font-size="0.65rem">→</text>
+      <text x="400" y="986" fill="#64748b" font-size="0.7rem">context/resolver.py (cwd-based 检索)</text>
+      <text x="665" y="986" fill="#a78bfa" font-size="0.65rem">→</text>
+      <text x="685" y="986" fill="#64748b" font-size="0.7rem">SESSION_CONTEXT.md (&lt;200 token)</text>
+      <text x="940" y="986" fill="#a78bfa" font-size="0.65rem">→</text>
+      <text x="960" y="986" fill="#64748b" font-size="0.7rem">CLAUDE.md 引用</text>
+
+      <text x="90" y="1006" fill="#5b21b6" font-size="0.72rem" font-weight="600">CLI 注入路径:</text>
+      <text x="220" y="1006" fill="#64748b" font-size="0.7rem">薄桥接调 context/resolver.py</text>
+      <text x="440" y="1006" fill="#a78bfa" font-size="0.65rem">→</text>
+      <text x="460" y="1006" fill="#64748b" font-size="0.7rem">注入 Claude CLI --system-prompt</text>
+
+      <!-- Legend -->
+      <rect x="60" y="1030" width="1090" height="64" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.5"/>
+      <text x="90" y="1054" fill="#1e293b" font-size="0.72rem" font-weight="600">图例:</text>
+
+      <rect x="160" y="1040" width="16" height="16" rx="3" fill="#2563eb"/>
+      <text x="184" y="1053" fill="#64748b" font-size="0.68rem">执行层</text>
+      <rect x="260" y="1040" width="16" height="16" rx="3" fill="#64748b"/>
+      <text x="284" y="1053" fill="#64748b" font-size="0.68rem">数据采集</text>
+      <rect x="370" y="1040" width="16" height="16" rx="3" fill="#0d9488"/>
+      <text x="394" y="1053" fill="#64748b" font-size="0.68rem">记忆管道</text>
+      <rect x="480" y="1040" width="16" height="16" rx="3" fill="#d97706"/>
+      <text x="504" y="1053" fill="#64748b" font-size="0.68rem">进化引擎</text>
+      <rect x="590" y="1040" width="16" height="16" rx="3" fill="#059669"/>
+      <text x="614" y="1053" fill="#64748b" font-size="0.68rem">存储层</text>
+      <rect x="690" y="1040" width="16" height="16" rx="3" fill="#7c3aed"/>
+      <text x="714" y="1053" fill="#64748b" font-size="0.68rem">上下文注入</text>
+      <rect x="800" y="1040" width="16" height="16" rx="3" fill="#16a34a"/>
+      <text x="824" y="1053" fill="#64748b" font-size="0.68rem">微信 (可选)</text>
+
+      <line x1="920" y1="1048" x2="950" y2="1048" stroke="#2563eb" stroke-width="2" stroke-dasharray="6,3"/>
+      <text x="958" y="1053" fill="#64748b" font-size="0.68rem">数据流</text>
+      <line x1="1020" y1="1048" x2="1050" y2="1048" stroke="#7c3aed" stroke-width="2" stroke-dasharray="8,4"/>
+      <text x="1058" y="1053" fill="#64748b" font-size="0.68rem">反馈回路</text>
+
+    </svg>
+  </div>
+
+  <!-- ==================== DETAIL CARDS ==================== -->
+
+  <h2 class="section-title"><span class="num">1</span> 数据流详解</h2>
+
+  <div class="detail-grid">
+    <div class="detail-card">
+      <h3 style="color:#2563eb">IDE 模式采集</h3>
+      <p class="card-subtitle">Claude Code 自动增量写入</p>
+      <ul class="flow-list">
+        <li><span class="arrow-icon">1</span> 每轮回复完成 → 追加写入 <span class="file-path">~/.claude/projects/{id}.jsonl</span></li>
+        <li><span class="arrow-icon">2</span> 完整 tool_use / tool_result / text_delta / result 序列</li>
+        <li><span class="arrow-icon">3</span> 用户关闭 IDE → 数据已落盘 (进程退出前)</li>
+        <li><span class="arrow-icon">4</span> 会话归档流程 → <span class="file-path">staging/cc-{id}.json</span> (可选)</li>
+        <li><span class="arrow-icon">5</span> cron 30min 扫描 → pipeline 摄入</li>
+      </ul>
+    </div>
+
+    <div class="detail-card">
+      <h3 style="color:#0d9488">记忆管道处理</h3>
+      <p class="card-subtitle">6 阶段标准化流水线</p>
+      <ul class="flow-list">
+        <li><span class="arrow-icon">fetch</span> 扫描 JSONL + staging → 提取消息</li>
+        <li><span class="arrow-icon">canonicalize</span> 按 source 类型分发 → Threaded JSON</li>
+        <li><span class="arrow-icon">chunk</span> SHA-256 幂等去重 → 分块</li>
+        <li><span class="arrow-icon">store</span> 写入 Librarian vault</li>
+        <li><span class="arrow-icon">bucket</span> 累积阈值: 10msg / 5000token / 60min</li>
+        <li><span class="arrow-icon">evaluate</span> DeepSeek LLM 提取结构化记忆</li>
+      </ul>
+    </div>
+
+    <div class="detail-card">
+      <h3 style="color:#7c3aed">上下文注入 (IDE)</h3>
+      <p class="card-subtitle">SessionStart Hook 触发</p>
+      <ul class="flow-list">
+        <li><span class="arrow-icon">1</span> IDE 启动 Claude → SessionStart Hook 触发</li>
+        <li><span class="arrow-icon">2</span> <span class="file-path">context/resolver.py</span> 获取 cwd</li>
+        <li><span class="arrow-icon">3</span> 查 Librarian: 该目录最近 10 条记忆</li>
+        <li><span class="arrow-icon">4</span> 取 top 2 记忆 + top 1 技能 (硬上限 200 token)</li>
+        <li><span class="arrow-icon">5</span> 写入 <span class="file-path">SESSION_CONTEXT.md</span></li>
+        <li><span class="arrow-icon">6</span> CLAUDE.md 引用 → Claude 自动阅读</li>
+      </ul>
+    </div>
+
+    <div class="detail-card">
+      <h3 style="color:#16a34a">微信薄桥接 (可选)</h3>
+      <p class="card-subtitle">辅助通道 &middot; 不阉割能力</p>
+      <ul class="flow-list">
+        <li><span class="arrow-icon">收</span> wx-cli 读取微信消息 → 提取文本</li>
+        <li><span class="arrow-icon">调</span> <span class="file-path">claude.exe --bare -p --output-format stream-json</span></li>
+        <li><span class="arrow-icon">解</span> 解析 stream-json → 文本块推微信</li>
+        <li><span class="arrow-icon">录</span> 旁路写 tool event JSONL (fire-and-forget)</li>
+        <li><span class="arrow-icon">注</span> 调 context/resolver.py → system prompt 注入</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ==================== COMPARISON STYLES ==================== -->
+  <style>
+    .cmp-table-wrap {
+      overflow-x: auto;
+      margin: 24px 0;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .cmp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      background: white;
+    }
+    .cmp-table thead th {
+      background: linear-gradient(135deg, #1e40af, #0d9488);
+      color: white;
+      padding: 14px 16px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+    .cmp-table thead th:first-child { border-radius: 0; width: 140px; }
+    .cmp-table thead th.col-ours { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+    .cmp-table thead th.col-hermes { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
+    .cmp-table thead th.col-openclaw { background: linear-gradient(135deg, #64748b, #475569); }
+    .cmp-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .cmp-table tr:last-child td { border-bottom: none; }
+    .cmp-table .cat-row td {
+      background: #f8fafc;
+      font-weight: 700;
+      font-size: 0.78rem;
+      color: #1e293b;
+      padding: 12px 16px;
+      letter-spacing: 0.02em;
+    }
+    .cmp-table .win { color: #059669; }
+    .cmp-table .loss { color: #dc2626; }
+    .cmp-table .neutral { color: #64748b; }
+    .cmp-table td.ours { background: #fafcff; border-left: 3px solid #2563eb; }
+    .cmp-table td.hermes { background: #fafafe; border-left: 3px solid #7c3aed; }
+    .cmp-table td.openclaw { background: #fafafa; border-left: 3px solid #94a3b8; }
+    .cmp-table .mark { font-size: 0.72rem; font-weight: 500; }
+    .cmp-table .mark-win { color: #059669; }
+    .cmp-table .mark-loss { color: #dc2626; }
+    .cmp-table .mark-draw { color: #d97706; }
+
+    .verdict-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin: 24px 0;
+    }
+    @media (max-width: 900px) { .verdict-grid { grid-template-columns: 1fr; } }
+    .verdict-card {
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      border: 1px solid;
+    }
+    .verdict-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .verdict-card .verdict-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .verdict-card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .verdict-card ul li { font-size: 0.82rem; line-height: 1.5; padding-left: 12px; border-left: 2px solid; }
+    .verdict-card.ours-card {
+      background: linear-gradient(135deg, #fafcff, #eff6ff);
+      border-color: #bfdbfe;
+    }
+    .verdict-card.ours-card .verdict-badge { background: #dbeafe; color: #1e40af; }
+    .verdict-card.ours-card ul li { border-color: #93c5fd; color: #1e40af; }
+    .verdict-card.hermes-card {
+      background: linear-gradient(135deg, #fafafe, #f5f3ff);
+      border-color: #ddd6fe;
+    }
+    .verdict-card.hermes-card .verdict-badge { background: #ede9fe; color: #6d28d9; }
+    .verdict-card.hermes-card ul li { border-color: #c4b5fd; color: #5b21b6; }
+    .verdict-card.openclaw-card {
+      background: linear-gradient(135deg, #fafafa, #f8fafc);
+      border-color: #e2e8f0;
+    }
+    .verdict-card.openclaw-card .verdict-badge { background: #f1f5f9; color: #475569; }
+    .verdict-card.openclaw-card ul li { border-color: #cbd5e1; color: #475569; }
+
+    .scenario-note {
+      background: linear-gradient(135deg, #f0fdf4, #faf5ff);
+      border: 1px solid #bbf7d0;
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin: 24px 0;
+    }
+    .scenario-note h3 { font-size: 1rem; font-weight: 700; margin-bottom: 16px; color: #065f46; }
+    .scenario-note .flow-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: #475569;
+    }
+    .scenario-note .flow-step {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-sm);
+      padding: 6px 14px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .scenario-note .flow-arrow { color: #94a3b8; font-weight: 600; }
+  </style>
+
+  <!-- ==================== 2. 三系统核心对比 ==================== -->
+
+  <h2 class="section-title"><span class="num">2</span> 三系统核心对比</h2>
+
+  <div class="cmp-table-wrap">
+    <table class="cmp-table">
+      <thead>
+        <tr>
+          <th>维度</th>
+          <th class="col-ours">这套方案 (Claude-as-Engine)</th>
+          <th class="col-hermes">Hermes (标准版)</th>
+          <th class="col-openclaw">OpenClaw (已弃用)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 执行层 -->
+        <tr class="cat-row"><td colspan="4">执行层</td></tr>
+        <tr>
+          <td>Agent Loop</td>
+          <td class="ours"><span class="mark mark-draw">Claude Code 原生</span><br>不重造, 不修改, 不拥有</td>
+          <td class="hermes"><span class="mark mark-win">自写 run_agent.py ~10,700 行</span><br>完全控制迭代/预算/子代理</td>
+          <td class="openclaw"><span class="mark mark-loss">无 loop</span><br>委托 Claude CLI, 黑盒调用</td>
+        </tr>
+        <tr>
+          <td>工具系统</td>
+          <td class="ours"><span class="mark mark-win">16 MCP 服务器</span><br>MCP 一等公民, 新服务器零改动接入</td>
+          <td class="hermes"><span class="mark mark-draw">40+ Python native + MCP 外挂</span><br>自己写 handler, MCP 是二等公民</td>
+          <td class="openclaw"><span class="mark mark-loss">3 MCP (阉割版)</span><br>gateway 覆盖 MCP 发现, 丢失 13 个</td>
+        </tr>
+        <tr>
+          <td>工具调用质量</td>
+          <td class="ours"><span class="mark mark-win">Claude #1 benchmark</span><br>固定最高水准, 无路由降级风险</td>
+          <td class="hermes"><span class="mark mark-draw">取决于路由到的模型</span><br>便宜模型可能出错, 贵的才稳</td>
+          <td class="openclaw"><span class="mark mark-draw">Claude (但能力被阉割)</span><br>模型强但只有 3 个工具可用</td>
+        </tr>
+        <tr>
+          <td>多模型路由</td>
+          <td class="ours"><span class="mark mark-loss">无</span><br>全部走 Claude, 成本无分层</td>
+          <td class="hermes"><span class="mark mark-win">200+ 模型, 20+ provider</span><br>机械操作走便宜模型, 推理走贵的</td>
+          <td class="openclaw"><span class="mark mark-loss">无</span><br>全部走 Claude</td>
+        </tr>
+        <tr>
+          <td>执行后端</td>
+          <td class="ours"><span class="mark mark-draw">local only</span><br>MCP 在宿主机, 无容器/远程执行</td>
+          <td class="hermes"><span class="mark mark-win">6 种后端</span><br>local/docker/SSH/modal/daytona/singularity</td>
+          <td class="openclaw"><span class="mark mark-draw">local only</span><br>同 Claude CLI</td>
+        </tr>
+        <tr>
+          <td>上下文注入</td>
+          <td class="ours"><span class="mark mark-draw">SessionStart Hook</span><br>cwd-based 预注入 &lt;200 token</td>
+          <td class="hermes"><span class="mark mark-win">mid-turn nudge</span><br>每 10 轮实时注入 + 行为修正</td>
+          <td class="openclaw"><span class="mark mark-loss">bootstrap 超重</span><br>SOUL/IDENTITY 占了大部分 token</td>
+        </tr>
+
+        <!-- 记忆系统 -->
+        <tr class="cat-row"><td colspan="4">记忆系统</td></tr>
+        <tr>
+          <td>记忆容量</td>
+          <td class="ours"><span class="mark mark-win">多 vault 无上限</span><br>FeynmanLibrary + knowledge + business-cards + BaiduSyncdisk</td>
+          <td class="hermes"><span class="mark mark-loss">MEMORY.md ≤2,200 字</span><br>+ USER.md ≤1,375 字</td>
+          <td class="openclaw"><span class="mark mark-win">多 vault 无上限</span><br>同 Librarian 基础设施</td>
+        </tr>
+        <tr>
+          <td>记忆检索</td>
+          <td class="ours"><span class="mark mark-win">FTS5 + 向量 + Decay 衰减</span><br>关键词 + 语义 + 自动淘汰陈旧信息</td>
+          <td class="hermes"><span class="mark mark-loss">FTS5 关键词</span><br>无语义检索, 无自动衰减</td>
+          <td class="openclaw"><span class="mark mark-win">FTS5 + 向量 + Decay</span><br>同 Librarian + memory-core dreaming</td>
+        </tr>
+        <tr>
+          <td>记忆加工</td>
+          <td class="ours"><span class="mark mark-win">6 阶段 pipeline + LLM 提取</span><br>fetch→canonicalize→chunk→write→bucket-seal→evaluate</td>
+          <td class="hermes"><span class="mark mark-loss">直接写 .md</span><br>无 pipeline, 无 LLM 提炼</td>
+          <td class="openclaw"><span class="mark mark-win">6 阶段 pipeline + LLM 提取</span><br>同一套 memory-pipeline</td>
+        </tr>
+        <tr>
+          <td>跨会话视角</td>
+          <td class="ours"><span class="mark mark-win">全局跨会话</span><br>Librarian 统一存储, 跨项目可检索</td>
+          <td class="hermes"><span class="mark mark-loss">per-session 冻结</span><br>每个 agent 只看到自己的 session</td>
+          <td class="openclaw"><span class="mark mark-win">全局跨会话</span><br>Librarian 统一存储</td>
+        </tr>
+
+        <!-- 进化系统 -->
+        <tr class="cat-row"><td colspan="4">进化系统</td></tr>
+        <tr>
+          <td>实时进化</td>
+          <td class="ours"><span class="mark mark-loss">无</span><br>没有 agent loop = 无 mid-turn hook</td>
+          <td class="hermes"><span class="mark mark-win">nudge engine + auto skill</span><br>每 10 轮触发, 踩坑立刻学会</td>
+          <td class="openclaw"><span class="mark mark-loss">无</span><br>同无 agent loop</td>
+        </tr>
+        <tr>
+          <td>离线进化</td>
+          <td class="ours"><span class="mark mark-win">Pattern Analyzer + Skill Extractor</span><br>编辑距离聚类 + LLM 批量提炼技能</td>
+          <td class="hermes"><span class="mark mark-loss">无跨会话分析</span><br>post-task review 仅 per-task</td>
+          <td class="openclaw"><span class="mark mark-loss">无</span><br>pipeline 只做记忆, 不做模式/技能</td>
+        </tr>
+        <tr>
+          <td>工具模式发现</td>
+          <td class="ours"><span class="mark mark-win">编辑距离聚类 (纯算法)</span><br>零 LLM 成本, 跨 N 次会话</td>
+          <td class="hermes"><span class="mark mark-loss">无</span><br>无工具序列分析</td>
+          <td class="openclaw"><span class="mark mark-loss">无</span><br>tool event 被丢弃了</td>
+        </tr>
+        <tr>
+          <td>模型训练闭环</td>
+          <td class="ours"><span class="mark mark-loss">无</span><br>不训练模型</td>
+          <td class="hermes"><span class="mark mark-win">GRPO RL Pipeline</span><br>执行轨迹反馈到模型微调</td>
+          <td class="openclaw"><span class="mark mark-loss">无</span></td>
+        </tr>
+
+        <!-- 安全与防护 -->
+        <tr class="cat-row"><td colspan="4">安全与防护</td></tr>
+        <tr>
+          <td>安全模型</td>
+          <td class="ours"><span class="mark mark-draw">Claude Code 内置</span><br>权限弹窗 + allow/deny 矩阵</td>
+          <td class="hermes"><span class="mark mark-win">五层防线</span><br>用户认证/危险命令审批/容器隔离/MCP凭据过滤/Tirith注入扫描</td>
+          <td class="openclaw"><span class="mark mark-draw">Claude Code 内置 + token 认证</span><br>gateway token + CC 权限模型</td>
+        </tr>
+
+        <!-- 造价场景适配 -->
+        <tr class="cat-row"><td colspan="4">造价工程师场景适配</td></tr>
+        <tr>
+          <td>微信接入</td>
+          <td class="ours"><span class="mark mark-win">wx-cli + 薄桥接</span><br>不注入人设, 不阉割 MCP, 不截断流</td>
+          <td class="hermes"><span class="mark mark-draw">原生支持 (刚上线)</span><br>成熟度未知, 需验证</td>
+          <td class="openclaw"><span class="mark mark-draw">原生成熟通道</span><br>但 gateway 阉割了 MCP</td>
+        </tr>
+        <tr>
+          <td>文档处理链</td>
+          <td class="ours"><span class="mark mark-win">完整</span><br>rapid-OCR/pdf2md/pandoc/excel 已就绪</td>
+          <td class="hermes"><span class="mark mark-loss">需自己写</span><br>无现成 OCR/PDF/Excel handler</td>
+          <td class="openclaw"><span class="mark mark-win">完整</span><br>同 MCP 基础设施</td>
+        </tr>
+        <tr>
+          <td>知识积累</td>
+          <td class="ours"><span class="mark mark-win">自然发生</span><br>每次分析自动归档, decay 淘汰旧定额</td>
+          <td class="hermes"><span class="mark mark-loss">容量不足</span><br>2,200 字无法承载造价知识</td>
+          <td class="openclaw"><span class="mark mark-win">自然发生</span><br>同 pipeline + Librarian</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ==================== 3. 各系统定位与取舍 ==================== -->
+
+  <h2 class="section-title"><span class="num">3</span> 各系统定位与取舍</h2>
+
+  <div class="verdict-grid">
+    <!-- Ours -->
+    <div class="verdict-card ours-card">
+      <h3>这套方案</h3>
+      <span class="verdict-badge">Claude-as-Engine + 外部进化</span>
+      <ul>
+        <li><strong>定位</strong>: 给 Claude Code 补记忆和进化, 不改执行层</li>
+        <li><strong>核心取舍</strong>: 放弃实时干预, 换取跨会话模式发现 + MCP 生态深度</li>
+        <li><strong>适用场景</strong>: 日常 IDE 使用为主, 需要知识积累和技能提炼的长期用户</li>
+        <li><strong>不需要</strong> 多模型路由, 不需要子代理并行, 不需要远程执行后端</li>
+        <li><strong>最弱项</strong>: 无法实时介入, 无法"这次踩坑这次学会"</li>
+        <li><strong>最强项</strong>: 工具生态即时可用, 跨会话知识无限积累</li>
+      </ul>
+    </div>
+
+    <!-- Hermes -->
+    <div class="verdict-card hermes-card">
+      <h3>Hermes (标准版)</h3>
+      <span class="verdict-badge">全栈 Agent 操作系统</span>
+      <ul>
+        <li><strong>定位</strong>: 从零构建的自主 agent, 拥有完整控制权</li>
+        <li><strong>核心取舍</strong>: 自写一切 (loop/工具/安全/训练), 换取最大灵活性和控制力</li>
+        <li><strong>适用场景</strong>: 需要精细控制迭代预算, 多模型降本, 多后端部署的企业级场景</li>
+        <li><strong>需要</strong> 维护 10,700 行 agent loop, 写 40+ Python handler, 跑 GRPO RL 训练</li>
+        <li><strong>最弱项</strong>: 工具生态需自己建设, 记忆容量有限, 无跨会话视角</li>
+        <li><strong>最强项</strong>: 实时干预 + 多模型路由 + 子代理并行 + 模型训练闭环</li>
+      </ul>
+    </div>
+
+    <!-- OpenClaw -->
+    <div class="verdict-card openclaw-card">
+      <h3>OpenClaw (已弃用)</h3>
+      <span class="verdict-badge">桌面 AI 伴侣 + 消息通道</span>
+      <ul>
+        <li><strong>定位</strong>: 微信/Telegram 通道 + Claude CLI 后端 + 记忆系统</li>
+        <li><strong>核心取舍</strong>: 重人设和消息体验, 轻工具执行能力</li>
+        <li><strong>适用场景</strong>: 聊天陪伴 + 轻量任务, 不适合复杂工程工作</li>
+        <li><strong>致命问题</strong>: gateway 覆盖 MCP 发现 → 16 工具变 3 个; 人设吃掉大量上下文</li>
+        <li><strong>可复用部分</strong>: memory-pipeline, Librarian, wx-cli, dreaming 子系统</li>
+        <li><strong>遗产价值</strong>: 记忆基础设施是这套方案的直接基础</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ==================== 4. 关键设计决策 ==================== -->
+
+  <h2 class="section-title"><span class="num">4</span> 关键设计决策: 为什么这么选</h2>
+
+  <div class="scenario-note">
+    <h3>造价工程师的典型工作流</h3>
+    <div class="flow-row">
+      <span class="flow-step">微信收文件</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">OCR 识别扫描件</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">PDF/Markdown 转换标书</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">Excel 造价表分析</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">生成差异报告</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">归档知识到 Librarian</span>
+    </div>
+    <p style="margin-top:16px;font-size:0.82rem;color:#475569;line-height:1.7;">
+      这套方案的每一项设计决策都服务于这个工作流:
+      <strong>MCP 生态</strong> 让工具链开箱即用 (不需要写 Python handler);
+      <strong>多 Vault</strong> 承载定额标准/历史项目/价格信息 (2,200 字的 MEMORY.md 根本不够);
+      <strong>离线进化</strong> 从重复的 Excel 操作中发现模式 (Hermes 的 per-session 记忆看不到);
+      <strong>全部本地</strong> 保证造价数据不出机器;
+      <strong>微信薄桥接</strong> 作为辅助通道 (不阉割能力)。
+    </p>
+  </div>
+
+  <div class="detail-grid">
+    <div class="detail-card">
+      <h3 style="color:#2563eb">1. 不拥有 Agent Loop</h3>
+      <p class="card-subtitle">是约束, 不是设计选择</p>
+      <p style="font-size:0.85rem;color:#475569;line-height:1.6;">
+        如果 Claude Code 暴露 mid-turn hook, 方案会立刻加入实时 nudge。<br><br>
+        <strong>为什么还是选它</strong>: Claude Code 的执行质量 (>Hermes 任意单模型) + 16 MCP 的开箱即用能力, 远大于"不能实时介入"的损失。外部观察的跨会话视角是副产品, 但成了独特优势。
+      </p>
+    </div>
+    <div class="detail-card">
+      <h3 style="color:#0d9488">2. 从 OpenClaw 继承而非重写</h3>
+      <p class="card-subtitle">memory-pipeline + Librarian 是成熟的</p>
+      <p style="font-size:0.85rem;color:#475569;line-height:1.6;">
+        OpenClaw 虽然执行层有致命缺陷 (MCP 阉割, 上下文膨胀), 但记忆基础设施是扎实的。<br><br>
+        <strong>继承的</strong>: pipeline (fetch/canonicalize/chunk/write/bucket-seal/evaluate), Librarian (FTS5+向量+decay), dreaming, wx-cli。<br>
+        <strong>丢弃的</strong>: gateway (覆盖 MCP), bootstrap 人设 (吃 token), agent 运行时。
+      </p>
+    </div>
+    <div class="detail-card">
+      <h3 style="color:#d97706">3. 进化是离线批量的 (接受这个天花板)</h3>
+      <p class="card-subtitle">换来了 Hermes 做不到的事</p>
+      <p style="font-size:0.85rem;color:#475569;line-height:1.6;">
+        实时进化需要 agent loop — Hermes 的 nudge engine 就是干这个的。没有 loop 就只能离线。<br><br>
+        <strong>但 Hermes 的 per-session 记忆看不见跨会话模式</strong>。外部观察者能看到"20 次 Excel 操作有 15 次在修 VLOOKUP" — 这是架构的副产品, 也是独特优势。
+      </p>
+    </div>
+    <div class="detail-card">
+      <h3 style="color:#059669">4. MCP 生态是执行力根基</h3>
+      <p class="card-subtitle">不写工具, 接入生态</p>
+      <p style="font-size:0.85rem;color:#475569;line-height:1.6;">
+        Hermes 需要为每个新能力写 Python handler。这套方案接入 MCP — 每个新 MCP 服务器自动成为系统能力。<br><br>
+        rapid-ocr, pdf2md, pandoc, excel, playwright, docker, mongodb, ssh... 16 个服务器覆盖开发全流程, 零额外开发成本。
+      </p>
+    </div>
+  </div>
+
+  <div class="footer">
+    Claude Code 记忆与进化架构 &middot; 2026-05-24 &middot; 主场景: IDE &middot; 辅助: 微信薄桥接
+  </div>
+
+</div>
+
+</body>
+</html>

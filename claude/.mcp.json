@@ -71,6 +71,13 @@
       "@negokaz/excel-mcp-server"
     ]
   },
+  "excel-mcp": {
+    "command": "{{PYTHONW_PATH}}",
+    "args": [
+      "{{HOME_WIN}}\\.claude\\scripts\\mcp_launcher.py",
+      "iflow-mcp_guillehr2-excel-mcp-server"
+    ]
+  },
   "playwright": {
     "command": "{{PYTHONW_PATH}}",
     "args": [
@@ -107,9 +114,9 @@
     ]
   },
   "pdf2md": {
-    "command": "{{HOME_WIN}}\\.claude\\scripts\\pdf2md\\venv\\Scripts\\pythonw.exe",
+    "command": "{{HOME_WIN}}\\.claude\\mcp-servers\\pdf2md\\.venv\\Scripts\\pythonw.exe",
     "args": [
-      "{{HOME_WIN}}\\.claude\\scripts\\pdf2md\\server.py"
+      "{{HOME_WIN}}\\.claude\\mcp-servers\\pdf2md\\server.py"
     ]
   },
   "docker": {

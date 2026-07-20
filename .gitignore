@@ -41,6 +41,7 @@ plugins/data/
 # === 会话数据 ===
 projects/
 scheduled_tasks.json
+SESSION_CONTEXT.md
 
 # === OpenClaw 运行时 ===
 openclaw/cron/jobs-state.json

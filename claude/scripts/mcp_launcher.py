@@ -17,4 +17,4 @@ else:
     flags = 0
     startup = None
 
-sys.exit(subprocess.run(args, creationflags=flags, startupinfo=startup).returncode)
+sys.exit(subprocess.run(args, creationflags=flags, startupinfo=startup, shell=True).returncode)

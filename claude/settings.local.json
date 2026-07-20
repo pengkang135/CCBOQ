@@ -24,7 +24,7 @@
       "mcp__filesystem__edit_file",
       "mcp__chrome-devtools__navigate_page",
       "mcp__chrome-devtools__take_snapshot",
-      "Bash(/c/Users/Kevin/AppData/Local/Programs/Python/Python313/python.exe *)",
+      "Bash(/c/Users/Kevin/AppData/Local/Programs/Python/Python313/pythonw.exe *)",
       "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('messages',{}\\).get\\('tts',{}\\), indent=2\\)\\)\")",
       "Bash(netstat -ano)"
     ]

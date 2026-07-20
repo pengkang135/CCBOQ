@@ -107,9 +107,9 @@
     ]
   },
   "pdf2md": {
-    "command": "{{HOME_WIN}}\\.claude\\scripts\\pdf2md\\venv\\Scripts\\pythonw.exe",
+    "command": "{{HOME_WIN}}\\.claude\\mcp-servers\\pdf2md\\.venv\\Scripts\\pythonw.exe",
     "args": [
-      "{{HOME_WIN}}\\.claude\\scripts\\pdf2md\\server.py"
+      "{{HOME_WIN}}\\.claude\\mcp-servers\\pdf2md\\server.py"
     ]
   },
   "docker": {

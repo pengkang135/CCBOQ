@@ -82,6 +82,18 @@
         "hooks": [
           {
             "type": "command",
+            "command": "{{PYTHONW_PATH}} {{HOME}}/.claude/scripts/archive_session_stop_hook.py",
+            "timeout": 15,
+            "statusMessage": "归档检查",
+            "async": false
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
             "command": "powershell -STA -File \"{{HOME}}/.claude/sounds/play-mp3.ps1\" -Path \"{{HOME}}/.claude/sounds/command-complete-fantasy_ui_button.mp3\"",
             "timeout": 15,
             "statusMessage": "🔊",

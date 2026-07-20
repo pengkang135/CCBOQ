@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alice 记忆框架 — 2026-05-22</title>
+<style>
+:root {
+  --bg-deep: #080c12;
+  --bg-panel: #0d141e;
+  --bg-card: #111922;
+  --border-subtle: #1a2533;
+  --border-glow: #1e3048;
+  --text-primary: #c8d6e5;
+  --text-secondary: #7a8c9e;
+  --text-dim: #4a5568;
+  --cyan: #39c5e6;
+  --cyan-dim: #1a4a5e;
+  --amber: #f0a040;
+  --amber-dim: #4a3020;
+  --rose: #e0558a;
+  --rose-dim: #4a2038;
+  --teal: #3cb8a0;
+  --teal-dim: #1a403a;
+  --violet: #8b7cf0;
+  --violet-dim: #2a2050;
+  --green: #5cb85c;
+  --green-dim: #1a3a1a;
+  --font-mono: "JetBrains Mono", "Cascadia Code", "Fira Code", "Consolas", monospace;
+  --font-sans: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(57,197,230,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse at 85% 100%, rgba(224,85,138,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 15% 80%, rgba(60,184,160,0.03) 0%, transparent 50%);
+}
+
+.dot-grid {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image: radial-gradient(rgba(57,197,230,0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.container { max-width: 1280px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+/* Header */
+.header {
+  padding: 48px 0 32px;
+  text-align: center;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 48px;
+}
+.header h1 {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--cyan);
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+}
+.header .subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.header .badge {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 4px 14px;
+  border: 1px solid var(--border-glow);
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.06em;
+  background: rgba(57,197,230,0.04);
+}
+
+/* Section titles */
+.section-title {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 24px;
+  padding-left: 12px;
+  border-left: 2px solid var(--cyan);
+}
+
+/* Architecture Diagram */
+.arch-diagram {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 20px;
+  margin-bottom: 56px;
+}
+
+.arch-zone {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 20px;
+  position: relative;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.arch-zone:hover {
+  border-color: var(--border-glow);
+  box-shadow: 0 0 30px rgba(57,197,230,0.04);
+}
+.arch-zone.zone-sources { grid-column: 1; grid-row: 1; border-top: 2px solid var(--teal); }
+.arch-zone.zone-pipeline { grid-column: 2; grid-row: 1 / 3; border-top: 2px solid var(--cyan); }
+.arch-zone.zone-vaults { grid-column: 3; grid-row: 1; border-top: 2px solid var(--amber); }
+.arch-zone.zone-librarian { grid-column: 1; grid-row: 2; border-top: 2px solid var(--violet); }
+.arch-zone.zone-memory { grid-column: 3; grid-row: 2; border-top: 2px solid var(--rose); }
+.arch-zone.zone-active { grid-column: 1; grid-row: 3; border-top: 2px solid var(--green); }
+.arch-zone.zone-consumers { grid-column: 2 / 4; grid-row: 3; border-top: 2px solid var(--text-dim); }
+
+.zone-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 14px;
+}
+
+.zone-nodes { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.node {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 100px;
+}
+.node:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+.node .node-name {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+.node .node-detail {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+/* Node color variants */
+.node-sources { border-left: 2px solid var(--teal); }
+.node-sources:hover { border-color: var(--teal); box-shadow: 0 0 20px rgba(60,184,160,0.1); }
+.node-pipeline { border-left: 2px solid var(--cyan); }
+.node-pipeline:hover { border-color: var(--cyan); box-shadow: 0 0 20px rgba(57,197,230,0.1); }
+.node-vaults { border-left: 2px solid var(--amber); }
+.node-vaults:hover { border-color: var(--amber); box-shadow: 0 0 20px rgba(240,160,64,0.1); }
+.node-librarian { border-left: 2px solid var(--violet); }
+.node-librarian:hover { border-color: var(--violet); box-shadow: 0 0 20px rgba(139,124,240,0.1); }
+.node-memory { border-left: 2px solid var(--rose); }
+.node-memory:hover { border-color: var(--rose); box-shadow: 0 0 20px rgba(224,85,138,0.1); }
+.node-active { border-left: 2px solid var(--green); }
+.node-active:hover { border-color: var(--green); box-shadow: 0 0 20px rgba(92,184,92,0.1); }
+.node-consumers { border-left: 2px solid var(--text-dim); }
+.node-consumers:hover { border-color: var(--text-secondary); box-shadow: 0 0 20px rgba(122,140,158,0.1); }
+
+/* Flow arrows */
+.flow-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 0;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+}
+.flow-arrow .arrow-line {
+  width: 32px;
+  height: 1px;
+  background: var(--border-glow);
+  position: relative;
+}
+.flow-arrow .arrow-line::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  top: -3px;
+  border: 4px solid transparent;
+  border-left: 6px solid var(--border-glow);
+}
+.flow-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border: 1px dashed var(--border-subtle);
+  border-radius: 3px;
+}
+
+/* Memory Levels */
+.levels-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 56px;
+}
+.level-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 20px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.level-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  transition: height 0.3s;
+}
+.level-card:hover { transform: translateY(-3px); }
+.level-card:hover::before { height: 4px; }
+.level-l1::before { background: var(--teal); }
+.level-l2::before { background: var(--cyan); }
+.level-l3::before { background: var(--amber); }
+.level-l4::before { background: var(--violet); }
+.level-l5::before { background: var(--rose); }
+.level-card .level-badge {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.level-card .level-name {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  margin: 8px 0;
+  color: var(--text-primary);
+}
+.level-card .level-desc {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+.level-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+  font-size: 0.7rem;
+}
+/* Arrow rows between levels */
+.levels-arrows {
+  display: grid;
+  grid-template-columns: 1fr 24px 1fr 24px 1fr 24px 1fr 24px 1fr;
+  align-items: center;
+  margin: -8px 0 16px;
+  padding: 0 40px;
+}
+.levels-arrows span {
+  text-align: center;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+/* Sequence Diagram */
+.seq-diagram {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 28px;
+  margin-bottom: 56px;
+  overflow-x: auto;
+}
+.seq-header {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.seq-participant {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--cyan);
+  text-align: center;
+  padding: 8px 4px;
+  border-bottom: 2px solid var(--cyan-dim);
+}
+.seq-step {
+  display: grid;
+  grid-template-columns: 40px 1fr 24px 1fr;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  animation: seqFadeIn 0.5s ease backwards;
+}
+.seq-step:nth-child(1) { animation-delay: 0.1s; }
+.seq-step:nth-child(2) { animation-delay: 0.2s; }
+.seq-step:nth-child(3) { animation-delay: 0.3s; }
+.seq-step:nth-child(4) { animation-delay: 0.4s; }
+.seq-step:nth-child(5) { animation-delay: 0.5s; }
+.seq-step:nth-child(6) { animation-delay: 0.6s; }
+.seq-step:nth-child(7) { animation-delay: 0.7s; }
+.seq-step:nth-child(8) { animation-delay: 0.8s; }
+.seq-step:nth-child(9) { animation-delay: 0.9s; }
+.seq-step:nth-child(10) { animation-delay: 1.0s; }
+.seq-step:nth-child(11) { animation-delay: 1.1s; }
+.seq-step:nth-child(12) { animation-delay: 1.2s; }
+
+@keyframes seqFadeIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.seq-step .seq-time {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  color: var(--text-dim);
+  text-align: right;
+}
+.seq-step .seq-from {
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--amber);
+}
+.seq-step .seq-arrow {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.6rem;
+}
+.seq-step .seq-to {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--teal);
+}
+.seq-note {
+  grid-column: 1 / -1;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  font-style: italic;
+  padding: 4px 0 4px 44px;
+}
+.seq-divider {
+  grid-column: 1 / -1;
+  border-top: 1px dashed var(--border-subtle);
+  margin: 8px 0;
+}
+
+/* Parameter Table */
+.params-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 12px;
+  margin-bottom: 56px;
+}
+.param-group {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.param-group-header {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--cyan);
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(57,197,230,0.03);
+  letter-spacing: 0.04em;
+}
+.param-group.memory .param-group-header { color: var(--rose); background: rgba(224,85,138,0.03); }
+.param-group.active .param-group-header { color: var(--green); background: rgba(92,184,92,0.03); }
+.param-group.librarian .param-group-header { color: var(--violet); background: rgba(139,124,240,0.03); }
+.param-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 16px;
+  font-size: 0.73rem;
+  border-bottom: 1px solid rgba(26,37,51,0.5);
+}
+.param-row:last-child { border-bottom: none; }
+.param-key { color: var(--text-secondary); }
+.param-val {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-primary);
+  text-align: right;
+  max-width: 60%;
+}
+
+/* Expandable Tree */
+.tree-section { margin-bottom: 56px; }
+.tree-root { margin-left: 0; }
+.tree-node { margin-left: 24px; border-left: 1px solid var(--border-subtle); }
+.tree-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0 6px 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+  position: relative;
+}
+.tree-item:hover { background: rgba(57,197,230,0.02); }
+.tree-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 8px;
+  height: 1px;
+  background: var(--border-subtle);
+}
+.tree-toggle {
+  width: 18px; height: 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  border: 1px solid var(--border-subtle);
+  border-radius: 3px;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.tree-toggle:hover { color: var(--cyan); border-color: var(--cyan); }
+.tree-toggle.open { transform: rotate(90deg); }
+.tree-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-primary);
+}
+.tree-type {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  padding: 1px 6px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 2px;
+  font-family: var(--font-mono);
+}
+.tree-children { display: none; }
+.tree-children.open { display: block; }
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 32px 0 48px;
+  border-top: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+}
+
+/* Tooltip */
+.tooltip {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glow);
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-size: 0.7rem;
+  color: var(--text-primary);
+  max-width: 280px;
+  pointer-events: none;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+.tooltip.visible { display: block; }
+.tooltip .tt-title {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--cyan);
+  margin-bottom: 4px;
+}
+.tooltip .tt-body { color: var(--text-secondary); line-height: 1.5; }
+
+/* Pulse animation for pipeline nodes */
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(57,197,230,0.2); }
+  50% { box-shadow: 0 0 0 6px rgba(57,197,230,0); }
+}
+.node-pipeline { animation: pulse 3s infinite; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .arch-diagram { grid-template-columns: 1fr; }
+  .arch-zone { grid-column: 1 !important; grid-row: auto !important; }
+  .levels-row { grid-template-columns: repeat(2, 1fr); }
+  .levels-arrows { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="dot-grid"></div>
+<div class="container">
+
+<header class="header">
+  <h1>Alice Memory Framework</h1>
+  <div class="subtitle">Architecture Blueprint &middot; 2026-05-22</div>
+  <div class="badge">OpenClaw + Librarian + memory-core</div>
+</header>
+
+<!-- Architecture Diagram -->
+<div class="section-title">Architecture Overview</div>
+<div class="arch-diagram" id="archDiagram"></div>
+
+<!-- Flow -->
+<div class="section-title">Data Flow</div>
+<div class="flow-section" id="flowSection"></div>
+
+<!-- Memory Levels -->
+<div class="section-title">Memory Hierarchy (L1 → L5)</div>
+<div class="levels-row" id="levelsRow"></div>
+<div class="levels-arrows" id="levelsArrows"></div>
+
+<!-- Sequence -->
+<div class="section-title">Interaction Sequence</div>
+<div class="seq-diagram" id="seqDiagram"></div>
+
+<!-- Tree -->
+<div class="section-title">Component Tree</div>
+<div class="tree-section" id="treeSection"></div>
+
+<!-- Parameters -->
+<div class="section-title">Key Parameters</div>
+<div class="params-grid" id="paramsGrid"></div>
+
+<footer class="footer">
+  Alice Memory Framework &middot; Built 2026-05-22 &middot; OpenClaw / Librarian / memory-core
+</footer>
+
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+const DATA = {
+  zones: [
+    { id: "sources", label: "Data Sources", cssClass: "zone-sources", nodes: [
+      { id: "wx", name: "微信消息", detail: "wx-cli + wxdb MCP", color: "node-sources" },
+      { id: "cc", name: "Claude Code 会话", detail: "staging/cc-*.json", color: "node-sources" },
+      { id: "tg", name: "Telegram", detail: "Bot API", color: "node-sources" },
+      { id: "gh", name: "GitHub", detail: "Issues / PRs", color: "node-sources" },
+      { id: "gm", name: "Gmail", detail: "邮件采集", color: "node-sources" }
+    ]},
+    { id: "pipeline", label: "Memory Pipeline (cron: 7,37 * * * *)", cssClass: "zone-pipeline", nodes: [
+      { id: "fetch", name: "1. fetch", detail: "多源采集器", color: "node-pipeline" },
+      { id: "canonicalize", name: "2. canonicalize", detail: "路由 → Threaded JSON", color: "node-pipeline" },
+      { id: "chunk", name: "3. chunk", detail: "SHA-256 去重分块", color: "node-pipeline" },
+      { id: "store", name: "4. store", detail: "写入 Librarian vault", color: "node-pipeline" },
+      { id: "bucket", name: "5. bucket-seal", detail: "累积阈值触发", color: "node-pipeline" },
+      { id: "evaluate", name: "6. evaluate", detail: "DeepSeek LLM 记忆提取", color: "node-pipeline" }
+    ]},
+    { id: "vaults", label: "Librarian Vaults", cssClass: "zone-vaults", nodes: [
+      { id: "v1", name: "Kevin Knowledge Hub", detail: "~/.claude/knowledge/", color: "node-vaults" },
+      { id: "v2", name: "Feynman Library", detail: "F:/FeynmanLibrary/", color: "node-vaults" },
+      { id: "v3", name: "名片库", detail: "~/.claude/business-cards/", color: "node-vaults" },
+      { id: "v4", name: "百度同步盘", detail: "F:/BaiduSyncdisk/", color: "node-vaults" }
+    ]},
+    { id: "librarian", label: "Librarian CLI", cssClass: "zone-librarian", nodes: [
+      { id: "lib-sqlite", name: "SQLite + FTS5", detail: "全文搜索引擎", color: "node-librarian" },
+      { id: "lib-vector", name: "Vector embedding", detail: "语义检索", color: "node-librarian" },
+      { id: "lib-cli", name: "librarian.cmd", detail: "hyb_search / vec_search / memory_list / get_excerpt", color: "node-librarian" }
+    ]},
+    { id: "memory", label: "memory-core Dreaming", cssClass: "zone-memory", nodes: [
+      { id: "mem-db", name: "main.sqlite", detail: "记忆数据库", color: "node-memory" },
+      { id: "mem-light", name: "Light Dreaming", detail: "回溯3天 · 相似度0.85", color: "node-memory" },
+      { id: "mem-deep", name: "Deep Dreaming", detail: "最低分0.4 · 半衰10天", color: "node-memory" },
+      { id: "mem-rem", name: "REM Dreaming", detail: "模式强度 >= 0.7", color: "node-memory" }
+    ]},
+    { id: "active", label: "active-memory Plugin", cssClass: "zone-active", nodes: [
+      { id: "act-retrieve", name: "会话启动时检索", detail: "contextInjection: always", color: "node-active" },
+      { id: "act-inject", name: "上下文注入", detail: "promptStyle: balanced", color: "node-active" }
+    ]},
+    { id: "consumers", label: "Consumers", cssClass: "zone-consumers", nodes: [
+      { id: "consumer-alice", name: "Alice (OpenClaw)", detail: "微信 + Telegram", color: "node-consumers" },
+      { id: "consumer-cc", name: "Claude Code", detail: "IDE / CLI", color: "node-consumers" }
+    ]}
+  ],
+  flows: [
+    { from: "Data Sources", to: "Memory Pipeline", label: "raw data", dashed: false },
+    { from: "Memory Pipeline", to: "Librarian Vaults", label: "structured memory", dashed: false },
+    { from: "Librarian Vaults", to: "Librarian CLI", label: "index & query", dashed: false },
+    { from: "Librarian CLI", to: "active-memory", label: "retrieve (bidirectional)", dashed: true },
+    { from: "active-memory", to: "Alice", label: "context injection", dashed: false },
+    { from: "memory-core", to: "Alice", label: "dreaming memory (bidirectional)", dashed: true },
+    { from: "Claude Code", to: "Data Sources", label: "session archive", dashed: false },
+    { from: "Claude Code", to: "Librarian CLI", label: "search (bidirectional)", dashed: true }
+  ],
+  levels: [
+    { id: "L1", name: "原始数据", desc: "微信消息 / CC会话 / Telegram\n未处理, 仅存储", color: "level-l1" },
+    { id: "L2", name: "结构化归档", desc: "Threaded JSON\n标准化格式, 时间线组织", color: "level-l2" },
+    { id: "L3", name: "去重分块", desc: "Content Chunks\nSHA-256 幂等, 可检索", color: "level-l3" },
+    { id: "L4", name: "语义记忆", desc: "结构化记忆\nLLM 提取, 置信度评分", color: "level-l4" },
+    { id: "L5", name: "Dreaming 记忆", desc: "Pattern Memory\n关联模式, 习惯, 偏好", color: "level-l5" }
+  ],
+  levelTransitions: [
+    "canonicalize", "chunk", "evaluate", "dreaming"
+  ],
+  sequence: [
+    { type: "note", text: "Claude Code: 会话结束" },
+    { from: "Claude Code", to: "staging/", msg: "写入 cc-{id}.json" },
+    { type: "note", text: "Memory Pipeline: cron 触发" },
+    { from: "Pipeline", to: "staging/", msg: "StagingFetcher 扫描" },
+    { from: "Pipeline", to: "Pipeline", msg: "canonicalize → Threaded JSON" },
+    { from: "Pipeline", to: "Pipeline", msg: "chunk → SHA-256 去重" },
+    { from: "Pipeline", to: "Librarian", msg: "store → 写入 vault" },
+    { from: "Pipeline", to: "Pipeline", msg: "bucket-seal 累积判断" },
+    { from: "Pipeline", to: "Pipeline", msg: "evaluate → DeepSeek 提取" },
+    { type: "note", text: "用户交互" },
+    { from: "微信用户", to: "Alice", msg: "发送消息" },
+    { from: "Alice", to: "Alice", msg: "memory-core dreaming 检索" },
+    { from: "Alice", to: "Librarian", msg: "active-memory 检索知识" },
+    { from: "Librarian", to: "Alice", msg: "返回记忆上下文" },
+    { from: "Alice", to: "微信用户", msg: "回复 (注入记忆上下文)" }
+  ],
+  tree: {
+    label: "Alice Memory System",
+    children: [
+      { label: "Data Sources", type: "layer", children: [
+        { label: "微信消息 (wx-cli + wxdb MCP)", type: "source" },
+        { label: "Claude Code 会话 (staging/cc-*.json)", type: "source" },
+        { label: "Telegram (Bot API)", type: "source" },
+        { label: "GitHub (Issues/PRs)", type: "source" },
+        { label: "Gmail", type: "source" }
+      ]},
+      { label: "Memory Pipeline (cron: 每30min)", type: "process", children: [
+        { label: "1. fetch — 多源采集器", type: "stage" },
+        { label: "2. canonicalize — 路由到 Threaded JSON", type: "stage" },
+        { label: "3. chunk — SHA-256 去重分块", type: "stage" },
+        { label: "4. store — 写入 Librarian vault", type: "stage" },
+        { label: "5. bucket-seal — 累积阈值触发 (10msg/5000tokens/60min)", type: "stage" },
+        { label: "6. evaluate — DeepSeek LLM 记忆提取", type: "stage" }
+      ]},
+      { label: "Librarian Vaults", type: "storage", children: [
+        { label: "Kevin Knowledge Hub (~/.claude/knowledge/)", type: "vault" },
+        { label: "Feynman Library (F:/FeynmanLibrary/)", type: "vault" },
+        { label: "名片库 (~/.claude/business-cards/)", type: "vault" },
+        { label: "百度同步盘 (F:/BaiduSyncdisk/)", type: "vault" }
+      ]},
+      { label: "Librarian CLI", type: "service", children: [
+        { label: "SQLite + FTS5 — 全文搜索", type: "engine" },
+        { label: "Vector embedding — 语义检索", type: "engine" },
+        { label: "hyb_search / vec_search / memory_list / get_excerpt", type: "api" }
+      ]},
+      { label: "memory-core Dreaming", type: "memory", children: [
+        { label: "Light Dreaming — 回溯3天, 相似度0.85", type: "phase", color: "rose" },
+        { label: "Deep Dreaming — 最低分0.4, 半衰10天", type: "phase", color: "rose" },
+        { label: "REM Dreaming — 模式强度 >= 0.7", type: "phase", color: "rose" }
+      ]},
+      { label: "active-memory Plugin", type: "plugin", children: [
+        { label: "会话启动时检索 (contextInjection: always)", type: "hook" },
+        { label: "上下文注入 (promptStyle: balanced)", type: "hook" }
+      ]},
+      { label: "Consumers", type: "consumer", children: [
+        { label: "Alice (OpenClaw) — 微信 + Telegram", type: "agent" },
+        { label: "Claude Code — IDE / CLI", type: "agent" }
+      ]}
+    ]
+  },
+  parameters: [
+    { group: "Memory Pipeline", cssClass: "", rows: [
+      ["执行频率", "每30分钟 (cron: 7,37 * * * *)"],
+      ["Bucket-Seal 触发阈值", "10条消息 / 5000 tokens / 60分钟"],
+      ["去重方式", "SHA-256 内容哈希"],
+      ["状态数据库", "~/.openclaw/memory-pipeline/db/state.sqlite"]
+    ]},
+    { group: "memory-core Light", cssClass: "memory", rows: [
+      ["回溯天数", "3天"],
+      ["去重相似度阈值", "0.85"]
+    ]},
+    { group: "memory-core Deep", cssClass: "memory", rows: [
+      ["最低评分", "0.4"],
+      ["记忆半衰期", "10天"]
+    ]},
+    { group: "memory-core REM", cssClass: "memory", rows: [
+      ["模式强度阈值", "0.7"]
+    ]},
+    { group: "active-memory", cssClass: "active", rows: [
+      ["注入时机", "每次会话启动 (contextInjection: always)"],
+      ["promptStyle", "balanced"],
+      ["适用会话类型", "direct + group"]
+    ]},
+    { group: "Librarian", cssClass: "librarian", rows: [
+      ["检索方式", "混合检索 (关键词 FTS5 + 语义向量)"],
+      ["Vault 数量", "4个"]
+    ]}
+  ]
+};
+
+// Render architecture zones
+(function() {
+  const arch = document.getElementById('archDiagram');
+  DATA.zones.forEach(zone => {
+    const div = document.createElement('div');
+    div.className = `arch-zone ${zone.cssClass}`;
+    div.innerHTML = `<div class="zone-label">${zone.label}</div><div class="zone-nodes">${
+      zone.nodes.map(n => `<div class="node ${n.color}" data-tip="${n.id}"><div class="node-name">${n.name}</div><div class="node-detail">${n.detail}</div></div>`).join('')
+    }</div>`;
+    arch.appendChild(div);
+  });
+})();
+
+// Render flows
+(function() {
+  const flow = document.getElementById('flowSection');
+  DATA.flows.forEach((f, i) => {
+    const item = document.createElement('div');
+    item.className = 'flow-arrow';
+    item.innerHTML = `<span style="color:var(--text-secondary);font-size:0.65rem">${f.from}</span><span class="arrow-line"></span><span class="flow-label">${f.label}</span><span class="arrow-line"></span><span style="color:var(--text-secondary);font-size:0.65rem">${f.to}</span>`;
+    flow.appendChild(item);
+  });
+})();
+
+// Render levels
+(function() {
+  const row = document.getElementById('levelsRow');
+  DATA.levels.forEach((lv, i) => {
+    const card = document.createElement('div');
+    card.className = `level-card ${lv.color}`;
+    card.innerHTML = `<div class="level-badge">${lv.id}</div><div class="level-name">${lv.name}</div><div class="level-desc">${lv.desc.replace(/\n/g,'<br>')}</div>`;
+    card.style.animationDelay = `${i * 0.1}s`;
+    row.appendChild(card);
+  });
+
+  const arrows = document.getElementById('levelsArrows');
+  DATA.levelTransitions.forEach((t, i) => {
+    arrows.innerHTML += `<span>→ ${t} →</span>`;
+  });
+})();
+
+// Render sequence
+(function() {
+  const seq = document.getElementById('seqDiagram');
+  DATA.sequence.forEach(step => {
+    if (step.type === 'note') {
+      seq.innerHTML += `<div class="seq-note">// ${step.text}</div>`;
+    } else {
+      seq.innerHTML += `<div class="seq-step"><div class="seq-time"></div><div class="seq-from">${step.from}</div><div class="seq-arrow">→</div><div class="seq-to">${step.to}: ${step.msg}</div></div>`;
+    }
+  });
+})();
+
+// Render tree
+(function() {
+  const root = document.getElementById('treeSection');
+
+  function buildTree(node) {
+    const div = document.createElement('div');
+    div.className = 'tree-node';
+
+    const item = document.createElement('div');
+    item.className = 'tree-item';
+
+    const hasChildren = node.children && node.children.length > 0;
+    if (hasChildren) {
+      const toggle = document.createElement('span');
+      toggle.className = 'tree-toggle';
+      toggle.textContent = '▶';
+      item.appendChild(toggle);
+    } else {
+      const spacer = document.createElement('span');
+      spacer.style.cssText = 'width:18px;flex-shrink:0';
+      item.appendChild(spacer);
+    }
+
+    const label = document.createElement('span');
+    label.className = 'tree-label';
+    label.textContent = node.label;
+    item.appendChild(label);
+
+    if (node.type) {
+      const type = document.createElement('span');
+      type.className = 'tree-type';
+      type.textContent = node.type;
+      item.appendChild(type);
+    }
+
+    div.appendChild(item);
+
+    if (hasChildren) {
+      const children = document.createElement('div');
+      children.className = 'tree-children';
+      node.children.forEach(child => children.appendChild(buildTree(child)));
+      div.appendChild(children);
+
+      item.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const isOpen = children.classList.toggle('open');
+        item.querySelector('.tree-toggle').classList.toggle('open', isOpen);
+        item.querySelector('.tree-toggle').textContent = isOpen ? '▼' : '▶';
+      });
+    }
+
+    return div;
+  }
+
+  root.appendChild(buildTree(DATA.tree));
+})();
+
+// Render parameters
+(function() {
+  const grid = document.getElementById('paramsGrid');
+  DATA.parameters.forEach(group => {
+    const div = document.createElement('div');
+    div.className = `param-group ${group.cssClass}`;
+    div.innerHTML = `<div class="param-group-header">${group.group}</div>${
+      group.rows.map(r => `<div class="param-row"><span class="param-key">${r[0]}</span><span class="param-val">${r[1]}</span></div>`).join('')
+    }`;
+    grid.appendChild(div);
+  });
+})();
+
+// Tooltip
+(function() {
+  const tip = document.getElementById('tooltip');
+  const tipMeta = {
+    wx: { title: "微信消息采集", body: "通过 wx-cli 读取本地微信数据库 (ledger_v2.db)，经 memory-pipeline 摄入。支持文本消息、文件交换、联系方式等 AI 提取。" },
+    cc: { title: "Claude Code 会话归档", body: "Claude Code 结束对话时将会话摘要写入 staging/cc-{session_id}.json，由 StagingFetcher 异步摄入 Librarian。CC 不直接写 Librarian，完全解耦。" },
+    tg: { title: "Telegram Bot", body: "通过 Telegram Bot API 采集消息，支持直接对话和群聊。OpenClaw 的 telegram 通道同时处理消息收发。" },
+    gh: { title: "GitHub 集成", body: "采集 Issues 和 PRs 中的讨论内容，作为项目知识的一部分纳入记忆系统。" },
+    gm: { title: "Gmail 采集", body: "邮件内容采集器，将邮件对话标准化后纳入记忆管道处理。" },
+    fetch: { title: "fetch — 多源采集器", body: "Pipeline 第一阶段。各 Fetcher 实现不同数据源的采集逻辑（StagingFetcher、WxFetcher 等），将原始数据标准化后送入 canonicalize。" },
+    canonicalize: { title: "canonicalize — 路由标准化", body: "Pipeline 第二阶段。将不同来源的数据统一转换为 Threaded JSON 格式（标准化时间线结构），含 source、timestamp、thread_id、participants 等元数据。" },
+    chunk: { title: "chunk — SHA-256 去重", body: "Pipeline 第三阶段。对标准化内容进行分块，使用 SHA-256 哈希做幂等去重。同一内容不会重复写入 Librarian vault，避免记忆冗余。" },
+    store: { title: "store — 写入 Vault", body: "Pipeline 第四阶段。将去重后的 chunk 写入对应 Librarian vault 的 Memory/ 目录，按日期和来源组织文件结构。" },
+    bucket: { title: "bucket-seal — 累积触发", body: "Pipeline 第五阶段。累积阈值判断：达到 10 条消息 / 5000 tokens / 60 分钟任一条件时触发 evaluate。避免频繁触发 LLM 调用，控制成本。" },
+    evaluate: { title: "evaluate — LLM 记忆提取", body: "Pipeline 第六阶段。使用 DeepSeek 模型对累积的消息桶进行语义分析，提取结构化记忆（事实、偏好、决策、关系），写入 Librarian 并评分置信度。" },
+    v1: { title: "Kevin Knowledge Hub", body: "通用知识库 vault。存储个人知识、笔记、技术文档、Claude Code 会话记忆等。路径: ~/.claude/knowledge/" },
+    v2: { title: "Feynman Library", body: "工程/造价专业知识库 vault。存储 BOQ 清单、造价数据、工程规范、设计院图纸等技术资料。路径: F:/FeynmanLibrary/" },
+    v3: { title: "名片库", body: "商务联系人与名片信息 vault。存储联系人信息、公司资料、商务往来记录。路径: ~/.claude/business-cards/" },
+    v4: { title: "百度同步盘", body: "工作文档 vault。同步百度网盘的文档目录，包含工程项目的各类工作文件。路径: F:/BaiduSyncdisk/" },
+    "lib-sqlite": { title: "SQLite + FTS5", body: "Librarian 的全文搜索引擎。基于 SQLite FTS5 扩展实现关键词检索，支持中英文混合搜索、布尔查询、短语匹配。" },
+    "lib-vector": { title: "Vector Embedding", body: "Librarian 的语义检索引擎。使用 embedding 模型将文本向量化，支持基于语义相似度的跨语言、模糊概念搜索。" },
+    "lib-cli": { title: "librarian.cmd", body: "Librarian 命令行接口。提供 hyb_search (混合检索)、vec_search (向量检索)、memory_list (记忆列表)、get_excerpt (获取摘要) 四个核心命令。" },
+    "mem-db": { title: "Memory Database", body: "memory-core 插件的 SQLite 数据库。存储 dreaming 过程产生的所有记忆条目，包含 embedding 向量、置信度评分、时间戳等。" },
+    "mem-light": { title: "Light Dreaming", body: "浅层记忆整理。回溯最近 3 天的消息，以 0.85 相似度阈值进行去重。提取短期内的对话主题、关键信息和上下文关联。" },
+    "mem-deep": { title: "Deep Dreaming", body: "深层记忆巩固。对评分 >= 0.4 的记忆进行深度分析，使用 10 天半衰期模型计算记忆衰减。决定哪些记忆需要长期保存。" },
+    "mem-rem": { title: "REM Dreaming", body: "模式识别层。检测强度 >= 0.7 的重复行为模式，发现用户的习惯、偏好、决策模式。最高层级的记忆抽象。" },
+    "act-retrieve": { title: "会话启动检索", body: "active-memory 插件的 pre-agent hook。在每次 Alice 会话启动时自动触发，从 Librarian 检索与当前对话上下文相关的历史记忆。" },
+    "act-inject": { title: "上下文注入", body: "将检索到的记忆以 balanced 风格注入 agent 的 system prompt，确保 Alice 在对话中能引用相关的历史知识和用户偏好。" },
+    "consumer-alice": { title: "Alice (OpenClaw)", body: "桌面 AI 伴侣，通过微信和 Telegram 与用户交互。使用 Claude CLI 作为 agent 运行时后端，集成 memory-core 和 active-memory 实现记忆化对话。" },
+    "consumer-cc": { title: "Claude Code", body: "IDE/CLI 中的 Claude Code。直接通过 librarian CLI 检索知识库，同时作为记忆数据源——每次会话结束后将摘要写入 staging 目录。" }
+  };
+
+  document.querySelectorAll('.node[data-tip]').forEach(node => {
+    const id = node.getAttribute('data-tip');
+    if (!tipMeta[id]) return;
+
+    node.addEventListener('mouseenter', function(e) {
+      const m = tipMeta[id];
+      tip.innerHTML = `<div class="tt-title">${m.title}</div><div class="tt-body">${m.body}</div>`;
+      tip.classList.add('visible');
+    });
+    node.addEventListener('mousemove', function(e) {
+      tip.style.left = (e.clientX + 16) + 'px';
+      tip.style.top = (e.clientY - 16) + 'px';
+    });
+    node.addEventListener('mouseleave', function() {
+      tip.classList.remove('visible');
+    });
+  });
+})();
+</script>
+</body>
+</html>

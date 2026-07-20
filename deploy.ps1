@@ -317,7 +317,7 @@ if ($pythonExe) {
     $venvDirs = @(
         @{ Path = "$ClaudeDir\mcp-servers\librarian"; Req = "$ClaudeDir\mcp-servers\librarian\requirements.txt" },
         @{ Path = "$ClaudeDir\mcp-servers\rapid-ocr"; Req = "$ClaudeDir\mcp-servers\rapid-ocr\requirements.txt" },
-        @{ Path = "$ClaudeDir\scripts\pdf2md"; Req = "$ClaudeDir\mcp-servers\pdf2md\requirements.txt" }
+        @{ Path = "$ClaudeDir\mcp-servers\pdf2md"; Req = "$ClaudeDir\mcp-servers\pdf2md\requirements.txt" }
     )
     foreach ($v in $venvDirs) {
         if (Test-Path $v.Req) {

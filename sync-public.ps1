@@ -5,7 +5,7 @@ param(
     [switch]$CheckOnly
 )
 
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Continue"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ManifestFile = Join-Path $ScriptDir "public-manifest.txt"
 $TempDir = "$env:TEMP\albedo-public-sync"
@@ -123,10 +123,10 @@ Write-Host ""
 Write-Host "Committing and pushing..." -ForegroundColor Yellow
 Push-Location $TempDir
 try {
-    git add -A
+    git add -A 2>&1 | Out-Null
     $commitMsg = "sync: $(Get-Date -Format 'yyyy-MM-dd HH:mm') from albedo-cfg"
     git commit -m $commitMsg --allow-empty 2>&1 | Out-Null
-    git push origin main --force
+    git push origin main --force 2>&1 | Out-Null
     Write-Host "Pushed to CCBOQ." -ForegroundColor Green
 } finally {
     Pop-Location
