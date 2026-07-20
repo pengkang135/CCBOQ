@@ -6,20 +6,22 @@ Each sub-agent (A, B, C) follows this exact workflow.
 
 Agent prompt must contain:
 - Material list with full specs (code, name, description, unit)
-- Search keywords (English + local language)
+- Search keywords (English + local language + Chinese)
 - Price reference ranges
 - Output file path for part_N.json
 - Explicit prohibitions (no fabrication, no fake URLs, no homepage-only URLs)
 
-## 2. Search Phase (Bilingual Parallel)
+## 2. Search Phase (Trilingual Parallel)
 
 ```
-WebSearch (English keywords, 3-5 queries)
+WebSearch (Chinese keywords, 3-5 queries) — Chinese manufacturers first
   +
 WebSearch (local language keywords, 3-5 queries)
+  +
+WebSearch (English keywords, 3-5 queries)
   → Merge results
   → Deduplicate
-  → Sort by: local sources first
+  → Sort by: Chinese factory sources > local sources > international sources
 ```
 
 ## 3. Candidate Screening
@@ -45,7 +47,7 @@ Record:
   - source: 1-line summary of what page says
   - url: Full URL to exact page
   - type: Classify (供应商报价/平台参考/市场参考)
-  - language: Source language
+  - language: Source language (zh for Chinese, en+zh for bilingual sources)
 ```
 
 ## 5. WebFetch Verification
@@ -86,5 +88,6 @@ Write `part_N.json` as valid JSON array. Report:
 - Total quotes found
 - Quotes with prices vs. without
 - Local source count
+- Chinese source count
 - Any anomalies or issues found
 - Recommendations for master verification

@@ -5,6 +5,8 @@ description: Query the WeChat message database (ledger_v2.db) via wxdb MCP. Sear
 
 # wx-msg — Alice 微信消息查询
 
+**禁止使用 wx-cli。** wx-cli 直接 hook 微信进程，有封号风险。本技能只通过 `mcp__wxdb__*` 读取 WXDashboard 已下载的 SQLite 数据库。数据同步由外部定时任务负责，不在本技能范围内。
+
 ## 数据库
 
 通过 `mcp__wxdb__*` 工具查询 `F:\WXDashboard\data\ledger_v2.db`。

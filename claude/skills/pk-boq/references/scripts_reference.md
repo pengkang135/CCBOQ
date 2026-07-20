@@ -5,7 +5,7 @@
 ## merge_boq.py — 单源归一化
 
 ```bash
-python merge_boq.py <source.xlsx> [-o output.xlsx] [--keep-source-sheets] [--no-outline] [--no-write-blank]
+python merge_boq.py <source.xlsx> [-o output.xlsx] [--keep-source-sheets] [--no-outline] [--no-write-blank] [--columns '{"item":1,...}']
 ```
 
 | 参数 | 说明 |
@@ -15,20 +15,24 @@ python merge_boq.py <source.xlsx> [-o output.xlsx] [--keep-source-sheets] [--no-
 | `--keep-source-sheets` | 保留原始各 sheet 数据（默认不保留） |
 | `--no-outline` | 禁用行分组/折叠 |
 | `--no-write-blank` | 跳过空单元格写入，减少 XML 体积 |
+| `--columns` | 列映射 JSON：`{"item":1,"desc":2,"unit":3,"qty":4,"data_start":5}`（1-based） |
 
 **功能**：自动检测列布局（描述列/单位列/数量列/单价列/合价列），4 级层级识别（`【】` → `《》` → `{}` → 普通条目），层级配色，数字会计格式 `#,##0.00;-#,##0.00;-`。
 
-## compare_boq.py — 多院对比分析
+**新项目适配**：遇到未知 BOQ 格式时，先运行 `document-ingest` semantic_analysis 确定列映射，再通过 `--columns` 传入。
+
+## compare_boq.py — 清单对比分析
+
+以一份清单为基准，逐项匹配其他类似清单，输出 Markdown 对比报告。
 
 ```bash
-python compare_boq.py --wtcc <base> --fhdi <other1> --sghcc <other2> [-o <output.md>] [--project <name>] [--date <YYYY-MM-DD>]
+python compare_boq.py --base <基准> --other <清单2> [--other <清单3> ...] [-o <output.md>] [--project <name>] [--date <YYYY-MM-DD>]
 ```
 
 | 参数 | 说明 |
 |------|------|
-| `--wtcc` | 对比基准 BQMerge xlsx |
-| `--fhdi` | 第二个设计院的 BQMerge xlsx |
-| `--sghcc` | 第三个设计院的 BQMerge xlsx |
+| `--base` | 对比基准 BQMerge xlsx |
+| `--other` | 其他清单 BQMerge xlsx（可重复指定） |
 | `-o, --output` | 输出 .md 路径（默认：`{date}_BOQ_Comparison_Report.md`） |
 | `--project` | 项目名称 |
 | `--date` | 日期前缀（默认今日） |
@@ -72,23 +76,6 @@ python check_boq_consistency.py target.xlsx source.xlsx --qty-col 5
 
 **qty_col 说明**：WTCC 格式通常工程量在 F 列（0-based = 5），FHDI 格式多在 D 列（0-based = 3）。
 
-## merge_all_institutes.py — 全量合并汇总
-
-```bash
-python merge_all_institutes.py --wtcc <base> --fhdi <other1> --sghcc <other2> --tender <path> [-o <output.xlsx>] [--date <YYYY-MM-DD>]
-```
-
-| 参数 | 说明 |
-|------|------|
-| `--wtcc` | 模板基准 BQMerge xlsx |
-| `--fhdi` | 第二个设计院的 BQMerge xlsx |
-| `--sghcc` | 第三个设计院的 BQMerge xlsx |
-| `--tender` | 招标标准清单 xlsx |
-| `-o, --output` | 输出路径（默认：`{date}_BOQ_Merged_All_Institutes.xlsx`） |
-| `--date` | 日期前缀（默认今日） |
-
-**输出列**：`Item | Description | Unit | 招标标准清单 | 院A Design | 院A Bid | 院B方案一 | 院B方案二 | 院C | Main Specification`
-
 ## extract_boq_by_keyword.py — 按关键字提取BOQ子清单
 
 ```bash
@@ -113,6 +100,10 @@ python extract_boq_by_keyword.py <source.xlsx> <keyword> <template.xlsx> [-o out
 python build_inquiry_materials.py --source <BOQ.xlsx> --config <config.json> \
     --template <模板.xlsx> -o <输出目录>
 
+# 配合 document-ingest 自动检测列映射（新项目推荐）
+python build_inquiry_materials.py --source <BOQ.xlsx> --config <config.json> \
+    --ast <semantic_analysis.json> --template <模板.xlsx> -o <输出目录>
+
 # 分阶段运行
 python build_inquiry_materials.py --source <BOQ.xlsx> --config <config.json> --phase 1
 python build_inquiry_materials.py --items <items.json> --config <config.json> --phase 2
@@ -122,8 +113,9 @@ python build_inquiry_materials.py --consolidated <consolidated.json> --config <c
 
 | 参数 | 说明 |
 |------|------|
-| `--source` | 设计院 BOQ Excel（Phase 1 必填） |
+| `--source` | BOQ Excel 源文件（Phase 1 必填） |
 | `--config` | JSON 配置文件（必填） |
+| `--ast` | document-ingest semantic_analysis JSON，自动检测列映射（Phase 1） |
 | `--template` | 参考模板 xlsx（Phase 3 必填） |
 | `-o, --output` | 输出目录（默认当前目录） |
 | `--phase` | 1/2/3 或省略=全部 |
@@ -191,6 +183,51 @@ python scripts/split_inquiry_boq.py \
 ```
 
 完整工作流详见 [inquiry_package_boq.md](inquiry_package_boq.md)。
+
+## clean_external_links.py — ZIP/XML 级别清理外部链接
+
+直接操作 xlsx 底层 ZIP/XML，无需 Excel COM 或 openpyxl。彻底清除外部链接和无效定义名称，解决 Excel 打开含大量外部链接文件时卡死/长时间等待的问题。
+
+```bash
+python clean_external_links.py <file.xlsx> [-o output.xlsx] [--no-backup]
+```
+
+| 参数 | 说明 |
+|------|------|
+| `input` | 输入 .xlsx 文件路径（必填） |
+| `-o, --output` | 输出路径（默认：`{input}_clean.xlsx`） |
+| `--no-backup` | 跳过备份（默认自动备份到 `原始备份/` 子目录） |
+
+**清理内容**：
+- 删除 `xl/externalLinks/` 目录下所有外部链接文件
+- 去除所有含 `#REF!`、`[`、`]`+`!`、绝对路径的外部引用定义名称
+- 清理 `xl/_rels/workbook.xml.rels` 等 `.rels` 文件中的 externalLink 关系
+- 去除 `xl/workbook.xml` 中的 `<externalReferences>` 元素
+
+**坏名称检测规则**：含 `#REF!/#VALUE!/#N/A/#NAME?/#NUM!/#NULL!/#DIV/0!` 的无效引用；含 `[` 的外部工作簿索引；含 `file://` / `https?://` 的协议引用；含 `\\` 的 UNC 网络路径；含 `X:\` 的 Windows 绝对路径。
+
+## xlsx_to_ast — 语义 Excel-AST 转换（document-ingest 技能）
+
+由 `document-ingest` 技能提供，将 xlsx 转为 JSON AST。三种模式：`workbook_summary`（sheet 元数据）、`sheet_ast`（cell 级 AST 含坐标/公式/样式角色）、`semantic_analysis`（自动识别表头树、数据区域、汇总行、公式列）。
+
+```bash
+python excel_to_ast.py "input.xlsx" --mode workbook_summary
+python excel_to_ast.py "input.xlsx" --mode sheet_ast --sheet "Sheet1" --max-rows 200 -o ast.json
+python excel_to_ast.py "input.xlsx" --mode semantic_analysis --sheet "Sheet1" -o semantic.json
+```
+
+| 参数 | 说明 |
+|------|------|
+| `input` | 输入 .xlsx 文件路径（必填） |
+| `--mode` | `workbook_summary` / `sheet_ast` / `semantic_analysis` |
+| `--sheet` | 目标 sheet 名 |
+| `--range` | 限定区域，如 `A1:Z500` |
+| `--max-rows` | 最大数据行数 |
+| `-o` | 输出 JSON 路径 |
+
+输出为 JSON 格式（非 Markdown），保留公式、合并单元格、数字格式、style_role 等完整语义信息。完整 schema 见 `document-ingest` 的 `references/ast_schema.md`。
+
+**典型工作流**：`clean_external_links.py` → `document-ingest` 的 `excel_to_ast.py`，先清理后结构化。
 
 ## 拆分询价包 — 图纸分发
 

@@ -171,6 +171,6 @@ python -m librarian_mcp.cli query-material-price "TIG焊工"
 ```
 报价资料处理（本流程）
   └── 产出：标准化人工/材料/设备单价表
-        └── 可供 merge_boq.py / merge_all_institutes.py 引用
+        └── 可供 merge_boq.py 引用
               └── 作为套定额/组价的价格依据
 ```

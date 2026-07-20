@@ -1,0 +1,201 @@
+# Bangladesh Import Tariff & Logistics Rates
+# Single source of truth for enrich_prices.py and generate_price_report.py
+# Last researched: 2026-06-02
+# Source: Bangladesh NBR (National Board of Revenue) customs tariff schedule
+#
+# To update: search NBR tariff for specific HS codes, or query
+# "Bangladesh customs duty [material] HS code" for each category.
+
+# ── Bangladesh import tax defaults ──
+bangladesh:
+  clearance_pct: 0.03           # Customs clearance + port handling on CIF
+  inland_transport_base_usd: 5  # Base inland transport per ton/m3 (Chittagong→Laldia ~20km)
+  vat_rate: 0.15                # Standard VAT on (CIF + CD)
+
+# ── Origin-country logistics factors ──
+origin_factors:
+  CN:
+    name: China
+    exw_to_fob_pct: 0.04        # Inland transport + port handling to FOB
+    freight_multiplier: 1.0     # Base sea freight multiplier
+  IN:
+    name: India
+    exw_to_fob_pct: 0.02
+    freight_multiplier: 0.5     # Shorter sea route / land border option
+  BD:
+    name: Bangladesh
+    exw_to_fob_pct: 0.02
+    freight_multiplier: 0.3
+  EU:
+    name: Europe
+    exw_to_fob_pct: 0.05
+    freight_multiplier: 1.5     # Longer sea route
+
+# ── Material categories with duty/tax breakdown ──
+# CD = Customs Duty on CIF
+# VAT = 15% on (CIF + CD) → effective = 0.15 × (1 + CD)
+# AIT = Advance Income Tax on CIF
+# AT = Advance Tax on CIF (typically 5%, up to 7.5% for certain categories per NBR Order 06/Mushak/2025)
+# RD = Regulatory Duty on CIF
+# DDP ex-VAT = CIF × (1 + CD + AIT + AT + RD + clearance) + inland
+# DDP inc-VAT = DDP ex-VAT + CIF × (1 + CD) × VAT
+categories:
+  - id: industrial
+    name: "Industrial Products"
+    display: "Steel / Pipes / Paint / Coating / SS / DI"
+    hs_codes:
+      - "7301"      # Sheet piling of iron or steel
+      - "7304"      # Tubes, pipes, hollow profiles — seamless, iron/steel
+      - "7305"      # Other tubes & pipes — welded, riveted, iron/steel
+      - "7306"      # Other tubes, pipes & hollow profiles — iron/steel
+      - "7308"      # Structures of iron or steel (piles, shoes, connectors)
+      - "7214"      # Bars & rods — hot-rolled (rebar, reinforcement)
+      - "7208"      # Flat-rolled products — hot-rolled (steel plate)
+      - "7314"      # Cloth, grill, mesh — iron/steel wire
+      - "7303"      # Tubes, pipes of cast iron (ductile iron)
+      - "3208"      # Paints & varnishes — non-aqueous (epoxy, anticorrosive)
+      - "3209"      # Paints & varnishes — aqueous
+    keywords:
+      - steel
+      - pipe
+      - paint
+      - coating
+      - stainless
+      - epoxy
+      - anticorrosive
+      - marine paint
+      - ndft
+      - reinforcement
+      - rebar
+      - deformed bar
+      - shear connector
+      - steel plate
+      - steel mesh
+      - pile shoe
+      - phc pile
+      - prestressed
+      - spun pile
+      - lsaw
+      - api 5l
+      - tubular
+      - ductile iron
+      - di pipe
+    customs_duty: 0.25
+    regulatory_duty: 0.03
+    advance_income_tax: 0.05
+    advance_tax: 0.05
+    freight_pct: 0.08            # Dense steel — efficient shipping
+
+  - id: plastics
+    name: "Plastics & Geosynthetics"
+    display: "HDPE / UPVC / Geotextile / PVD"
+    hs_codes:
+      - "3917.21"   # Tubes & pipes — polymers of ethylene (HDPE)
+      - "3917.23"   # Tubes & pipes — polymers of vinyl chloride (UPVC)
+      - "5603"      # Nonwovens (geotextile fabric)
+      - "3917.29"   # Tubes & pipes — other plastics (corrugated, drainage)
+      - "3920"      # Other plates, sheets, film — plastics (PVD core, membrane)
+    keywords:
+      - hdpe
+      - upvc
+      - geotextile
+      - pvd
+      - corrugated
+      - hdp pipe
+      - slot drain
+      - gatic
+      - ducting
+      - drainage pipe
+      - prefabricated vertical
+      - vertical drain
+      - woven
+      - 400gsm
+    customs_duty: 0.15
+    regulatory_duty: 0.03
+    advance_income_tax: 0.03
+    advance_tax: 0.05
+    freight_pct: 0.10            # Light, containerized
+
+  - id: cement
+    name: "Cement & Concrete"
+    display: "Cement / Concrete"
+    hs_codes:
+      - "2523"      # Portland cement, aluminous cement, slag cement
+      - "6810"      # Articles of cement, concrete or artificial stone
+    keywords:
+      - cement
+      - concrete
+      - rmc
+      - ready mix
+      - site batch
+      - opc
+      - grout
+      - cementitious
+      - 5000psi
+      - 4000psi
+      - c25
+      - c30
+      - c32
+      - c35
+      - c40
+      - pavement
+      - paver
+      - block paving
+      - block sett
+      - kerb
+      - barrier
+      - edge restraint
+      - concrete mattress
+      - box culvert
+      - outfall
+      - rtg runway
+      - yard road
+      - tie in
+      - gate complex
+    customs_duty: 0.10
+    regulatory_duty: 0.03
+    advance_income_tax: 0.03
+    advance_tax: 0.05
+    freight_pct: 0.35            # Heavy/bulky
+
+  - id: raw_materials
+    name: "Raw Materials"
+    display: "Rock / Stone / Sand / Aggregate"
+    hs_codes:
+      - "2505"      # Sands of all kinds (natural, coloured)
+      - "2516"      # Granite, porphyry, basalt, sandstone
+      - "2517"      # Pebbles, gravel, broken/crushed stone
+      - "6802"      # Worked monumental/building stone
+    keywords:
+      - rock
+      - stone
+      - boulder
+      - armour
+      - rubble
+      - sand
+      - aggregate
+      - crushed
+      - fill sand
+      - backfill
+      - underlayer
+      - gabion
+      - reno mattress
+      - mix filter
+      - filter material
+    customs_duty: 0.05
+    regulatory_duty: 0.00
+    advance_income_tax: 0.03
+    advance_tax: 0.05
+    freight_pct: 0.35            # Heavy/bulky, high freight
+
+  - id: default
+    name: "Other Materials"
+    display: "Other / Default"
+    hs_codes:
+      - "varies"    # Depends on specific material — check NBR tariff schedule
+    keywords: []
+    customs_duty: 0.15
+    regulatory_duty: 0.00
+    advance_income_tax: 0.03
+    advance_tax: 0.05
+    freight_pct: 0.12            # Default

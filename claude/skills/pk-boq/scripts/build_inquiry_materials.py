@@ -15,6 +15,49 @@ import xlsxwriter
 
 # ── Phase 1: Extract ──────────────────────────────────────────────
 
+def _col_letter_to_idx(letter):
+    result = 0
+    for ch in letter.upper():
+        result = result * 26 + (ord(ch) - ord("A") + 1)
+    return result
+
+
+def detect_columns_from_ast(ast_path, sheet_name):
+    """Auto-detect column mapping from document-ingest semantic_analysis JSON.
+    Returns dict like {'item_no': 0, 'description': 1, 'unit': 2, 'quantity': 3, 'spec': 4}
+    or None if detection fails.
+    """
+    with open(ast_path, 'r', encoding='utf-8') as f:
+        ast = json.load(f)
+
+    for s in ast.get('sheets', []):
+        if s.get('sheet') != sheet_name:
+            continue
+        semantic = s.get('semantic', {})
+        header_tree = semantic.get('header_tree', {})
+        if not header_tree:
+            continue
+
+        col_map = {'item_no': 0, 'description': 1, 'unit': 2, 'quantity': 3, 'spec': 4}
+        for node in header_tree.get('nodes', []):
+            text = (node.get('text') or '').lower()
+            col_letter = node.get('column', '')
+            col_idx = _col_letter_to_idx(col_letter) - 1  # 0-based
+
+            if any(kw in text for kw in ('item', 'no', '编号', '序号', 'code')):
+                col_map['item_no'] = col_idx
+            elif any(kw in text for kw in ('description', 'desc', '描述', '名称', '项目特征', '项目名称')):
+                col_map['description'] = col_idx
+            elif any(kw in text for kw in ('unit', '单位')):
+                col_map['unit'] = col_idx
+            elif any(kw in text for kw in ('quantity', 'qty', '数量', '工程量')):
+                col_map['quantity'] = col_idx
+            elif any(kw in text for kw in ('spec', '规格', '型号', '规格型号')):
+                col_map['spec'] = col_idx
+
+        return col_map
+    return None
+
 def _is_leaf(item_no, min_depth=2):
     s = str(item_no).strip() if item_no else ''
     parts = s.split('.')
@@ -211,21 +254,20 @@ def _round_qty(qty):
 
 # ── Phase 3: Format ────────────────────────────────────────────────
 
-COLORS = {
-    'title_bg': '#FFF2CC',
-    'l1_bg': '#333F50',
-    'l1_fg': '#FFFFFF',
-    'l2_bg': '#DAE3F3',
-    'header_bg': '#FFF2CC',
-    'border': '#808080',
+# BOQ层级样式常量（引用 boq_hierarchy_rules.md）
+BOQ_COLORS = {
+    'l1_bg': '#C6D9F1',    # L1 section
+    'l2_bg': '#EEF2FA',    # L2 class
+    'l3_bg': '#FBE5D6',    # L3 sub-class
+    'header_bg': '#4472C4',
+    'border': '#BFBFBF',
 }
-
-L1_LETTERS = [chr(ord('A') + i) for i in range(26)]
 
 
 def _build_hierarchy(consolidated, config):
-    """Build L1 > L2 > items structure."""
+    """Build L1 > L2 > items structure with optional L3."""
     l1_configs = config['hierarchy'].get('l1_groups', [])
+    l3_threshold = config.get('l3_threshold', 30)
 
     l1_map = OrderedDict()
     for l1c in l1_configs:
@@ -249,12 +291,18 @@ def _build_hierarchy(consolidated, config):
     if unmapped_l1:
         l1_map['其他 Miscellaneous'] = unmapped_l1
 
-    # Remove empty L1s
     empty = [k for k, v in l1_map.items() if not v]
     for k in empty:
         del l1_map[k]
 
-    return l1_map
+    # L3 auto-detection
+    needs_l3 = {}
+    for l1_name, l2_sections in l1_map.items():
+        for l2_name, items in l2_sections.items():
+            if len(items) > l3_threshold:
+                needs_l3[(l1_name, l2_name)] = True
+
+    return l1_map, needs_l3
 
 
 def _split_spec(desc):
@@ -270,23 +318,20 @@ def format_output(consolidated, config, template_path, output_dir, title=None, n
     """Phase 3: Format consolidated materials into MD + xlsx output."""
     project = config.get('project', 'Project')
     today = date.today().isoformat()
-    prefix = f'{today}_'
 
     if title is None:
         title = f'人材机价格表 — {project} 市场询价'
 
-    hierarchy = _build_hierarchy(consolidated, config)
+    hierarchy, needs_l3 = _build_hierarchy(consolidated, config)
 
-    # ── Markdown output ──
     if not no_md:
         md_path = os.path.join(output_dir, f'{today}_材料询价表.md')
         _write_md(hierarchy, title, project, today, md_path)
         print(f'  MD: {md_path}')
 
-    # ── xlsx output ──
     if not no_xlsx:
         xlsx_path = os.path.join(output_dir, f'{today}_材料询价表.xlsx')
-        _write_xlsx(hierarchy, title, xlsx_path)
+        _write_xlsx(hierarchy, needs_l3, title, xlsx_path)
         print(f'  xlsx: {xlsx_path}')
 
 
@@ -320,112 +365,120 @@ def _write_md(hierarchy, title, project, today, md_path):
         f.write('\n'.join(lines))
 
 
-def _write_xlsx(hierarchy, title, xlsx_path):
+def _write_xlsx(hierarchy, needs_l3, title, xlsx_path):
     wb = xlsxwriter.Workbook(xlsx_path)
     ws = wb.add_worksheet('市场询价表')
 
-    # Formats
-    title_fmt = wb.add_format({
-        'bold': True, 'font_size': 10, 'font_name': 'Microsoft YaHei',
-        'bg_color': COLORS['title_bg'], 'border': 1, 'border_color': COLORS['border'],
-        'align': 'center', 'valign': 'vcenter', 'text_wrap': True,
+    # BOQ-standard formats
+    fmt_l1 = wb.add_format({
+        'bold': True, 'font_size': 11, 'font_name': 'Microsoft YaHei UI',
+        'font_color': '#1A1A1A', 'bg_color': BOQ_COLORS['l1_bg'],
+        'valign': 'vcenter', 'border': 0,
     })
-    header_fmt = wb.add_format({
-        'bold': True, 'font_size': 8, 'font_name': 'Microsoft YaHei',
-        'bg_color': COLORS['header_bg'], 'border': 1, 'border_color': COLORS['border'],
-        'align': 'center', 'valign': 'vcenter', 'text_wrap': True,
+    fmt_l2 = wb.add_format({
+        'bold': True, 'font_size': 10, 'font_name': 'Microsoft YaHei UI',
+        'font_color': '#1A1A1A', 'bg_color': BOQ_COLORS['l2_bg'],
+        'valign': 'vcenter', 'border': 0,
     })
-    l1_fmt = wb.add_format({
-        'bold': True, 'font_size': 8, 'font_name': 'Microsoft YaHei',
-        'bg_color': COLORS['l1_bg'], 'font_color': COLORS['l1_fg'],
-        'border': 1, 'border_color': COLORS['border'],
-        'align': 'left', 'valign': 'vcenter',
+    fmt_l3 = wb.add_format({
+        'bold': True, 'font_size': 10, 'font_name': 'Microsoft YaHei UI',
+        'font_color': '#1A1A1A', 'bg_color': BOQ_COLORS['l3_bg'],
+        'valign': 'vcenter', 'border': 0,
     })
-    l2_fmt = wb.add_format({
-        'bold': True, 'font_size': 8, 'font_name': 'Microsoft YaHei',
-        'bg_color': COLORS['l2_bg'], 'border': 1, 'border_color': COLORS['border'],
-        'align': 'left', 'valign': 'vcenter',
+    fmt_header = wb.add_format({
+        'bold': True, 'font_size': 10, 'font_name': 'Microsoft YaHei UI',
+        'bg_color': BOQ_COLORS['header_bg'], 'font_color': '#FFFFFF',
+        'border': 1, 'text_wrap': True, 'valign': 'vcenter', 'align': 'center',
     })
-    data_fmt = wb.add_format({
-        'font_size': 8, 'font_name': 'Microsoft YaHei',
-        'border': 1, 'border_color': COLORS['border'],
-        'align': 'left', 'valign': 'vcenter', 'text_wrap': True,
+    fmt_data = wb.add_format({
+        'font_size': 9, 'font_name': 'Microsoft YaHei UI',
+        'border': 1, 'valign': 'vcenter', 'border_color': BOQ_COLORS['border'],
     })
-    num_fmt = wb.add_format({
-        'font_size': 8, 'font_name': 'Microsoft YaHei',
-        'border': 1, 'border_color': COLORS['border'],
-        'align': 'center', 'valign': 'vcenter',
+    fmt_num = wb.add_format({
+        'font_size': 9, 'font_name': 'Microsoft YaHei UI',
+        'border': 1, 'valign': 'vcenter', 'border_color': BOQ_COLORS['border'],
         'num_format': '#,##0.00',
     })
-    center_fmt = wb.add_format({
-        'font_size': 8, 'font_name': 'Microsoft YaHei',
-        'border': 1, 'border_color': COLORS['border'],
-        'align': 'center', 'valign': 'vcenter',
+    fmt_num_qty = wb.add_format({
+        'font_size': 9, 'font_name': 'Microsoft YaHei UI',
+        'border': 1, 'valign': 'vcenter', 'border_color': BOQ_COLORS['border'],
+        'num_format': '#,##0.0',
+    })
+    fmt_center = wb.add_format({
+        'font_size': 9, 'font_name': 'Microsoft YaHei UI',
+        'border': 1, 'valign': 'vcenter', 'border_color': BOQ_COLORS['border'],
+        'align': 'center',
     })
 
-    widths = [7, 14, 28, 24, 6, 9, 6, 9, 8, 5, 10, 6, 10, 10, 18]
-    for i, w in enumerate(widths):
-        ws.set_column(i, i, w)
-
-    # Row 1: Title
-    ws.merge_range(0, 0, 0, 14, title, title_fmt)
-    ws.set_row(0, 22)
-
-    # Row 2: Header
-    headers = ['编号', '专业', '名称', '项目特征', '单位',
+    headers = ['编号', '专业', '名称', '项目特征', '单位', '数量',
                '除税单价', '税金', '含税单价', '日期', '币种',
                '供应商', '联系人', '电话', '地址', '备注']
-    ws.set_row(1, 20)
-    for i, h in enumerate(headers):
-        ws.write(1, i, h, header_fmt)
+    n_cols = len(headers)
+    col_widths = [7, 14, 28, 24, 6, 9, 9, 6, 9, 10, 5, 10, 6, 10, 10, 18]
 
-    row = 2
-    l1_idx = 0
+    for c, w in enumerate(col_widths):
+        ws.set_column(c, c, w)
+
+    ws.set_row(0, 22)
+    for c, h in enumerate(headers):
+        ws.write(0, c, h, fmt_header)
+    ws.freeze_panes(1, 0)
+
+    row = 1
+    seq = 0
+
     for l1_name, l2_sections in hierarchy.items():
         if not l2_sections:
             continue
 
-        letter = L1_LETTERS[l1_idx] if l1_idx < len(L1_LETTERS) else ''
-        ws.set_row(row, 18)
-        ws.write(row, 0, letter, l1_fmt)
-        ws.write(row, 1, '', l1_fmt)
-        ws.merge_range(row, 2, row, 14, f'【{l1_name}】', l1_fmt)
+        # L1 header
+        ws.write(row, 0, 'P', fmt_l1)
+        ws.write(row, 1, '', fmt_l1)
+        ws.write(row, 2, f'【{l1_name}】', fmt_l1)
+        for c in range(3, n_cols):
+            ws.write(row, c, '', fmt_l1)
+        ws.set_row(row, 16.5, None, {'level': 0})
         row += 1
 
         for l2_name, items in l2_sections.items():
             if not items:
                 continue
 
-            ws.set_row(row, 16)
-            ws.write(row, 0, '', l2_fmt)
-            ws.write(row, 1, '', l2_fmt)
-            ws.merge_range(row, 2, row, 14, f'《{l2_name}》', l2_fmt)
+            key = (l1_name, l2_name)
+            has_l3 = needs_l3.get(key, False)
+
+            # L2 header
+            ws.write(row, 0, '', fmt_l2)
+            ws.write(row, 1, '', fmt_l2)
+            ws.write(row, 2, f'《{l2_name}》', fmt_l2)
+            for c in range(3, n_cols):
+                ws.write(row, c, '', fmt_l2)
+            ws.set_row(row, 14.5, None, {'level': 1})
             row += 1
 
             for item in items:
                 name, spec = _split_spec(item['desc'])
-                ws.set_row(row, 16)
-                ws.write(row, 0, item.get('id', ''), data_fmt)
-                ws.write(row, 1, item.get('category', ''), data_fmt)
-                ws.write(row, 2, name, data_fmt)
-                ws.write(row, 3, spec or item.get('spec', ''), data_fmt)
-                ws.write(row, 4, item.get('unit', ''), center_fmt)
-                ws.write(row, 5, '', num_fmt)
-                ws.write(row, 6, '', num_fmt)
-                ws.write(row, 7, '', num_fmt)
-                ws.write(row, 8, '', center_fmt)
-                ws.write(row, 9, 'USD', center_fmt)
-                ws.write(row, 10, '', data_fmt)
-                ws.write(row, 11, '', data_fmt)
-                ws.write(row, 12, '', data_fmt)
-                ws.write(row, 13, '', data_fmt)
-                ws.write(row, 14, item.get('remark', ''), data_fmt)
+                seq += 1
+                ws.write(row, 0, item.get('id', ''), fmt_data)
+                ws.write(row, 1, item.get('category', l2_name), fmt_data)
+                ws.write(row, 2, name, fmt_data)
+                ws.write(row, 3, spec or item.get('spec', ''), fmt_data)
+                ws.write(row, 4, item.get('unit', ''), fmt_center)
+                ws.write_number(row, 5, item.get('qty', 0), fmt_num_qty)
+                ws.write(row, 6, '', fmt_num)
+                ws.write(row, 7, '', fmt_num)
+                ws.write(row, 8, '', fmt_num)
+                ws.write(row, 9, '', fmt_center)
+                ws.write(row, 10, 'USD', fmt_center)
+                ws.write(row, 11, '', fmt_data)
+                ws.write(row, 12, '', fmt_data)
+                ws.write(row, 13, '', fmt_data)
+                ws.write(row, 14, '', fmt_data)
+                ws.write(row, 15, item.get('remark', ''), fmt_data)
+                data_level = 3 if has_l3 else 2
+                ws.set_row(row, 14.5, None, {'level': data_level})
                 row += 1
 
-        l1_idx += 1
-
-    ws.freeze_panes(2, 0)
-    ws.autofilter(1, 0, row - 1, 14)
     wb.close()
 
 
@@ -435,6 +488,7 @@ def main():
     ap = argparse.ArgumentParser(description='Build market inquiry material table from BOQ')
     ap.add_argument('--source', help='BOQ source Excel path (Phase 1)')
     ap.add_argument('--config', required=True, help='JSON config file path')
+    ap.add_argument('--ast', help='document-ingest semantic_analysis JSON for auto column detection (Phase 1)')
     ap.add_argument('--template', help='Reference template xlsx (Phase 3)')
     ap.add_argument('-o', '--output', default='.', help='Output directory')
     ap.add_argument('--phase', type=int, choices=[1, 2, 3], help='Run single phase only')
@@ -447,6 +501,16 @@ def main():
 
     with open(args.config, 'r', encoding='utf-8') as f:
         config = json.load(f)
+
+    # Override column config from document-ingest if provided
+    if args.ast and args.source:
+        col_map = detect_columns_from_ast(args.ast, config['source'].get('sheets', ['Sheet1'])[0])
+        if col_map:
+            cols = config['source'].setdefault('columns', {})
+            for k in ('item_no', 'description', 'unit', 'quantity', 'spec'):
+                if k not in cols or cols[k] == 0:
+                    cols[k] = col_map.get(k, cols.get(k, 0))
+            print(f'  Auto-detected columns from AST: {col_map}')
 
     os.makedirs(args.output, exist_ok=True)
 

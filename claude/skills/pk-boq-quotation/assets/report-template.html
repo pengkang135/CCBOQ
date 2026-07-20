@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{REPORT_TITLE}}</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Microsoft YaHei', 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #333; line-height: 1.6; }
+    .container { max-width: 1600px; margin: 0 auto; padding: 20px; }
+    .header { background: linear-gradient(135deg, #0077B6 0%, #00B4D8 100%); color: white; padding: 30px; border-radius: 10px; margin-bottom: 25px; }
+    .header h1 { font-size: 24px; margin-bottom: 8px; }
+    .header p { opacity: 0.9; font-size: 14px; }
+    .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
+    .summary-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .summary-card h3 { font-size: 12px; color: #888; text-transform: uppercase; margin-bottom: 8px; }
+    .summary-card .value { font-size: 28px; font-weight: 700; color: #0077B6; }
+    .summary-card .unit { font-size: 13px; color: #666; }
+    .section { background: white; border-radius: 8px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .section h2 { font-size: 18px; color: #0077B6; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #90E0EF; }
+    .supplier-info { margin-bottom: 15px; padding: 12px; background: #e8f4f8; border-radius: 6px; font-size: 13px; }
+    .supplier-info strong { color: #0077B6; }
+    .table-wrapper { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 1400px; }
+    th { background: #0077B6; color: white; padding: 10px 8px; text-align: left; font-weight: 500; white-space: nowrap; position: sticky; top: 0; z-index: 1; }
+    td { padding: 8px; border-bottom: 1px solid #e8e8e8; }
+    tr:hover td { background: #f0f7fa; }
+    .num { text-align: right; font-variant-numeric: tabular-nums; font-family: 'Consolas', 'Courier New', monospace; }
+    .footer { text-align: center; color: #999; font-size: 12px; margin-top: 20px; padding: 15px; }
+    @media print { body { background: white; } .header, .summary { break-inside: avoid; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>{{REPORT_TITLE}}</h1>
+      <p>上传时间: {{GENERATED_TIME}} | 数据来源: {{SUPPLIER_COUNT}}家供应商原始报价单 | 项目: Evolution Data Center</p>
+    </div>
+
+    <div class="summary">
+      <div class="summary-card">
+        <h3>供应商数量</h3>
+        <div class="value">{{SUPPLIER_COUNT}}</div>
+        <div class="unit">家</div>
+      </div>
+      <div class="summary-card">
+        <h3>数据总条数</h3>
+        <div class="value">{{TOTAL_RECORDS}}</div>
+        <div class="unit">条报价记录</div>
+      </div>
+      <div class="summary-card">
+        <h3>平均除税单价</h3>
+        <div class="value">{{AVG_PRICE}}</div>
+        <div class="unit">{{CURRENCY}}/{{UNIT}}</div>
+      </div>
+      <div class="summary-card">
+        <h3>供应商</h3>
+        <div class="value" style="font-size:14px;">{{SUPPLIER_NAMES}}</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>一、报价数据明细表</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>编号</th>
+              <th>专业</th>
+              <th>名称</th>
+              <th>项目特征</th>
+              <th>单位</th>
+              <th>除税单价</th>
+              <th>税金(7%)</th>
+              <th>含税单价</th>
+              <th>日期</th>
+              <th>币种</th>
+              <th>供应商</th>
+              <th>联系人</th>
+              <th>电话</th>
+              <th>地址</th>
+              <th>备注</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{TABLE_ROWS}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>二、供应商详细信息</h2>
+      {{SUPPLIER_DETAILS}}
+    </div>
+
+    <div class="section">
+      <h2>三、数据处理说明</h2>
+      <table style="min-width: auto;">
+        <tr><td style="width: 200px;"><strong>数据来源</strong></td><td>供应商原始报价单</td></tr>
+        <tr><td><strong>转换方式</strong></td><td>{{CONVERSION_METHOD}}</td></tr>
+        <tr><td><strong>翻译处理</strong></td><td>{{TRANSLATION_NOTE}}</td></tr>
+        <tr><td><strong>价格处理</strong></td><td>{{PRICING_NOTE}}</td></tr>
+        <tr><td><strong>数据库</strong></td><td>MongoDB {{DB_NAME}}</td></tr>
+        <tr><td><strong>上传状态</strong></td><td>{{UPLOAD_STATUS}}</td></tr>
+        <tr><td><strong>插入记录数</strong></td><td>{{INSERTED_COUNT}}</td></tr>
+        <tr><td><strong>删除旧记录数</strong></td><td>{{DELETED_COUNT}}</td></tr>
+      </table>
+    </div>
+
+    <div class="footer">
+      <p>CostSpread 成本分析平台 | 自动生成于 {{GENERATED_TIME}}</p>
+    </div>
+  </div>
+</body>
+</html>

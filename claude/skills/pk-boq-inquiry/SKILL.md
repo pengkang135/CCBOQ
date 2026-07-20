@@ -8,6 +8,7 @@ license: Proprietary. LICENSE.txt has complete terms
 
 > 清单合并/对比/校验等核心操作 → 触发 `pk-boq` 技能
 > 工程造价约定、Excel 兼容性、BOQ 层级体系 → 见 `pk-boq` 技能
+> Excel 结构探测、列自动检测 → 使用 `document-ingest` 技能
 
 ## 触发词速查
 
@@ -48,7 +49,14 @@ flowchart TD
 
 从总承包 BOQ 提取子分部，以基础模板为骨架组装独立询价清单。
 
+**新项目适配**：遇到未知 BOQ 格式时，先用 document-ingest 探测源文件结构。
+
 ```bash
+# 第一步：探测源文件列结构
+python ../document-ingest/scripts/excel_to_ast.py "WTCC.xlsx" --mode semantic_analysis \
+    --sheet "Sheet1" -o wtcc_ast.json
+
+# 第二步：拆分询价包（列映射已知后）
 python ../pk-boq/scripts/split_inquiry_boq.py \
     --template "combine.xlsx" \
     --source "WTCC.xlsx" --label WTCC \
@@ -85,9 +93,17 @@ find <源目录> -iname "*关键词*"
 三阶段流水线，从设计院 BOQ 到分级市场询价表：
 
 ```bash
+# 标准用法
 python ../pk-boq/scripts/build_inquiry_materials.py \
     --source <BOQ.xlsx> --config <config.json> \
     --template <模板.xlsx> -o <输出目录>
+
+# 新项目推荐：配合 document-ingest 自动检测列映射
+python ../document-ingest/scripts/excel_to_ast.py "<BOQ.xlsx>" \
+    --mode semantic_analysis --sheet "<Sheet>" -o boq_ast.json
+python ../pk-boq/scripts/build_inquiry_materials.py \
+    --source <BOQ.xlsx> --config <config.json> \
+    --ast boq_ast.json --template <模板.xlsx> -o <输出目录>
 ```
 
 可 `--phase 1/2/3` 分阶段续跑。Phase 1 输出 `items.json`，Phase 2 输出 `consolidated.json`，Phase 3 输出最终 .xlsx + .md。

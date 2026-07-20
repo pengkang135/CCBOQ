@@ -221,11 +221,19 @@ def _extract_option_label(name: str) -> str:
 # ── 主类 ──────────────────────────────────────────────
 
 class BOQMerger:
-    def __init__(self, source_path: str | Path):
+    def __init__(self, source_path: str | Path, columns: dict | None = None):
         self.source_path = Path(source_path)
         self.wb = openpyxl.load_workbook(self.source_path, data_only=True)
         self.sheet_aliases: dict[str, str] = {}
         self.sheet_options: dict[str, str] = {}
+
+        # Column mapping (1-based), overridable via --columns
+        cols = columns or {}
+        self.col_item = cols.get("item", COL_ITEM)
+        self.col_desc = cols.get("desc", COL_DESC)
+        self.col_unit = cols.get("unit", COL_UNIT)
+        self.col_qty = cols.get("qty", COL_QTY)
+        self.col_data_start = cols.get("data_start", 5)
 
     # ── Sheet 筛选 ──
 
@@ -255,8 +263,8 @@ class BOQMerger:
         if header_row == 0:
             return 1
         for r in range(header_row + 1, min(ws.max_row or 500, 500) + 1):
-            val_a = _cell_str(ws, r, COL_ITEM)
-            val_b = _cell_str(ws, r, COL_DESC)
+            val_a = _cell_str(ws, r, self.col_item)
+            val_b = _cell_str(ws, r, self.col_desc)
             if not val_a and not val_b:
                 continue
             if _is_excel_error(val_a) or _is_excel_error(val_b):
@@ -284,11 +292,13 @@ class BOQMerger:
 
     def _classify_row(
         self, ws: Worksheet, row: int, max_col: int,
-        qty_col: int = COL_QTY,
+        qty_col: int | None = None,
     ) -> dict:
-        val_a = _cell_str(ws, row, COL_ITEM)
-        val_b = _cell_str(ws, row, COL_DESC)
-        val_c = _cell_str(ws, row, COL_UNIT)
+        if qty_col is None:
+            qty_col = self.col_qty
+        val_a = _cell_str(ws, row, self.col_item)
+        val_b = _cell_str(ws, row, self.col_desc)
+        val_c = _cell_str(ws, row, self.col_unit)
         val_d = _cell_str(ws, row, qty_col)
 
         if not val_a and not val_b and not val_c and not val_d:
@@ -471,11 +481,11 @@ class BOQMerger:
             if start_row == 1:
                 continue
 
-            # 检测本 sheet 的数量列：优先 Design Quantity，其次默认 COL_QTY
+            # 检测本 sheet 的数量列：优先 Design Quantity，其次默认 col_qty
             design_qty_col = 0
             if header_row:
                 design_qty_col = _find_design_qty_col(ws, header_row, sheet_max_col)
-            qty_col = design_qty_col if design_qty_col else COL_QTY
+            qty_col = design_qty_col if design_qty_col else self.col_qty
 
             title_row = [None] * global_max_col
             title_row[1] = f"【{sheet_name}】"
@@ -496,7 +506,7 @@ class BOQMerger:
 
                 # 保留全部源列：A-D(分类用) + E 起全部数据列
                 raw_row = [info["code"], desc, info["unit"], info["quantity"]]
-                for c in range(5, sheet_max_col + 1):
+                for c in range(self.col_data_start, sheet_max_col + 1):
                     if c == design_qty_col:
                         raw_row.append(None)
                     else:
@@ -635,9 +645,16 @@ def main():
                         help="禁用行分组/大纲")
     parser.add_argument("--no-write-blank", action="store_true",
                         help="不对空单元格写入格式（减少 XML 体积）")
+    parser.add_argument("--columns", default=None,
+                        help='列映射 JSON，例如: \'{"item":1,"desc":2,"unit":3,"qty":4,"data_start":5}\'')
     args = parser.parse_args()
 
-    merger = BOQMerger(args.source)
+    columns_config = None
+    if args.columns:
+        import json as _json
+        columns_config = _json.loads(args.columns)
+
+    merger = BOQMerger(args.source, columns=columns_config)
     out = merger.merge(
         output_path=args.output,
         keep_source_sheets=args.keep_source_sheets,

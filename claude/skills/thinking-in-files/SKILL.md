@@ -18,6 +18,27 @@ This skill enforces a disciplined engineering mindset: **Don't calculate in your
 3.  **多媒体/文件操作**：视频剪辑（ffmpeg）、批量重命名、文件格式转换。
 4.  **长流程任务**：需要保存中间状态，以便出错时回溯或调试的任务。
 5.  **验证关键步骤**：当每一步的输出都必须被人工或脚本验证时。
+6.  **Excel 文件理解与修改**：大型 Excel 文件先转为 JSON AST 中间格式再处理，避免反复打开 Excel 或全量读入上下文。优先使用 `document-ingest` 技能。
+
+## Excel 文件推荐中间格式
+
+处理大型/复杂 Excel 文件时，不要直接读 raw cell 或反复用 openpyxl。推荐流程：
+
+```bash
+# 1. 转为 JSON AST（中间格式，放在 temp/）
+python .claude/skills/document-ingest/scripts/excel_to_ast.py "input.xlsx" \
+    --mode semantic_analysis --sheet "Sheet1" -o temp/ast.json
+
+# 2. 在中间格式上分析/推理
+#    - AI 直接阅读 temp/ast.json 理解结构
+#    - 编写 modification_plan.json 描述要改的单元格
+
+# 3. 写回原文件
+python .claude/skills/document-ingest/scripts/ast_to_excel.py "input.xlsx" \
+    --plan temp/modification_plan.json -o output.xlsx
+```
+
+核心原则：Excel 文件大、格式复杂 → 先转 JSON → 在 JSON 上操作 → 精准写回。
 
 ## 操作规范 (Protocol)
 

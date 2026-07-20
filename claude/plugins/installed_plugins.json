@@ -7,16 +7,7 @@
         "installPath": "C:\\Users\\Kevin\\.claude\\plugins\\cache\\claude-plugins-official\\frontend-design\\unknown",
         "version": "unknown",
         "installedAt": "2026-04-30T17:25:21.674Z",
-        "lastUpdated": "2026-05-01T04:15:47.743Z"
-      }
-    ],
-    "context7@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "C:\\Users\\Kevin\\.claude\\plugins\\cache\\claude-plugins-official\\context7\\unknown",
-        "version": "unknown",
-        "installedAt": "2026-05-01T03:52:59.589Z",
-        "lastUpdated": "2026-05-01T04:15:47.743Z"
+        "lastUpdated": "2026-07-20T13:24:13.898Z"
       }
     ],
     "github@claude-plugins-official": [
@@ -25,7 +16,7 @@
         "installPath": "C:\\Users\\Kevin\\.claude\\plugins\\cache\\claude-plugins-official\\github\\unknown",
         "version": "unknown",
         "installedAt": "2026-05-01T03:54:48.896Z",
-        "lastUpdated": "2026-05-01T04:15:47.743Z"
+        "lastUpdated": "2026-07-20T13:24:13.920Z"
       }
     ],
     "playwright@claude-plugins-official": [
@@ -34,7 +25,7 @@
         "installPath": "C:\\Users\\Kevin\\.claude\\plugins\\cache\\claude-plugins-official\\playwright\\unknown",
         "version": "unknown",
         "installedAt": "2026-05-01T03:54:52.122Z",
-        "lastUpdated": "2026-05-01T04:15:47.743Z"
+        "lastUpdated": "2026-07-20T13:24:13.906Z"
       }
     ],
     "commit-commands@claude-plugins-official": [
@@ -43,7 +34,7 @@
         "installPath": "C:\\Users\\Kevin\\.claude\\plugins\\cache\\claude-plugins-official\\commit-commands\\unknown",
         "version": "unknown",
         "installedAt": "2026-05-01T04:15:47.743Z",
-        "lastUpdated": "2026-05-01T04:15:47.743Z"
+        "lastUpdated": "2026-07-20T13:24:13.902Z"
       }
     ],
     "feature-dev@claude-plugins-official": [
@@ -52,7 +43,7 @@
         "installPath": "C:\\Users\\Kevin\\.claude\\plugins\\cache\\claude-plugins-official\\feature-dev\\unknown",
         "version": "unknown",
         "installedAt": "2026-05-01T04:15:47.743Z",
-        "lastUpdated": "2026-05-01T04:15:47.743Z"
+        "lastUpdated": "2026-07-20T13:24:13.904Z"
       }
     ],
     "code-review@claude-plugins-official": [
@@ -61,7 +52,7 @@
         "installPath": "C:\\Users\\Kevin\\.claude\\plugins\\cache\\claude-plugins-official\\code-review\\unknown",
         "version": "unknown",
         "installedAt": "2026-05-01T04:15:47.743Z",
-        "lastUpdated": "2026-05-01T04:15:47.743Z"
+        "lastUpdated": "2026-07-20T13:24:13.894Z"
       }
     ],
     "code-simplifier@claude-plugins-official": [
@@ -76,10 +67,10 @@
     "security-guidance@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "C:\\Users\\Kevin\\.claude\\plugins\\cache\\claude-plugins-official\\security-guidance\\unknown",
-        "version": "unknown",
+        "installPath": "C:\\Users\\Kevin\\.claude\\plugins\\cache\\claude-plugins-official\\security-guidance\\2.0.6",
+        "version": "2.0.6",
         "installedAt": "2026-05-01T04:15:47.743Z",
-        "lastUpdated": "2026-05-01T04:15:47.743Z"
+        "lastUpdated": "2026-06-12T17:01:27.901Z"
       }
     ],
     "code-modernization@claude-plugins-official": [
@@ -88,7 +79,7 @@
         "installPath": "C:\\Users\\Kevin\\.claude\\plugins\\cache\\claude-plugins-official\\code-modernization\\unknown",
         "version": "unknown",
         "installedAt": "2026-05-01T04:15:47.743Z",
-        "lastUpdated": "2026-05-01T04:15:47.743Z"
+        "lastUpdated": "2026-07-20T13:24:13.910Z"
       }
     ],
     "pr-review-toolkit@claude-plugins-official": [
@@ -97,7 +88,7 @@
         "installPath": "C:\\Users\\Kevin\\.claude\\plugins\\cache\\claude-plugins-official\\pr-review-toolkit\\unknown",
         "version": "unknown",
         "installedAt": "2026-05-01T04:15:47.743Z",
-        "lastUpdated": "2026-05-01T04:15:47.743Z"
+        "lastUpdated": "2026-07-20T13:24:13.896Z"
       }
     ],
     "hookify@claude-plugins-official": [
@@ -106,7 +97,7 @@
         "installPath": "C:\\Users\\Kevin\\.claude\\plugins\\cache\\claude-plugins-official\\hookify\\unknown",
         "version": "unknown",
         "installedAt": "2026-05-01T04:15:47.743Z",
-        "lastUpdated": "2026-05-01T04:15:47.743Z"
+        "lastUpdated": "2026-07-20T13:24:13.912Z"
       }
     ],
     "session-report@claude-plugins-official": [
@@ -115,16 +106,16 @@
         "installPath": "C:\\Users\\Kevin\\.claude\\plugins\\cache\\claude-plugins-official\\session-report\\unknown",
         "version": "unknown",
         "installedAt": "2026-05-01T04:15:47.743Z",
-        "lastUpdated": "2026-05-01T04:15:47.743Z"
+        "lastUpdated": "2026-07-20T13:24:13.900Z"
       }
     ],
     "chrome-devtools-mcp@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "C:\\Users\\Kevin\\.claude\\plugins\\cache\\claude-plugins-official\\chrome-devtools-mcp\\1.0.1",
-        "version": "1.0.1",
+        "installPath": "C:\\Users\\Kevin\\.claude\\plugins\\cache\\claude-plugins-official\\chrome-devtools-mcp\\1.6.0",
+        "version": "1.6.0",
         "installedAt": "2026-05-02T00:29:24.315Z",
-        "lastUpdated": "2026-05-19T00:38:53.844Z",
+        "lastUpdated": "2026-07-15T02:07:58.273Z",
         "gitCommitSha": "a1612be8e01401cf1711c64bc2ef5da5763ba956"
       }
     ],
@@ -134,16 +125,16 @@
         "installPath": "C:\\Users\\Kevin\\.claude\\plugins\\cache\\claude-plugins-official\\skill-creator\\unknown",
         "version": "unknown",
         "installedAt": "2026-05-02T10:05:16.183Z",
-        "lastUpdated": "2026-05-02T10:05:16.183Z"
+        "lastUpdated": "2026-07-20T13:24:13.908Z"
       }
     ],
     "superpowers@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "C:\\Users\\Kevin\\.claude\\plugins\\cache\\claude-plugins-official\\superpowers\\5.1.0",
-        "version": "5.1.0",
+        "installPath": "C:\\Users\\Kevin\\.claude\\plugins\\cache\\claude-plugins-official\\superpowers\\6.1.1",
+        "version": "6.1.1",
         "installedAt": "2026-05-02T10:05:17.022Z",
-        "lastUpdated": "2026-05-04T23:17:31.673Z",
+        "lastUpdated": "2026-07-03T02:28:59.901Z",
         "gitCommitSha": "e7a2d16476bf042e9add4699c9d018a90f86e4a6"
       }
     ],
@@ -154,6 +145,15 @@
         "version": "1.0.0",
         "installedAt": "2026-05-02T10:05:35.429Z",
         "lastUpdated": "2026-05-02T10:05:35.429Z"
+      }
+    ],
+    "context7@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "C:\\Users\\Kevin\\.claude\\plugins\\cache\\claude-plugins-official\\context7\\unknown",
+        "version": "unknown",
+        "installedAt": "2026-05-29T14:01:39.497Z",
+        "lastUpdated": "2026-07-20T13:24:13.922Z"
       }
     ]
   }
