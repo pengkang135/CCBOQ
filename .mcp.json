@@ -65,15 +65,13 @@
     ]
   },
   "librarian": {
-    "command": "cmd",
+    "command": "{{HOME}}\\.claude\\mcp-servers\\librarian\\.venv\\Scripts\\pythonw.exe",
     "args": [
-      "/c",
-      "{{FEYNMAN_LIBRARY}}\\.venv\\Scripts\\python.exe",
       "-m",
       "librarian_mcp.server"
     ],
     "env": {
-      "PYTHONPATH": "{{FEYNMAN_LIBRARY}}\\.trae",
+      "PYTHONPATH": "{{HOME}}\\.claude\\mcp-servers\\librarian",
       "PYTHONUNBUFFERED": "1"
     }
   },
@@ -85,7 +83,7 @@
     ]
   },
   "rapid-ocr": {
-    "command": "{{HOME}}\\.claude\\mcp-servers\\rapid-ocr\\.venv\\Scripts\\python.exe",
+    "command": "{{HOME}}\\.claude\\mcp-servers\\rapid-ocr\\.venv\\Scripts\\pythonw.exe",
     "args": [
       "{{HOME}}\\.claude\\mcp-servers\\rapid-ocr\\server.py"
     ]
