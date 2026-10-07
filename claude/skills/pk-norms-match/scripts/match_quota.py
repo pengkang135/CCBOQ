@@ -16,6 +16,9 @@ from collections import defaultdict
 HERE = Path(__file__).resolve().parent
 BASE = HERE.parent
 
+# Import shared Phase 0 filter functions from the matching engine
+from matcher import has_title_markers, CONCEPTUAL_UNITS_RAW
+
 
 def _setup_stdout():
     if not isinstance(sys.stdout, io.TextIOWrapper) or sys.stdout.encoding != 'utf-8':
@@ -23,16 +26,6 @@ def _setup_stdout():
             sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
         except (ValueError, AttributeError):
             pass
-
-
-def _has_title_markers(name):
-    if not name:
-        return False
-    markers = [('{', '}'), ('《', '》'), ('【', '】')]
-    for open_m, close_m in markers:
-        if open_m in name and close_m in name:
-            return True
-    return False
 
 
 def load_ast(ast_path, sheet_name=None):
@@ -111,11 +104,10 @@ def load_ast(ast_path, sheet_name=None):
             continue
         # Phase 0 pre-filter: skip conceptual units (LS/lot/项)
         raw_unit = str(unit).strip().lower() if unit else ''
-        if raw_unit in ('ls', 'l.s.', 'lump sum', 'item', 'lot', 'allow',
-                        'allowance', '项', 'sum', 'lump'):
+        if raw_unit in CONCEPTUAL_UNITS_RAW:
             continue
         # Phase 0 pre-filter: skip title/header items with hierarchy markers
-        if _has_title_markers(name):
+        if has_title_markers(name):
             continue
 
         items.append({

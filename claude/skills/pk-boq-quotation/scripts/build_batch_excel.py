@@ -3,7 +3,7 @@
 """
 Build unified Excel material price table from quotation data.json.
 
-Accepts the same data.json format as upload-rates.js, producing a standardized
+Takes manifest-enriched.json (the --analyze output), producing a standardized
 16-column 人材机价格表 Excel file suitable for sharing and review.
 
 Usage:
@@ -16,10 +16,40 @@ from pathlib import Path
 import openpyxl
 from openpyxl.styles import Font, Border, Side, Alignment, PatternFill
 
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'pk-boq', 'scripts'))
+from openpyxl_utils import clean_save
+
 
 def load_data(path: str) -> dict:
     with open(path, encoding="utf-8") as f:
         return json.load(f)
+
+
+def _num(v):
+    """价格安全转数值：None / 空串 / 带千分位的字符串都能处理。
+
+    读不到返回 None 而不是 0 —— 表格里写 0 会被读成"这东西不要钱"，
+    比留空更糟。国别税率未配置时除税价反算不出来，整列会是 null，
+    真按 0 写出去就是一张错表。
+    """
+    if v is None:
+        return None
+    if isinstance(v, (int, float)):
+        return float(v)
+    s = str(v).replace(",", "").strip()
+    if not s:
+        return None
+    try:
+        return float(s)
+    except ValueError:
+        return None
+
+
+def _date(v):
+    """日期只取到日。manifest-enriched 里 date 已被转成 Date 再序列化，
+    原样写进表格会是 2026-06-03T00:00:00.000Z。"""
+    s = str(v or "").strip()
+    return s[:10] if len(s) >= 10 else s
 
 
 def build_xlsx(data: dict, output_path: str, title: str, subtitle: str):
@@ -29,6 +59,27 @@ def build_xlsx(data: dict, output_path: str, title: str, subtitle: str):
 
     project = data.get("project", {})
     suppliers = data.get("suppliers", [])
+
+    # 兼容 manifest.json 的扁平结构：items 平铺、供应商信息挂在每条上。
+    # 老的 data.json 是 suppliers[].items[]，两种都要能读。
+    if not suppliers and data.get("items"):
+        grouped = {}
+        for it in data["items"]:
+            key = it.get("supplier", "") or "(未标供应商)"
+            if key not in grouped:
+                grouped[key] = {
+                    "name": key,
+                    "name_cn": it.get("supplier_cn", ""),
+                    "contact": it.get("contact", ""),
+                    "phone": it.get("phone", ""),
+                    "address": it.get("address", ""),
+                    "projectName": it.get("projectName", project.get("projectName", "")),
+                    "sourceFile": (it.get("sourceRef") or {}).get("file", ""),
+                    "remarks": it.get("remarks", ""),
+                    "items": [],
+                }
+            grouped[key]["items"].append(it)
+        suppliers = list(grouped.values())
 
     # Styles
     thin_border = Border(
@@ -60,24 +111,24 @@ def build_xlsx(data: dict, output_path: str, title: str, subtitle: str):
     c.font = title_font
     c.alignment = center_align
 
-    # Row 2: Headers
+    # Row 2: Subtitle —— 副标题紧跟标题，表头在它下面直接压着数据区
+    ws.merge_cells("A2:P2")
+    c = ws["A2"]
+    c.value = subtitle
+    c.font = Font(name="Microsoft YaHei", size=9, bold=True)
+    c.alignment = left_align
+
+    # Row 3: Headers
     headers = [
         "编号", "专业", "名称", "项目特征", "单位", "除税单价", "税金", "含税单价",
         "日期", "币种", "供应商", "联系人", "电话", "地址", "备注", "来源",
     ]
     for i, h in enumerate(headers, 1):
-        cell = ws.cell(row=2, column=i, value=h)
+        cell = ws.cell(row=3, column=i, value=h)
         cell.font = header_font
         cell.fill = header_fill
         cell.border = thin_border
         cell.alignment = center_align
-
-    # Row 3: Subtitle
-    ws.merge_cells("A3:P3")
-    c = ws["A3"]
-    c.value = subtitle
-    c.font = Font(name="Microsoft YaHei", size=9, bold=True)
-    c.alignment = left_align
 
     # Data rows (start from row 4)
     row = 4
@@ -100,10 +151,17 @@ def build_xlsx(data: dict, output_path: str, title: str, subtitle: str):
         row += 1
 
         for item in supplier.get("items", []):
-            price_excl = float(item.get("price_excl_tax", 0))
-            price_incl = float(item.get("price_incl_tax", 0))
-            tax = price_incl - price_excl
-            all_prices.append(price_excl)
+            # manifest 里"读不到的价格"是显式 null，.get(k, 0) 对显式 None 不生效，
+            # 且值可能是带千分位的字符串，统一走安全转换
+            price_excl = _num(item.get("price_excl_tax"))
+            price_incl = _num(item.get("price_incl_tax"))
+            tax = round(price_incl - price_excl, 2) if (price_incl and price_excl) else ""
+            # 价格统计优先用除税价；税率未配置时它整列为空，退回含税价，
+            # 否则统计行会报 0.00 - 0.00
+            if price_excl:
+                all_prices.append(price_excl)
+            elif price_incl:
+                all_prices.append(price_incl)
 
             vals = [
                 seq,
@@ -111,11 +169,11 @@ def build_xlsx(data: dict, output_path: str, title: str, subtitle: str):
                 item.get("name_cn") or item.get("name", ""),
                 item.get("features_cn") or item.get("features", ""),
                 item.get("unit", ""),
-                price_excl,
-                round(tax, 2),
-                price_incl,
-                item.get("date", ""),
-                item.get("currency", "THB"),
+                price_excl if price_excl else "",
+                tax,
+                price_incl if price_incl else "",
+                _date(item.get("date")),
+                item.get("currency", ""),
                 supplier_name,
                 supplier.get("contact", ""),
                 supplier.get("phone", ""),
@@ -158,13 +216,13 @@ def build_xlsx(data: dict, output_path: str, title: str, subtitle: str):
     cell.font = Font(name="Microsoft YaHei", size=9)
     cell.alignment = left_align
 
-    wb.save(output_path)
+    clean_save(wb, output_path)
     return total, (min(all_prices) if all_prices else 0), (max(all_prices) if all_prices else 0)
 
 
 def main():
     parser = argparse.ArgumentParser(description="Build unified quotation Excel from data.json")
-    parser.add_argument("data", help="JSON data file (same format as upload-rates.js input)")
+    parser.add_argument("data", help="manifest-enriched.json (the --analyze output)")
     parser.add_argument("-o", "--output", default=None, help="Output xlsx path")
     parser.add_argument("--title", default="人材机价格表", help="Main title")
     parser.add_argument("--subtitle", default="", help="Subtitle in row 3")

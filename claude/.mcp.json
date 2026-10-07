@@ -1,49 +1,45 @@
 {
-  "filesystem": {
-    "command": "{{PYTHONW_PATH}}",
+  "sqlite": {
+    "type": "stdio",
+    "command": "cmd",
     "args": [
-      "{{HOME_WIN}}\\.claude\\scripts\\mcp_launcher.py",
+      "/c",
       "npx",
       "-y",
-      "@modelcontextprotocol/server-filesystem",
-      "C:\\",
-      "E:\\",
-      "F:\\"
-    ]
+      "mcp-sqlite",
+      "C:\\Users\\Kevin\\.claude\\data.db"
+    ],
+    "env": {}
   },
-  "shell": {
-    "command": "{{PYTHONW_PATH}}",
+  "ssh": {
+    "type": "stdio",
+    "command": "cmd",
     "args": [
-      "{{HOME_WIN}}\\.claude\\scripts\\mcp_launcher.py",
+      "/c",
       "npx",
       "-y",
-      "@wonderwhy-er/desktop-commander"
-    ]
+      "mcp-server-ssh"
+    ],
+    "env": {}
   },
   "git": {
-    "command": "{{PYTHONW_PATH}}",
+    "type": "stdio",
+    "command": "cmd",
     "args": [
-      "{{HOME_WIN}}\\.claude\\scripts\\mcp_launcher.py",
+      "/c",
       "npx",
       "-y",
       "-p",
       "github-mcp-server",
       "github-mcp-server-mcp"
-    ]
-  },
-  "http": {
-    "command": "{{PYTHONW_PATH}}",
-    "args": [
-      "{{HOME_WIN}}\\.claude\\scripts\\mcp_launcher.py",
-      "npx",
-      "-y",
-      "mcp-fetch-server"
-    ]
+    ],
+    "env": {}
   },
   "mongodb": {
-    "command": "{{PYTHONW_PATH}}",
+    "type": "stdio",
+    "command": "cmd",
     "args": [
-      "{{HOME_WIN}}\\.claude\\scripts\\mcp_launcher.py",
+      "/c",
       "npx",
       "-y",
       "mongodb-mcp-server"
@@ -52,117 +48,60 @@
       "MONGODB_URI": "mongodb://localhost:27017"
     }
   },
-  "sqlite": {
-    "command": "{{PYTHONW_PATH}}",
+  "http": {
+    "type": "stdio",
+    "command": "cmd",
     "args": [
-      "{{HOME_WIN}}\\.claude\\scripts\\mcp_launcher.py",
+      "/c",
       "npx",
       "-y",
-      "mcp-sqlite",
-      "{{HOME_WIN}}\\.claude\\data.db"
-    ]
+      "mcp-fetch-server"
+    ],
+    "env": {}
   },
-  "excel": {
-    "command": "{{PYTHONW_PATH}}",
+  "filesystem": {
+    "type": "stdio",
+    "command": "cmd",
     "args": [
-      "{{HOME_WIN}}\\.claude\\scripts\\mcp_launcher.py",
+      "/c",
       "npx",
       "-y",
-      "@negokaz/excel-mcp-server"
-    ]
+      "@modelcontextprotocol/server-filesystem",
+      "C:\\Users\\Kevin"
+    ],
+    "env": {}
   },
-  "excel-mcp": {
-    "command": "{{PYTHONW_PATH}}",
+  "fastexcel": {
+    "type": "stdio",
+    "command": "C:\\Users\\Kevin\\AppData\\Local\\Programs\\Python\\Python313\\pythonw.exe",
     "args": [
-      "{{HOME_WIN}}\\.claude\\scripts\\mcp_launcher.py",
-      "iflow-mcp_guillehr2-excel-mcp-server"
-    ]
-  },
-  "playwright": {
-    "command": "{{PYTHONW_PATH}}",
-    "args": [
-      "{{HOME_WIN}}\\.claude\\scripts\\mcp_launcher.py",
-      "npx",
-      "-y",
-      "@playwright/mcp@latest"
-    ]
-  },
-  "ssh": {
-    "command": "{{PYTHONW_PATH}}",
-    "args": [
-      "{{HOME_WIN}}\\.claude\\scripts\\mcp_launcher.py",
-      "npx",
-      "-y",
-      "mcp-server-ssh"
-    ]
-  },
-  "librarian": {
-    "command": "{{HOME_WIN}}\\.claude\\mcp-servers\\librarian\\.venv\\Scripts\\pythonw.exe",
-    "args": [
-      "-m",
-      "librarian_mcp.server"
+      "C:\\Users\\Kevin\\.claude\\scripts\\fastexcel_mcp_server.py"
     ],
     "env": {
-      "PYTHONPATH": "{{HOME_WIN}}\\.claude\\mcp-servers\\librarian",
+      "PYTHONIOENCODING": "utf-8",
       "PYTHONUNBUFFERED": "1"
     }
   },
-  "rapid-ocr": {
-    "command": "{{HOME_WIN}}\\.claude\\mcp-servers\\rapid-ocr\\.venv\\Scripts\\pythonw.exe",
+  "shell": {
+    "type": "stdio",
+    "command": "cmd",
     "args": [
-      "{{HOME_WIN}}\\.claude\\mcp-servers\\rapid-ocr\\server.py"
-    ]
-  },
-  "pdf2md": {
-    "command": "{{HOME_WIN}}\\.claude\\mcp-servers\\pdf2md\\.venv\\Scripts\\pythonw.exe",
-    "args": [
-      "{{HOME_WIN}}\\.claude\\mcp-servers\\pdf2md\\server.py"
-    ]
-  },
-  "docker": {
-    "command": "{{PYTHONW_PATH}}",
-    "args": [
-      "{{HOME_WIN}}\\.claude\\scripts\\mcp_launcher.py",
-      "uvx",
-      "docker-mcp"
-    ]
-  },
-  "pandoc": {
-    "command": "{{PYTHONW_PATH}}",
-    "args": [
-      "{{HOME_WIN}}\\.claude\\scripts\\mcp_launcher.py",
-      "uvx",
-      "mcp-pandoc"
-    ]
-  },
-  "chrome-devtools": {
-    "command": "{{PYTHONW_PATH}}",
-    "args": [
-      "{{HOME_WIN}}\\.claude\\scripts\\mcp_launcher.py",
+      "/c",
       "npx",
       "-y",
-      "chrome-devtools-mcp@latest",
-      "--headless"
-    ]
+      "@wonderwhy-er/desktop-commander"
+    ],
+    "env": {}
   },
-  "sequential-thinking": {
-    "command": "{{PYTHONW_PATH}}",
+  "playwright": {
+    "type": "stdio",
+    "command": "cmd",
     "args": [
-      "{{HOME_WIN}}\\.claude\\scripts\\mcp_launcher.py",
+      "/c",
       "npx",
       "-y",
-      "@modelcontextprotocol/server-sequential-thinking"
-    ]
-  },
-  "serena": {
-    "command": "{{PYTHONW_PATH}}",
-    "args": [
-      "{{HOME_WIN}}\\.claude\\scripts\\mcp_launcher.py",
-      "uvx",
-      "--from",
-      "git+https://github.com/oraios/serena",
-      "serena",
-      "start-mcp-server"
-    ]
+      "@playwright/mcp@latest"
+    ],
+    "env": {}
   }
 }

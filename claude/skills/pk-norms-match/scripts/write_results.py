@@ -24,6 +24,9 @@ try:
 except ImportError:
     sys.exit('openpyxl is required: pip install openpyxl')
 
+# Import shared filter functions from the matching engine
+from matcher import has_title_markers, CONCEPTUAL_UNITS_RAW
+
 
 def load_matching_results(path):
     with open(path, 'r', encoding='utf-8') as f:
@@ -41,26 +44,7 @@ def write_excel(results, source_path, output_path, sheet_name=None, dry_run=Fals
     wb = openpyxl.load_workbook(output_path, keep_links=False)
     ws = wb[sheet_name] if sheet_name else wb[wb.sheetnames[0]]
 
-    _TITLE_MARKER_PAIRS = [('{', '}'), ('【', '】'), ('《', '》')]
-    _CONCEPTUAL_UNITS = {'ls', 'l.s.', 'lump sum', 'item', 'lot', 'allow',
-                         'allowance', '项', 'sum', 'lump'}
-
-    def _is_title_row(name_val):
-        if not name_val:
-            return False
-        s = str(name_val).strip()
-        for open_m, close_m in _TITLE_MARKER_PAIRS:
-            if open_m in s and close_m in s:
-                return True
-        return False
-
-    def _is_conceptual_unit(unit_val):
-        if not unit_val:
-            return False
-        return str(unit_val).strip().lower() in _CONCEPTUAL_UNITS
-
     # Build name→row mapping from the sheet for robust row lookup
-    # (fastexcel and openpyxl may disagree on row numbers due to empty rows)
     name_to_row = {}
     for row in range(1, ws.max_row + 1):
         name_val = ws.cell(row=row, column=5).value
@@ -88,7 +72,7 @@ def write_excel(results, source_path, output_path, sheet_name=None, dry_run=Fals
         # Safety net: skip title rows and conceptual units
         col_e = ws.cell(row=row, column=5).value
         col_f = ws.cell(row=row, column=6).value
-        if _is_title_row(col_e) or _is_conceptual_unit(col_f):
+        if has_title_markers(col_e) or (col_f and str(col_f).strip().lower() in CONCEPTUAL_UNITS_RAW):
             for col in [1, 2]:
                 ws.cell(row=row, column=col).value = None
             cleared += 1

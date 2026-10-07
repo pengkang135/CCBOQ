@@ -1,0 +1,304 @@
+{
+  "domain_map": [
+    {
+      "trigger": "intumescent.*coating|fire.resistive coating|fire.protective coating",
+      "db_regex": "paint to steel structure|fire rate paint|fire protection",
+      "cn_regex": "防火涂料|钢结构涂装|膨胀型",
+      "note": "BOQ 膨胀型防火涂料 ⇄ DB 钢结构防火漆"
+    },
+    {
+      "trigger": "structural steel coating|coating to steelwork|paint to.{0,15}steel",
+      "db_regex": "paint to steel structure|steel coating",
+      "cn_regex": "钢结构涂装|钢结构防腐",
+      "note": "钢结构涂料系统"
+    },
+    {
+      "trigger": "zinc.rich epoxy|inorganic zinc primer|epoxy primer",
+      "db_regex": "paint to steel structure|zinc.{0,10}(rich|epoxy)|primer",
+      "cn_regex": "环氧富锌|富锌底漆",
+      "note": "富锌环氧底漆"
+    },
+    {
+      "trigger": "epoxy mio|micaceous iron oxide|epoxy intermediate",
+      "db_regex": "paint to steel structure|epoxy|intergard|high solids",
+      "cn_regex": "环氧云铁|环氧中间漆",
+      "note": "环氧云铁中间漆"
+    },
+    {
+      "trigger": "polyurethane.{0,15}finish|polyurethane topcoat|finish coat.{0,20}polyurethane",
+      "db_regex": "paint to steel structure|polyurethane|interthane",
+      "cn_regex": "聚氨酯面漆",
+      "note": "聚氨酯面漆"
+    },
+    {
+      "trigger": "abrasive blast|blast clean|sand blast|shot blast",
+      "db_regex": "blast clean|paint to steel structure|abrasive",
+      "cn_regex": "喷砂|抛丸|钢结构表面处理",
+      "note": "喷砂表面处理 (常与涂装系统一起报价)"
+    },
+    {
+      "trigger": "compacted.{0,20}subbase|compacted crushed rock|crushed rock.*cbr",
+      "db_regex": "compacted base course|compacted.*crushed|crushed rock",
+      "cn_regex": "碎石基层|级配碎石|路面基层",
+      "note": "碎石压实基层 (常见 200mm CBR>=80%)"
+    },
+    {
+      "trigger": "compacted.{0,20}fill|compacted.{0,20}subgrade",
+      "db_regex": "compacted fill|compacted subgrade|compacted.*95",
+      "cn_regex": "压实回填|路基压实",
+      "note": "压实填土/路基"
+    },
+    {
+      "trigger": "^earthwork excavation|^excavation$|excavation.*disposal",
+      "db_regex": "excavation|excavation and backfill",
+      "cn_regex": "土方开挖|开挖",
+      "note": "土方开挖 (含或不含运输)"
+    },
+    {
+      "trigger": "^earth backfilling|backfilling.{0,10}with|import.*fill",
+      "db_regex": "backfill|backfill import|import.*fill",
+      "cn_regex": "土方回填|外购土|回填",
+      "note": "土方回填 (含外购)"
+    },
+    {
+      "trigger": "backfilling with crushed rock|crushed stone.*backfill",
+      "db_regex": "crushed stone|crushed rock|well grade|backfill.*crushed",
+      "cn_regex": "碎石回填",
+      "note": "碎石回填"
+    },
+    {
+      "trigger": "load and remove surplus|surplus.*disposal|removal.*surplus",
+      "db_regex": "excavation|disposal from site|remove surplus",
+      "cn_regex": "余土外运|土方外运",
+      "note": "余土外运"
+    },
+    {
+      "trigger": "site grading|surface clearance",
+      "db_regex": "site clearance|grading|leveling",
+      "cn_regex": "场地平整",
+      "note": "场地平整"
+    },
+    {
+      "trigger": "asphalt pavement|asphalt concrete.*pavement",
+      "db_regex": "asphalt|asphaltic",
+      "cn_regex": "沥青路面|沥青混凝土",
+      "note": "沥青路面"
+    },
+    {
+      "trigger": "road.{0,10}marking|thermoplastic.*paint",
+      "db_regex": "road marking|thermoplastic|line marking",
+      "cn_regex": "道路划线|标线",
+      "note": "道路标线"
+    },
+    {
+      "trigger": "rubber wheel stop",
+      "db_regex": "wheel stop|rubber wheel",
+      "cn_regex": "车轮挡|车挡",
+      "note": "橡胶车轮挡"
+    },
+    {
+      "trigger": "cast.in.situ.*concrete|cast in place|reinforced concrete",
+      "db_regex": "reinforced concrete|cast.{0,5}in.{0,5}situ|C\\d+.*concrete",
+      "cn_regex": "现浇混凝土|钢筋混凝土|素混凝土",
+      "note": "现浇混凝土"
+    },
+    {
+      "trigger": "concrete.*copings?|coping.*concrete",
+      "db_regex": "coping|压顶",
+      "cn_regex": "压顶",
+      "note": "混凝土压顶"
+    },
+    {
+      "trigger": "concrete pavement|concrete road",
+      "db_regex": "concrete pavement|concrete.*road",
+      "cn_regex": "混凝土路面",
+      "note": "混凝土路面"
+    },
+    {
+      "trigger": "formwork to",
+      "db_regex": "formwork",
+      "cn_regex": "模板",
+      "note": "模板 (工程量项，非施工措施)"
+    },
+    {
+      "trigger": "deformed bar|deformed reinforcement",
+      "db_regex": "deformed|DB\\s?\\d+|SD40|三级钢筋|螺纹钢",
+      "cn_regex": "螺纹钢|三级钢筋|SD40",
+      "note": "螺纹钢筋"
+    },
+    {
+      "trigger": "plain round bars?|plain reinforcement",
+      "db_regex": "plain.*bar|round bar|RB\\s?\\d+|光圆",
+      "cn_regex": "光圆钢筋|一级钢筋",
+      "note": "光圆钢筋"
+    },
+    {
+      "trigger": "reinforcement (mesh|to|for)|welded (wire )?mesh",
+      "db_regex": "reinforcement|钢筋|steel mesh|钢筋网",
+      "cn_regex": "钢筋|钢筋网",
+      "note": "钢筋综合"
+    },
+    {
+      "trigger": "structural steel|fabrication and installation of.*section",
+      "db_regex": "steel structure|structural steel|fabrication|hot rolled|SS400|钢结构",
+      "cn_regex": "钢结构|型钢|H型钢|工字钢|槽钢",
+      "note": "钢结构制作安装"
+    },
+    {
+      "trigger": "i.section|h.section|steel section",
+      "db_regex": "I.beam|H.beam|steel section|工字钢|H型钢",
+      "cn_regex": "工字钢|H型钢",
+      "note": "型钢"
+    },
+    {
+      "trigger": "mortar|screed|render|plaster|找平|抹灰|砂浆|抗裂",
+      "db_regex": "mortar|screed|plaster|render|水泥砂浆|砂浆|抹灰|找平|抗裂",
+      "cn_regex": "砂浆|抹灰|找平|抗裂",
+      "note": "砂浆/找平/抹灰 (干硬性/水泥砂浆/抗裂砂浆)"
+    },
+    {
+      "trigger": "SBS.*bituminous|SBS.*modified.*membrane|elastomer.modified.*bitumen",
+      "db_regex": "SBS|waterproof.*membrane|bituminous.*membrane|elastomer",
+      "cn_regex": "SBS|防水卷材|沥青防水",
+      "note": "SBS 改性沥青防水卷材"
+    },
+    {
+      "trigger": "waterstop|water.?stop|steel.?plate waterstop|止水带",
+      "db_regex": "waterstop|water.?stop|止水带|止水钢板",
+      "cn_regex": "止水带|止水钢板",
+      "note": "止水带/止水钢板"
+    },
+    {
+      "trigger": "cementitious.*waterproof|polymer.modified.*waterproof|crystalline waterproof",
+      "db_regex": "cementitious waterproof|polymer.*waterproof|crystalline|水泥基防水",
+      "cn_regex": "水泥基防水|渗透结晶",
+      "note": "水泥基防水"
+    },
+    {
+      "trigger": "PE damp.proof membrane|polyethylene.*damp",
+      "db_regex": "PE.*damp|polyethylene.*damp|damp.?proof.*sheet",
+      "cn_regex": "PE防潮|聚乙烯防潮",
+      "note": "PE 防潮膜"
+    },
+    {
+      "trigger": "class a.*fire.?rated door|class a steel fire.?rated|steel fire.?rated door",
+      "db_regex": "fire.?rated door|fire door|steel fire|防火门",
+      "cn_regex": "防火门|甲级防火门|钢制防火门",
+      "note": "甲级钢制防火门"
+    },
+    {
+      "trigger": "class b.*fire.?rated door|class b steel fire",
+      "db_regex": "fire.?rated door|fire door|防火门",
+      "cn_regex": "防火门|乙级防火门",
+      "note": "乙级防火门"
+    },
+    {
+      "trigger": "tempered glass door|glass door.*ironmongery",
+      "db_regex": "tempered glass door|钢化玻璃门",
+      "cn_regex": "钢化玻璃门",
+      "note": "钢化玻璃门"
+    },
+    {
+      "trigger": "galvanized sheet.*gutter|steel gutter|metal gutter",
+      "db_regex": "gutter|檐沟|落水",
+      "cn_regex": "檐沟|镀锌天沟",
+      "note": "镀锌天沟"
+    },
+    {
+      "trigger": "pre.painted steel roofing|colour.coated roofing|color.coated roofing|steel roofing sheet|roofing sheet",
+      "db_regex": "roofing sheet|sheet roof|roof cladding|steel roofing|pre.painted|sandwich panel|彩钢|屋面板",
+      "cn_regex": "彩钢|屋面板|屋面",
+      "note": "彩钢屋面板"
+    },
+    {
+      "trigger": "water closet|toilet\\b",
+      "db_regex": "toilet|water closet|坐便器",
+      "cn_regex": "坐便器",
+      "note": "坐便器"
+    },
+    {
+      "trigger": "squatting pan|squat pan",
+      "db_regex": "squat|squatting|蹲便器",
+      "cn_regex": "蹲便器",
+      "note": "蹲便器 (与坐便器不同产品)"
+    },
+    {
+      "trigger": "wash basin|hand basin|basin\\b",
+      "db_regex": "wash basin|handbasin|洗手盆|洗脸盆",
+      "cn_regex": "洗手盆|洗脸盆|台面",
+      "note": "洗手盆"
+    },
+    {
+      "trigger": "urinal",
+      "db_regex": "urinal|小便器",
+      "cn_regex": "小便器",
+      "note": "小便器"
+    },
+    {
+      "trigger": "faucet|tap\\b|basin faucet|mixer",
+      "db_regex": "faucet|mixer|tap|水龙头|龙头",
+      "cn_regex": "水龙头|龙头",
+      "note": "水龙头"
+    },
+    {
+      "trigger": "rinsing spray|hand shower|shower head",
+      "db_regex": "shower head|spray|shower|喷头|花洒",
+      "cn_regex": "喷头|花洒",
+      "note": "淋浴喷头/冲洗喷枪"
+    },
+    {
+      "trigger": "homogeneous tile|porcelain tile",
+      "db_regex": "homogeneous|porcelain|通体砖|抛光砖",
+      "cn_regex": "通体砖|抛光砖",
+      "note": "通体砖"
+    },
+    {
+      "trigger": "non.slip.*tile|anti.slip.*tile|slip.resistant",
+      "db_regex": "anti.slip|non.slip|slip.resistant|防滑",
+      "cn_regex": "防滑砖|防滑地砖",
+      "note": "防滑砖"
+    },
+    {
+      "trigger": "steel grating|galvanized.*grating",
+      "db_regex": "steel grating|galvanized grating|钢格栅|镀锌钢格栅",
+      "cn_regex": "钢格栅|镀锌钢格栅",
+      "note": "钢格栅"
+    },
+    {
+      "trigger": "AAC.*wall panel|autoclaved aerated.*panel",
+      "db_regex": "aerated concrete|加气|AAC|ALC",
+      "cn_regex": "加气砌块|加气板|ALC",
+      "note": "加气混凝土板"
+    },
+    {
+      "trigger": "double.layer.*gypsum|fire.rated gypsum",
+      "db_regex": "gypsum|石膏板|轻钢龙骨.*石膏",
+      "cn_regex": "石膏板|轻钢龙骨石膏板",
+      "note": "石膏板"
+    },
+    {
+      "trigger": "curtain wall|unitized glazed",
+      "db_regex": "curtain wall|unitized|玻璃幕墙|单元式幕墙",
+      "cn_regex": "玻璃幕墙|单元式幕墙",
+      "note": "玻璃幕墙"
+    },
+    {
+      "trigger": "XPS|extruded polystyrene|polystyrene.*insulation",
+      "db_regex": "XPS|extruded polystyrene|挤塑板|聚苯",
+      "cn_regex": "挤塑板|XPS|聚苯板",
+      "note": "XPS 挤塑板"
+    }
+  ],
+  "skip_patterns": [
+    "^allow a provision",
+    "^allow for the design",
+    "^allow for maintaining",
+    "^allow for providing",
+    "^allow for the provision"
+  ],
+  "construction_patterns": [],
+  "count": {
+    "domain_entries": 48,
+    "skip": 5
+  }
+}

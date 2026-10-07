@@ -1,0 +1,180 @@
+{
+  "rules": [
+    {
+      "id": "R01",
+      "pattern_type": "desc_starts",
+      "pattern_spec": "【",
+      "level": "L1",
+      "confidence": "high",
+      "reason": "Schedule boundary marker, already confirmed as 8 L1 boundaries across all sheets"
+    },
+    {
+      "id": "R01b",
+      "pattern_type": "desc_contains",
+      "pattern_spec": "(Cont'd)",
+      "level": "L4",
+      "confidence": "high",
+      "reason": "Page-break continuation markers — must fire BEFORE chapter-label regex (R02) to prevent CONT'D variants like 《4.4 - PARTITION WORKS (CONT'D)》 from being misclassified as L2"
+    },
+    {
+      "id": "R01c",
+      "pattern_type": "desc_regex",
+      "pattern_spec": "(?i)(^total|^subtotal|^sub total|carried forward|brought forward|page total|grand total|summary)",
+      "level": "L4",
+      "confidence": "high",
+      "reason": "Aggregate/summary rows — L4 data-level, not heading or note"
+    },
+    {
+      "id": "R02",
+      "pattern_type": "desc_regex",
+      "pattern_spec": "^\\d+\\.\\d+\\s*[-–]\\s*.+",
+      "level": "L2",
+      "confidence": "high",
+      "reason": "Chapter labels (X.X - Description) — CONT'D variants already caught by R01b above"
+    },
+    {
+      "id": "R03",
+      "pattern_type": "code_regex",
+      "pattern_spec": "^\\d+\\.\\d+$",
+      "level": "L2",
+      "confidence": "high",
+      "reason": "Schedule 1 Preliminaries section headings identified by X.X numeric code (1.0-19.0), including their (Cont'd) page-break continuations"
+    },
+    {
+      "id": "R04",
+      "pattern_type": "has_unit_qty",
+      "pattern_spec": "",
+      "level": "L4",
+      "confidence": "high",
+      "reason": "Rows with unit AND quantity are L4 bill items — forced, no exceptions"
+    },
+    {
+      "id": "R05",
+      "pattern_type": "desc_exact",
+      "pattern_spec": "Special Preambles",
+      "level": "L3",
+      "confidence": "high",
+      "reason": "NRM L3 preamble section preceding trade-level items; appears after every L2 chapter label in work-package schedules (2-7), 19 occurrences"
+    },
+    {
+      "id": "R07",
+      "pattern_type": "all_caps_no_number",
+      "pattern_spec": "",
+      "level": "L3",
+      "confidence": "medium",
+      "reason": "ALL-CAPS rows not matching building keywords are trade-level sub-groupings within work packages (Q1: not independent asset). Includes trade names (FORMWORK, REINFORCEMENT, EXCAVATION), generic groups (OTHER, MISCELLANEOUS), and area categories (EXTERNAL ROADS, CARRIAGEWAYS). 83 rows"
+    },
+    {
+      "id": "R08",
+      "pattern_type": "desc_regex",
+      "pattern_spec": "^\\d+\\.\\d+\\s+\\w+",
+      "level": "Note",
+      "confidence": "high",
+      "reason": "Contract clause citation references (e.g. 2.01 Employer, 3.05 Works carried out under separate contracts). Not structural headings, purely contractual reference text. 117 rows, predominantly in Schedule 1"
+    },
+    {
+      "id": "R09",
+      "pattern_type": "desc_regex",
+      "pattern_spec": "^\\d+\\.\\s",
+      "level": "Note",
+      "confidence": "high",
+      "reason": "Numbered explanatory notes (e.g. 1. The Tenderer shall...) within preamble sections. 101 rows"
+    },
+    {
+      "id": "R10",
+      "pattern_type": "desc_contains",
+      "pattern_spec": "shall",
+      "level": "Note",
+      "confidence": "high",
+      "reason": "Contractual obligation language indicating descriptive/instructional text rather than structural heading"
+    },
+    {
+      "id": "R11",
+      "pattern_type": "desc_contains",
+      "pattern_spec": "preamble notes",
+      "level": "Note",
+      "confidence": "high",
+      "reason": "Preamble boilerplate intro text (In addition to the preamble notes, the following apply...)"
+    },
+    {
+      "id": "R12",
+      "pattern_type": "desc_starts",
+      "pattern_spec": "Allow for",
+      "level": "Note",
+      "confidence": "high",
+      "reason": "Provisional sum / allowance directive, not a structural heading"
+    },
+    {
+      "id": "R13",
+      "pattern_type": "desc_starts",
+      "pattern_spec": "Allow a",
+      "level": "Note",
+      "confidence": "high",
+      "reason": "Provisional sum / allowance directive variant"
+    },
+    {
+      "id": "R14",
+      "pattern_type": "desc_starts",
+      "pattern_spec": "Comply with",
+      "level": "Note",
+      "confidence": "high",
+      "reason": "Specification compliance directive, descriptive text"
+    },
+    {
+      "id": "R15",
+      "pattern_type": "desc_starts",
+      "pattern_spec": "Supply and",
+      "level": "Note",
+      "confidence": "high",
+      "reason": "Work instruction / specification directive text"
+    },
+    {
+      "id": "R16",
+      "pattern_type": "desc_contains",
+      "pattern_spec": "including but not limited to",
+      "level": "Note",
+      "confidence": "medium",
+      "reason": "Specification enumeration preamble, descriptive text"
+    },
+    {
+      "id": "R17",
+      "pattern_type": "desc_regex",
+      "pattern_spec": "\\.$",
+      "level": "Note",
+      "confidence": "high",
+      "reason": "Full-sentence descriptive text ending with period; work descriptions (e.g. concrete filling to bored pile shafts, fabrication and fixing of reinforcement) are not structural headings"
+    },
+    {
+      "id": "R18",
+      "pattern_type": "desc_contains",
+      "pattern_spec": "f'c(MPa)",
+      "level": "Note",
+      "confidence": "high",
+      "reason": "Concrete strength specification text (f’c(MPa)32 reinforced concrete filling etc.); these are material spec descriptions, not structural headings"
+    },
+    {
+      "id": "R19",
+      "pattern_type": "desc_contains",
+      "pattern_spec": "in accordance with",
+      "level": "Note",
+      "confidence": "high",
+      "reason": "Specification reference language indicating descriptive compliance text, not a structural heading"
+    },
+    {
+      "id": "R20",
+      "pattern_type": "desc_contains",
+      "pattern_spec": "as shown on the",
+      "level": "Note",
+      "confidence": "high",
+      "reason": "Drawing/specification reference language in descriptive work items"
+    },
+    {
+      "id": "R22",
+      "pattern_type": "desc_regex",
+      "pattern_spec": ".",
+      "level": "L3",
+      "confidence": "medium",
+      "reason": "Catch-all: remaining non-empty text assumed to be work sub-group headings (L3). Includes Title Case element names (Doors and Door Frames, Precast Columns), specification-type finish names (Waterborne Epoxy Floor Coating - F3, 300 mm High Anti-Static Raised Access Floor - F7), material grade labels (Reinforced Concrete Grades), and partition/element type labels (AAC Wall Panels, Glazed Partitions). ~85 rows across all work-package schedules. Step 4 boundary agent may override specific cases."
+    }
+  ]
+}

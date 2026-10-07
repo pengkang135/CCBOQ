@@ -2155,21 +2155,7 @@
       "aliases": []
     },
     {
-      "english_key": "pile test",
-      "target_chapters": [
-        "第二章"
-      ],
-      "keywords": [
-        "试桩",
-        "静载",
-        "检测"
-      ],
-      "exclude_keywords": [],
-      "note": "试桩",
-      "aliases": []
-    },
-    {
-      "english_key": "pile ",
+      "english_key": "pile",
       "target_chapters": [
         "第二章",
         "第三章"
@@ -2609,21 +2595,6 @@
       ],
       "exclude_keywords": [],
       "note": "分离器",
-      "aliases": []
-    },
-    {
-      "english_key": "sign board",
-      "target_chapters": [
-        "第六章"
-      ],
-      "keywords": [
-        "标志牌",
-        "标牌"
-      ],
-      "exclude_keywords": [
-        "挡土板"
-      ],
-      "note": "标志牌",
       "aliases": []
     },
     {

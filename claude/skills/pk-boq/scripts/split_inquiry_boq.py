@@ -27,6 +27,8 @@ from pathlib import Path
 import openpyxl
 from openpyxl.cell.cell import MergedCell
 
+from openpyxl_utils import clean_save
+
 
 # ── FHDI 表头 #REF! 修复映射 ──────────────────────────────
 
@@ -220,7 +222,7 @@ def main():
     print(f"Final sheets: {wb.sheetnames}")
 
     os.makedirs(os.path.dirname(args.output), exist_ok=True)
-    wb.save(args.output)
+    clean_save(wb, args.output)
     print(f"\nSaved: {args.output}")
     print("Done!")
 

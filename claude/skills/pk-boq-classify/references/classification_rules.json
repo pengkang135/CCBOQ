@@ -1,0 +1,300 @@
+{
+  "version": "2026-08-02",
+  "desc": "BOQ 分类持久化通用规则库（技能级，跨项目复用）。分类流水线启动时加载本文件，将人工审核修正固化为规则。项目特定的行号级覆写放项目分类规则库，不在此。",
+  "closed_vocab_source": {
+    "desc": "Category/Subcategory 必须来自定额库闭词表，禁止 LLM 自由生成。E 册（房屋修缮）只有 division 和 chapter，sub_division/enterprise_item 为空，Subcategory 层没有候选是数据现状不是漏检。L1/L2 大纲查询见 references/quota_db_schema.md。",
+    "db_dir": "E:\\Code\\Norms-AI\\db\\",
+    "books": {
+      "A": "企业定额_A册_建筑装饰.sqlite",
+      "B": "企业定额_B册_通用安装.sqlite",
+      "C": "企业定额_C册_市政园林.sqlite",
+      "D": "企业定额_D册_水运工程.sqlite",
+      "E": "企业定额_E册_房屋修缮.sqlite"
+    },
+    "whitelist": {
+      "desc": "非定额库来源的特殊分类值白名单，validate_classification.py 校验时视为有效。",
+      "universal_subcategories": [
+        "Provisional Sums"
+      ],
+      "note": "Provisional Sums（章节级暂列金）可在任何分部工程下出现，不限于 PRELIM。Preliminaries 仅限开办费 Discipline，由 PRELIM 专属校验路径处理，不放入通用白名单。"
+    },
+    "enforcement": {
+      "desc": "三层防线确保 LLM 不会编造分类值。V3 事故教训：431/493 条 Subcategory 为 LLM 自由生成（87%），验证通过率仅 12.6%。",
+      "layer1_prompt_injection": {
+        "desc": "LLM 分类 prompt 中必须注入候选 Category/Subcategory 闭词表列表，LLM 只能从中选择，禁止自由生成。",
+        "tool": "scripts/build_classification_prompt.py",
+        "mandatory": true,
+        "rule": "prompt 中必须包含 'You MUST pick from this list. Do NOT invent, translate, or rephrase.' 指令"
+      },
+      "layer2_validation_gate": {
+        "desc": "写回前每个分类值过 validate_item() 校验，不在闭词表的值通过 fuzzy match 自动修正。",
+        "tool": "scripts/validate_classification.py",
+        "mandatory": true,
+        "fuzzy_threshold": 0.5
+      },
+      "layer3_audit_report": {
+        "desc": "所有不合规值记入 validation_errors.json 审计报告，供人工复核和规则沉淀。",
+        "tool": "scripts/validate_classification.py",
+        "mandatory": true
+      }
+    }
+  },
+  "term_map": {
+    "desc": "Discipline 列文字映射。不带分册/编号前缀（如 A册·）；PRELIM 用'开办费'(国外惯例)而非'前期与合同条款'；category 列的'前期与合同条款'也映射为'开办费'。",
+    "A": "建筑装饰",
+    "B": "通用安装",
+    "C": "市政园林",
+    "D": "水运工程",
+    "PRELIM": "开办费",
+    "FREE": "未映射",
+    "前期与合同条款": "开办费"
+  },
+  "offset": {
+    "desc": "分类流水线(coordinator 用 openpyxl 读取) row N 即 Excel row N，偏移 0。fastexcel 的 to_pandas 会丢弃前导行，按 df.iloc[r-4] 核对行号会得出 +1 的错误结论，核对行对齐务必用 openpyxl 读实际单元格坐标。",
+    "json_to_excel_offset": 0
+  },
+  "discipline_split": {
+    "desc": "A 册 Civil & Decoration 拆分为 Civil / Decoration 的规则。按定额库 division 编号区间判定：A.01-A.19 和 A.30-A.33 归 Civil，A.20-A.29 归 Decoration。其他册 Discipline 不变。脚本 postprocess_sortkey.py 在插入 SortKey 时同步执行此拆分。",
+    "book": "A",
+    "zones": {
+      "Civil": "div_num <= 19 or div_num >= 30",
+      "Decoration": "20 <= div_num <= 29"
+    },
+    "note": "不覆盖已有非 Civil & Decoration 的 Discipline 值，仅处理原值为 'Civil & Decoration' 的行"
+  },
+  "sortkey": {
+    "desc": "SortKey 列：插入到 Category 列之前，值为定额库 division.code（如 A.04、B.10）。PRELIM 行填 'PRELIM'。数据透视表将 SortKey 作为第一个行字段可实现按章顺序排列，解决自定义序列难题。",
+    "column": "SortKey",
+    "insert_before": "Category",
+    "source": "norms DB division.code",
+    "prelim_value": "PRELIM",
+    "script": "scripts/postprocess_sortkey.py"
+  },
+  "provisional_sums_rule": {
+    "desc": "章节级暂列金/兜底项('Allow a provision for all other works and costs required for completion of the X')不放开办费、不归措施项目，按 X 对应分部工程。仅限带 X 章节名的；无章节名的合同级兜底项(如 'Allow for all other works and costs not included above')保留开办费。",
+    "regex": "^Allow a provision for all other works and costs required for completion of the [\"“](.+)[\"”]\\.?$",
+    "mapping": {
+      "CONCRETE WORKS": {
+        "discipline": "A",
+        "category_code": "A.04",
+        "category_name": "现浇混凝土及钢筋",
+        "subcategory_code": "",
+        "subcategory_name": ""
+      },
+      "PRECAST REINFORCED CONCRETE WORKS": {
+        "discipline": "A",
+        "category_code": "A.05",
+        "category_name": "预制混凝土与装配式",
+        "subcategory_code": "",
+        "subcategory_name": ""
+      },
+      "STRUCTURAL STEEL WORKS": {
+        "discipline": "A",
+        "category_code": "A.07",
+        "category_name": "金属结构与构件",
+        "subcategory_code": "",
+        "subcategory_name": ""
+      },
+      "PARTITION WORKS": {
+        "discipline": "A",
+        "category_code": "A.21",
+        "category_name": "墙、柱面装饰与隔断",
+        "subcategory_code": "06",
+        "subcategory_name": "隔墙、隔断"
+      },
+      "WATERPROOFING WORKS": {
+        "discipline": "A",
+        "category_code": "A.11",
+        "category_name": "防水与防潮",
+        "subcategory_code": "",
+        "subcategory_name": ""
+      },
+      "METAL WORKS": {
+        "discipline": "A",
+        "category_code": "A.07",
+        "category_name": "金属结构与构件",
+        "subcategory_code": "",
+        "subcategory_name": ""
+      },
+      "FLOOR FINISHES": {
+        "discipline": "A",
+        "category_code": "A.20",
+        "category_name": "楼地面装饰",
+        "subcategory_code": "",
+        "subcategory_name": ""
+      },
+      "WALL FINISHES": {
+        "discipline": "A",
+        "category_code": "A.21",
+        "category_name": "墙、柱面装饰与隔断",
+        "subcategory_code": "",
+        "subcategory_name": ""
+      },
+      "CEILING FINISHES": {
+        "discipline": "A",
+        "category_code": "A.22",
+        "category_name": "天棚工程",
+        "subcategory_code": "",
+        "subcategory_name": ""
+      },
+      "ROOFING WORKS": {
+        "discipline": "A",
+        "category_code": "A.10",
+        "category_name": "屋面工程",
+        "subcategory_code": "",
+        "subcategory_name": ""
+      },
+      "OTHER WORKS": {
+        "discipline": "A",
+        "category_code": "A.12",
+        "category_name": "保温、隔热、防腐、防火封堵",
+        "subcategory_code": "01",
+        "subcategory_name": "保温、隔热",
+        "why": "该 OTHER 章节含防火封堵(Firestopping)，归属保温隔热"
+      },
+      "EXTERNAL WORK": {
+        "discipline": "A",
+        "category_code": "A.31",
+        "category_name": "外部场地工程",
+        "subcategory_code": "01",
+        "subcategory_name": "场地工程（含道路、平整）"
+      },
+      "PLUMBING AND DRAINAGE SYSTEM": {
+        "discipline": "B",
+        "category_code": "B.10",
+        "category_name": "给排水、采暖、燃气工程",
+        "subcategory_code": "01",
+        "subcategory_name": "给排水、采暖、燃气管道"
+      }
+    }
+  },
+  "skip_patterns": [
+    {
+      "pattern": "^in addition to the preamble notes",
+      "flags": "i",
+      "reason": "章节说明文字（preamble notes），无数量单位，不写回"
+    },
+    {
+      "pattern": "the following apply specifically to",
+      "flags": "i",
+      "reason": "章节说明文字（preamble notes），无数量单位，不写回"
+    },
+    {
+      "pattern": "^the bill of quantities is based on",
+      "flags": "i",
+      "reason": "BOQ 前言说明（量单编制依据），无数量单位，不写回"
+    },
+    {
+      "pattern": "^all quantities stated are to be verified",
+      "flags": "i",
+      "reason": "BOQ 前言说明（量单复核声明），无数量单位，不写回"
+    },
+    {
+      "pattern": "^the tenderer shall separately list and price below",
+      "flags": "i",
+      "reason": "BOQ 前言说明（投标人补充列项），无数量单位，不写回"
+    },
+    {
+      "pattern": "^contractor to itemise",
+      "flags": "i",
+      "reason": "占位行（承包商自行列项），非工程条目，不写回"
+    },
+    {
+      "pattern": "others?.*contractor to itemise\\s*$",
+      "flags": "i",
+      "reason": "兜底占位行（Others - Contractor to itemise），非工程条目，不写回"
+    },
+    {
+      "pattern": "^\\[?contractor to specify( if any others)?\\]?$",
+      "flags": "i",
+      "reason": "纯占位行（方括号内仅承包商补充指定），非工程条目，不写回"
+    }
+  ],
+  "routing": {
+    "desc": "第2步脚本 scripts/route_boq.py 的候选分档阈值：按检索命中的候选分部(division)数分档，控制后续 LLM 调用层级。UNIQUE→纯规则直接写回(0 token)；LOW→Haiku；HIGH→Sonnet；ZERO→Opus仲裁/人工。",
+    "unique_max_divisions": 1,
+    "low_min_divisions": 2,
+    "low_max_divisions": 3,
+    "high_min_divisions": 4
+  },
+  "patterns": [
+    {
+      "pattern": "masonry construction of slurry pit",
+      "flags": "i",
+      "discipline": "A",
+      "discipline_en": "Civil & Decoration",
+      "category_code": "A.06",
+      "category_name": "砌筑工程",
+      "category_name_en": "Masonry Works",
+      "subcategory_code": "",
+      "subcategory_name": "",
+      "subcategory_name_en": "",
+      "reason": "泥浆池砌体=砌筑工程，非桩基检测"
+    },
+    {
+      "pattern": "anti-termite treatment",
+      "flags": "i",
+      "discipline": "A",
+      "discipline_en": "Civil & Decoration",
+      "category_code": "A.01",
+      "category_name": "场地准备与土石方",
+      "category_name_en": "Site Preparation and Earthworks",
+      "subcategory_code": "03",
+      "subcategory_name": "平整场地及其他",
+      "subcategory_name_en": "Site Preparation and Others",
+      "reason": "防白蚁通常放土方工程 A.01"
+    },
+    {
+      "pattern": "accessibility sign",
+      "flags": "i",
+      "discipline": "A",
+      "discipline_en": "Civil & Decoration",
+      "category_code": "A.24",
+      "category_name": "其他装饰、家具设备",
+      "category_name_en": "Miscellaneous Decoration and Furniture Fittings",
+      "subcategory_code": "07",
+      "subcategory_name": "招牌、灯箱",
+      "subcategory_name_en": "Signage and Light Boxes",
+      "reason": "无障碍标识牌属装饰工程 A.24"
+    },
+    {
+      "pattern": "fire.?stopp",
+      "flags": "i",
+      "discipline": "A",
+      "discipline_en": "Civil & Decoration",
+      "category_code": "A.12",
+      "category_name": "保温、隔热、防腐、防火封堵",
+      "category_name_en": "Thermal Insulation, Fire Protection and Corrosion Protection",
+      "subcategory_code": "01",
+      "subcategory_name": "保温、隔热",
+      "subcategory_name_en": "Thermal and Acoustic Insulation",
+      "reason": "防火封堵属保温隔热 A.12"
+    },
+    {
+      "pattern": "flame.retardant extruded polystyrene|xps.*(flame.?retardant|thermal)|extruded polystyrene.*insulation",
+      "flags": "i",
+      "discipline": "A",
+      "discipline_en": "Civil & Decoration",
+      "category_code": "A.12",
+      "category_name": "保温、隔热、防腐、防火封堵",
+      "category_name_en": "Thermal Insulation, Fire Protection and Corrosion Protection",
+      "subcategory_code": "01",
+      "subcategory_name": "保温、隔热",
+      "subcategory_name_en": "Thermal and Acoustic Insulation",
+      "reason": "XPS 保温板归保温隔热 A.12；注意 XPS 防水保护板(protection board)归 A.11 屋面防水及其他，勿混淆"
+    },
+    {
+      "pattern": "dta mortar|tile adhesive bedding",
+      "flags": "i",
+      "discipline": null,
+      "discipline_en": null,
+      "category_code": null,
+      "category_name": null,
+      "category_name_en": null,
+      "subcategory_code": null,
+      "subcategory_name": null,
+      "subcategory_name_en": null,
+      "reason": "DTA 砂浆/瓷砖粘结层是砂浆类不是瓷砖面层，按所在章节定：楼地面→A.20/01 整体面层及找平层；墙柱面→A.21/01 墙、柱面抹灰。需上下文，不自动匹配"
+    }
+  ]
+}

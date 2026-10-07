@@ -9,12 +9,26 @@ description: "统一文档处理入口：将任意办公文档转为 AI 可读�
 
 ## 路由规则
 
-| 输入 | 输出 | 工具 |
+| 输入 | 输出 | 工具（按优先级） |
 |------|------|------|
-| `.pdf` | Markdown | `pdf` skill 或 `pdf2md` MCP |
-| `.docx` | Markdown | `docx` skill 或 `pandoc` MCP |
-| `.png` / `.jpg` / `.bmp` | 文本 | `rapid-ocr` MCP |
-| `.xlsx` / `.xlsm` / `.xls` | **见下方判定** | 本 skill 脚本 |
+| `.pdf` 有文本层 | Markdown | `pdfplumber` 抽取 → `pdf` skill |
+| `.pdf` 扫描件 | 文本 | `fitz` 渲染 200dpi → `paddleocr`（准）或 `rapidocr_onnxruntime`（快 15 倍） |
+| `.docx` | Markdown | `anydoc` 或 `docx` skill → `pandoc` MCP |
+| `.png` / `.jpg` / `.bmp` | 文本 | `paddleocr` 或 `rapidocr_onnxruntime` |
+| `.xlsx` / `.xlsm` / `.xls` | **见下方判定** | 本 skill 脚本（`fastexcel` 读值） |
+
+**先探文本层再决定走不走 OCR**：`len("".join(p.get_text() for p in fitz.open(f)).strip())` 为 0 才是扫描件。有文本层却去 OCR 是纯浪费，而且更容易读错。
+
+**`pdf2md` 与 `rapid-ocr` 这两个 MCP 在当前环境不存在**，不要调用——用上表的本地 Python 库，均已安装：`fitz`(PyMuPDF)、`pdfplumber`、`rapidocr_onnxruntime`、`paddleocr`、`fastexcel`、`openpyxl`、`PIL`。
+
+OCR 引擎选型（同一份英文扫描报价单实测，200dpi）：
+
+| 引擎 | 耗时 | 数字准确率 | 备注 |
+|---|---|---|---|
+| `paddleocr` | 107.5s | 4/6 个价格 | 更准，唯一读对邮箱的。本机须 `PaddleOCR(lang='en', enable_mkldnn=False)`，默认 onednn 后端会崩 |
+| `rapidocr_onnxruntime` | 6.4s | 3/6 个价格 | 快 15 倍，适合全页粗读定位；会误读字形相近字符（`l`→`i`） |
+
+**两者都不能可靠读数字。** 有结构化源（Excel、有文本层 PDF）时数值一律从那里取，OCR 只用于定位和佐证；关键数值靠裁图人工/视觉核验。
 
 **所有生成的 `.md` 文件转换完成后，统一调用 `baoyu-format-markdown` skill 美化一次。**
 

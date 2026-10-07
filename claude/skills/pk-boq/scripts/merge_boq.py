@@ -6,11 +6,11 @@
 - 自动检测列布局（标准/移位），归一化到统一列结构
 - 取消合并单元格，保留所有原始数据
 - 删除空行、Excel错误行、汇总行（SUBTOTAL/TOTAL/% COST/DITTO 等）
-- 自动分级：一级【】、二级《》、三级{}、四级分项
-- 层级配色 + 可折叠行分组 + 数字会计格式
-- 输出端使用 xlsxwriter（Office 原生兼容，无 COM/分组/fill 问题）
+- 输出平坦数据（无层级格式），仅 sheet 标题行用蓝色背景标识
+- 合并完成后自动调用 pk-boq-hierarchy/apply_hierarchy.py 应用 NRM 五级层级化
 """
 import re
+import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -25,14 +25,12 @@ from openpyxl.worksheet.worksheet import Worksheet
 
 FONT_NAME = "Microsoft YaHei UI"
 FONT_COLOR = "#1A1A1A"
-BORDER_COLOR = "#D9D9D9"
 HEADER_FILL = "#1F4E79"
 NUM_FORMAT = '#,##0.00'
-
-LEVEL_FILLS = {1: "#C6D9F1", 2: "#EEF2FA", 3: "#FBE5D6", 4: None}
-LEVEL_BOLD = {1: True, 2: True, 3: False, 4: False}
-LEVEL_SIZE = {1: 11, 2: 10, 3: 9, 4: 9}
-LEVEL_HEIGHT = {1: 24, 2: 20, 3: 18, 4: 16}
+DATA_FONT_SIZE = 9
+L1_FILL = "#C6D9F1"
+L1_HEIGHT = 24
+DATA_HEIGHT = 16
 
 
 # ── 配置 ──────────────────────────────────────────────
@@ -72,12 +70,6 @@ COL_DESC = 2
 COL_UNIT = 3
 COL_QTY = 4
 
-CLASS_RE = re.compile(r"^Class\s+[A-Z]\b", re.IGNORECASE)
-ITEM_CODE_RE = re.compile(r"^([A-Za-z]+\.\d+(?:\.\d+)*)\b")
-
-OPTION_RE = re.compile(r"[（(]方案[一二三四五六七八九十]+\s*[）)]|\bOption\s*\d+\b", re.IGNORECASE)
-
-
 
 # ── 辅助函数 ──────────────────────────────────────────
 
@@ -109,49 +101,8 @@ def _row_all_empty(ws: Worksheet, row: int, max_col: int) -> bool:
     return True
 
 
-def _code_depth(code: str) -> int:
-    return code.count(".")
-
-
 def _is_remove_row(text: str) -> bool:
     return bool(REMOVE_PATTERNS.search(text))
-
-
-def _looks_like_unit(val: str) -> bool:
-    if not val:
-        return False
-    common_units = {
-        "m", "m2", "m3", "m²", "m³", "㎡", "㎥",
-        "kg", "t", "No.", "No", "NOS", "Sets",
-        "LS", "ls", "Sum", "sum", "hr", "hour", "day", "week",
-        "month", "nr", "pcs", "set", "sets", "each", "item", "lot",
-        "km", "mm", "cm", "ha", "nos", "nos.", "hrs", "hours", "days",
-        "weeks", "months", "tonne", "tonnes", "ton", "tons",
-        "meter", "meters", "points", "sq.m", "sqm",
-    }
-    clean = val.strip()
-    clean_lower = clean.lower()
-    if clean_lower in {u.lower() for u in common_units}:
-        return True
-    # 去掉尾部句点再试（如 "m." → "m"、"kg." → "kg"、"sq.m." → "sq.m"）
-    if clean_lower.endswith("."):
-        stripped = clean_lower.rstrip(".")
-        if stripped in {u.lower() for u in common_units}:
-            return True
-    return False
-
-
-
-def _looks_like_qty(val: str) -> bool:
-    if not val:
-        return False
-    clean = val.strip().replace(",", "").replace(" ", "")
-    try:
-        float(clean)
-        return True
-    except ValueError:
-        pass
-    return False
 
 
 def _to_number(val: str):
@@ -165,16 +116,6 @@ def _to_number(val: str):
         return int(f) if f == int(f) and "." not in clean else f
     except ValueError:
         return val
-
-
-def _find_unit_rate_col(ws: Worksheet, header_row: int, max_col: int) -> int:
-    """返回 'Unit Rate' 表头的 0-based 列索引（默认 4 = E 列）。"""
-    for row in (header_row, header_row + 1):
-        for c in range(4, max_col + 1):
-            val = _cell_str(ws, row, c + 1).lower()
-            if "unit rate" in val and "breakdown" not in val:
-                return c
-    return 4
 
 
 def _find_design_qty_col(ws: Worksheet, header_row: int, max_col: int) -> int:
@@ -206,26 +147,12 @@ def _read_headers(ws: Worksheet, header_row: int, max_col: int) -> list[str]:
     return headers
 
 
-def _extract_alias(name: str) -> str:
-    parts = name.split("_", 1)
-    if len(parts) == 2:
-        return parts[1].strip()
-    return name.strip()
-
-
-def _extract_option_label(name: str) -> str:
-    m = OPTION_RE.search(name)
-    return m.group(0) if m else ""
-
-
 # ── 主类 ──────────────────────────────────────────────
 
 class BOQMerger:
     def __init__(self, source_path: str | Path, columns: dict | None = None):
         self.source_path = Path(source_path)
         self.wb = openpyxl.load_workbook(self.source_path, data_only=True)
-        self.sheet_aliases: dict[str, str] = {}
-        self.sheet_options: dict[str, str] = {}
 
         # Column mapping (1-based), overridable via --columns
         cols = columns or {}
@@ -288,7 +215,19 @@ class BOQMerger:
                 return True
         return False
 
-    # ── 行分类 ──
+    # ── 隐藏行检测 ──
+
+    @staticmethod
+    def _detect_hidden_rows(ws: Worksheet, start_row: int = 1) -> list[int]:
+        """返回指定 sheet 中数据区域内隐藏行的行号列表。"""
+        hidden = []
+        for r in range(start_row, (ws.max_row or 1) + 1):
+            if ws.row_dimensions[r].hidden:
+                hidden.append(r)
+        return hidden
+
+    # ── 行分类 (仅噪声过滤，不做层级判定) ──
+    # 层级化由 apply_hierarchy.py 统一处理，不在合并阶段做简化分级
 
     def _classify_row(
         self, ws: Worksheet, row: int, max_col: int,
@@ -313,8 +252,12 @@ class BOQMerger:
         if "Item Description" in val_a or "Item Description" in val_b:
             return {"action": "remove"}
 
+        # SUBTOTAL/TOTAL rows are legitimate L4 data — keep them.
+        # Hierarchy script R01c classifies them as L4.
         if _is_remove_row(val_a) or _is_remove_row(val_b):
-            return {"action": "remove"}
+            return {"action": "keep",
+                    "code": val_a, "desc": val_b,
+                    "unit": val_c, "quantity": val_d}
 
         if self._is_disclaimer(val_b):
             return {"action": "remove"}
@@ -323,107 +266,15 @@ class BOQMerger:
             if word_count > 25:
                 return {"action": "remove"}
 
-        code_match = ITEM_CODE_RE.match(val_a)
-        code = code_match.group(1) if code_match else ""
-        depth = _code_depth(code) if code else 0
-
-        has_unit = bool(val_c) and _looks_like_unit(val_c)
-        has_qty = bool(val_d) and _looks_like_qty(val_d)
-
-        # 核心规则：单位列和工程量列同时非空 → 一定是分部分项清单条目，不是标题
-        # （标题行不会有工程量，即使 LS/No./Sum 带数量也是实际报价条目）
-        if bool(val_c) and bool(val_d):
-            return {"action": "keep", "level": 4,
-                    "code": val_a, "desc": val_b,
-                    "unit": val_c, "quantity": val_d}
-
-        if CLASS_RE.match(val_a) or CLASS_RE.match(val_b):
-            return {"action": "keep", "level": 2,
-                    "code": val_a, "desc": val_b,
-                    "unit": val_c, "quantity": val_d}
-
-        if code:
-            # Depth≥3 with raw unit or qty → Level 4 (sub-items follow Level 3 titles)
-            if has_unit or has_qty:
-                return {"action": "keep", "level": 4,
-                        "code": val_a, "desc": val_b,
-                        "unit": val_c, "quantity": val_d}
-            elif depth == 1:
-                return {"action": "keep", "level": 2,
-                        "code": val_a, "desc": val_b,
-                        "unit": val_c, "quantity": val_d}
-            elif depth >= 3:
-                # Deep code without detected unit/qty — check raw values
-                if bool(val_c) or bool(val_d):
-                    return {"action": "keep", "level": 4,
-                            "code": val_a, "desc": val_b,
-                            "unit": val_c, "quantity": val_d}
-                return {"action": "keep", "level": 3,
-                        "code": val_a, "desc": val_b,
-                        "unit": val_c, "quantity": val_d}
-            else:
-                # depth == 2: Level 3 title (followed by depth≥3 sub-items)
-                return {"action": "keep", "level": 3,
-                        "code": val_a, "desc": val_b,
-                        "unit": val_c, "quantity": val_d}
-
-        if val_a:
-            if has_unit or has_qty:
-                return {"action": "keep", "level": 4,
-                        "code": val_a, "desc": val_b,
-                        "unit": val_c, "quantity": val_d}
-            else:
-                return {"action": "keep", "level": 3,
-                        "code": val_a, "desc": val_b,
-                        "unit": val_c, "quantity": val_d}
-
-        if val_b:
-            if has_unit or has_qty:
-                return {"action": "keep", "level": 4,
-                        "code": "", "desc": val_b,
-                        "unit": val_c, "quantity": val_d}
-            # Raw unit or qty present → Level 4 (preserve the data)
-            if bool(val_c) or bool(val_d):
-                return {"action": "keep", "level": 4,
-                        "code": "", "desc": val_b,
-                        "unit": val_c, "quantity": val_d}
-            word_count = len(val_b.split())
-            if word_count <= 10 and not val_b.endswith("."):
-                return {"action": "keep", "level": 3,
-                        "code": "", "desc": val_b,
-                        "unit": val_c, "quantity": val_d}
-            return {"action": "keep", "level": 4,
-                    "code": "", "desc": val_b,
-                    "unit": val_c, "quantity": val_d}
-
-        return {"action": "keep", "level": 0,
+        return {"action": "keep",
                 "code": val_a, "desc": val_b,
                 "unit": val_c, "quantity": val_d}
-
-    # ── 格式化 ──
-
-    def _format_desc(self, row_info: dict, sheet_name: str) -> str:
-        desc = row_info["desc"]
-        level = row_info["level"]
-        if level == 1:
-            text = desc.strip()
-            option_label = self.sheet_options.get(sheet_name, "")
-            if option_label:
-                return f"【{text} — {option_label}】"
-            return f"【{text}】"
-        elif level == 2:
-            return f"《{desc.strip()}》"
-        elif level == 3:
-            return f"{{{desc.strip()}}}"
-        else:
-            return desc
 
     # ── 主流程 ──
 
     def merge(self, output_path: Optional[str | Path] = None,
               keep_source_sheets: bool = False,
-              use_outline: bool = True,
-              use_write_blank: bool = False) -> Path:
+              delete_hidden_rows: bool = False) -> Path:
         if output_path is None:
             stem = self.source_path.stem
             output_path = self.source_path.parent / f"{datetime.now().strftime('%Y-%m-%d')}_BQMerge_{stem}.xlsx"
@@ -436,12 +287,9 @@ class BOQMerger:
         for name in all_sheets:
             if self._is_boq_sheet(name) and not self._is_prelims(name):
                 boq_sheets.append(name)
-                self.sheet_aliases[name] = _extract_alias(name)
-                self.sheet_options[name] = _extract_option_label(name)
 
-        # 动态检测表头和列数：遍历所有 sheet 取最大列数和最佳表头
+        # 动态检测表头：遍历所有 sheet 取最大列数
         dynamic_headers: list[str] = []
-        global_unit_rate_col = 4  # 默认 E 列
 
         for name in boq_sheets:
             ws = self.wb[name]
@@ -451,9 +299,6 @@ class BOQMerger:
                 hdrs = _read_headers(ws, header_row, sheet_max_col)
                 if len(hdrs) > len(dynamic_headers):
                     dynamic_headers = hdrs
-                urc = _find_unit_rate_col(ws, header_row, sheet_max_col)
-                if urc > global_unit_rate_col:
-                    global_unit_rate_col = urc
 
         if not dynamic_headers:
             dynamic_headers = ["Item", "Item Description", "Unit", "Quantity",
@@ -469,6 +314,43 @@ class BOQMerger:
         if global_max_col > 3:
             dynamic_headers[3] = "Quantity"
         all_rows: list[tuple[list, int]] = []  # (row_data, level)
+
+        # ── Hidden Row Detection (pre-scan all BOQ sheets) ─────────
+        all_hidden: dict[str, list[int]] = {}
+        for sheet_name in boq_sheets:
+            ws = self.wb[sheet_name]
+            header_row = self._find_header_row(ws, ws.max_column or global_max_col)
+            if not header_row:
+                continue
+            data_start = self._find_data_start(ws, ws.max_column or global_max_col)
+            hidden = self._detect_hidden_rows(ws, data_start)
+            if hidden:
+                all_hidden[sheet_name] = hidden
+
+        if all_hidden:
+            total_hidden = sum(len(v) for v in all_hidden.values())
+            print(f'\n检测到 {total_hidden} 个隐藏行，分布在 {len(all_hidden)} 个 sheet:')
+            for sn, rows in all_hidden.items():
+                ranges = []
+                start = rows[0]; end = rows[0]
+                for h in rows[1:]:
+                    if h == end + 1:
+                        end = h
+                    else:
+                        ranges.append(f'{start}-{end}' if start != end else str(start))
+                        start = end = h
+                ranges.append(f'{start}-{end}' if start != end else str(start))
+                print(f'  [{sn}] {len(rows)} 行: {", ".join(ranges)}')
+
+            if delete_hidden_rows:
+                for sheet_name, rows in all_hidden.items():
+                    ws = self.wb[sheet_name]
+                    _unmerge_and_fill(ws)  # dissolve merged cells before row deletion
+                    for r in sorted(rows, reverse=True):
+                        ws.delete_rows(r)
+                print(f'已删除 {total_hidden} 个隐藏行\n')
+            else:
+                print('提示: 使用 --delete-hidden-rows 参数可自动删除这些隐藏行\n')
 
         for sheet_name in boq_sheets:
             ws = self.wb[sheet_name]
@@ -499,10 +381,7 @@ class BOQMerger:
                 if info["action"] == "remove":
                     continue
 
-                level = info["level"]
-                if level == 0:
-                    level = 4
-                desc = self._format_desc(info, sheet_name)
+                desc = info["desc"]
 
                 # 保留全部源列：A-D(分类用) + E 起全部数据列
                 raw_row = [info["code"], desc, info["unit"], info["quantity"]]
@@ -526,7 +405,7 @@ class BOQMerger:
                     elif raw_row[ci] == "":
                         raw_row[ci] = None
 
-                all_rows.append((raw_row, level))
+                all_rows.append((raw_row, 0))
 
         self.wb.close()
 
@@ -534,30 +413,32 @@ class BOQMerger:
         out_wb = xlsxwriter.Workbook(str(output_path), {'constant_memory': False})
         out_ws = out_wb.add_worksheet("MergeSheet")
 
-        cell_fmts = {}
-        for lvl in [1, 2, 3, 4]:
-            base = {
-                'font_name': FONT_NAME,
-                'font_color': FONT_COLOR,
-                'bold': LEVEL_BOLD[lvl],
-                'font_size': LEVEL_SIZE[lvl],
-                'bottom': 1,
-                'bottom_color': BORDER_COLOR,
-                'valign': 'vcenter',
-            }
-            if LEVEL_FILLS[lvl]:
-                base['bg_color'] = LEVEL_FILLS[lvl]
-
-            cell_fmts[(lvl, False)] = out_wb.add_format(base)
-            cell_fmts[(lvl, True)] = out_wb.add_format({**base, 'num_format': NUM_FORMAT})
-
+        l1_fmt = out_wb.add_format({
+            'font_name': FONT_NAME,
+            'font_color': FONT_COLOR,
+            'bold': True,
+            'font_size': 10,
+            'bg_color': L1_FILL,
+            'valign': 'vcenter',
+        })
+        data_fmt = out_wb.add_format({
+            'font_name': FONT_NAME,
+            'font_color': FONT_COLOR,
+            'font_size': DATA_FONT_SIZE,
+            'valign': 'vcenter',
+        })
+        data_num_fmt = out_wb.add_format({
+            'font_name': FONT_NAME,
+            'font_color': FONT_COLOR,
+            'font_size': DATA_FONT_SIZE,
+            'valign': 'vcenter',
+            'num_format': NUM_FORMAT,
+        })
         header_fmt = out_wb.add_format({
             'font_name': FONT_NAME,
             'bold': True,
             'font_color': '#FFFFFF',
             'bg_color': HEADER_FILL,
-            'border': 1,
-            'border_color': BORDER_COLOR,
             'align': 'center',
             'valign': 'vcenter',
             'text_wrap': True,
@@ -572,29 +453,21 @@ class BOQMerger:
             hdr = dynamic_headers[ci] if ci < len(dynamic_headers) else ""
             out_ws.write(0, ci, hdr, header_fmt)
 
-        # 计算 outline level
-        outline_lv = [0] * len(all_rows)
-        if use_outline:
-            for i, (_, lvl) in enumerate(all_rows):
-                outline_lv[i] = lvl - 1  # 【1→0, 《2→1, {3→2, 分项4→3
-
-        # 写数据行
+        # 写数据行：L1 sheet 标题行用蓝色背景，其余统一平坦格式
         for i, (row_data, level) in enumerate(all_rows):
             xl_row = i + 2
-            if outline_lv[i] > 0:
-                out_ws.set_row(xl_row, LEVEL_HEIGHT[level], None,
-                               {'level': outline_lv[i]})
-            else:
-                out_ws.set_row(xl_row, LEVEL_HEIGHT[level])
+            is_l1 = (level == 1)
+            out_ws.set_row(xl_row, L1_HEIGHT if is_l1 else DATA_HEIGHT)
             for ci, val in enumerate(row_data):
                 if ci >= used_cols:
                     break
-                is_num = ci >= 3
-                fmt = cell_fmts[(level, is_num)]
-                if val is None:
-                    if use_write_blank:
-                        out_ws.write_blank(xl_row, ci, None, fmt)
+                if is_l1:
+                    fmt = l1_fmt
+                elif ci >= 3:
+                    fmt = data_num_fmt
                 else:
+                    fmt = data_fmt
+                if val is not None:
                     out_ws.write(xl_row, ci, val, fmt)
 
         # 列宽
@@ -641,12 +514,10 @@ def main():
     parser.add_argument("-o", "--output", default=None, help="输出文件路径")
     parser.add_argument("--keep-source-sheets", action="store_true",
                         help="在输出中保留原始分表（默认不保留）")
-    parser.add_argument("--no-outline", action="store_true",
-                        help="禁用行分组/大纲")
-    parser.add_argument("--no-write-blank", action="store_true",
-                        help="不对空单元格写入格式（减少 XML 体积）")
     parser.add_argument("--columns", default=None,
                         help='列映射 JSON，例如: \'{"item":1,"desc":2,"unit":3,"qty":4,"data_start":5}\'')
+    parser.add_argument("--delete-hidden-rows", action="store_true",
+                        help="删除源 sheet 中的隐藏行后再合并")
     args = parser.parse_args()
 
     columns_config = None
@@ -658,10 +529,22 @@ def main():
     out = merger.merge(
         output_path=args.output,
         keep_source_sheets=args.keep_source_sheets,
-        use_outline=not args.no_outline,
-        use_write_blank=not args.no_write_blank,
+        delete_hidden_rows=args.delete_hidden_rows,
     )
     print(f"Merged → {out}")
+
+    hierarchy_script = (
+        Path(__file__).resolve().parent.parent.parent
+        / "pk-boq-hierarchy" / "scripts" / "apply_hierarchy.py"
+    )
+    if hierarchy_script.exists():
+        print("Applying NRM 5-level hierarchy (pk-boq-hierarchy)...")
+        subprocess.run(
+            [sys.executable, str(hierarchy_script), str(out)],
+            check=False,
+        )
+    else:
+        print(f"Warning: hierarchy script not found at {hierarchy_script}")
 
 
 if __name__ == "__main__":

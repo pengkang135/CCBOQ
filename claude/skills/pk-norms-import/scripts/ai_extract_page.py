@@ -114,15 +114,19 @@ def build_continued_prompt(clustered, prev_result):
 
 
 def call_claude_api(prompt, model="claude-sonnet-4-6", max_tokens=4096):
-    """Call Claude API. Requires ANTHROPIC_API_KEY in environment."""
-    import anthropic
-    client = anthropic.Anthropic()
-    response = client.messages.create(
-        model=model,
-        max_tokens=max_tokens,
-        messages=[{"role": "user", "content": prompt}]
+    """DEPRECATED: AI extraction is now done via Claude Code Agent/Skill system.
+
+    This function is no longer used. The pk-norms-import workflow now invokes
+    Claude Code agents directly for page-level semantic extraction, which run
+    within the same Claude Code session — no external API key required.
+
+    If you need AI extraction, invoke the pk-norms-import skill which will
+    orchestrate Agent tool calls internally.
+    """
+    raise NotImplementedError(
+        "Direct API calls are deprecated. Use Claude Code Agent/Skill system. "
+        "Invoke pk-norms-import skill for AI-powered extraction."
     )
-    return response.content[0].text
 
 
 def validate_result(result, n_codes, n_cost_items):

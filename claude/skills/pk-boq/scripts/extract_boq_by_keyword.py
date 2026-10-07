@@ -18,6 +18,8 @@ import argparse
 import os
 from datetime import datetime
 
+from openpyxl_utils import clean_save
+
 COL_MAP = {0: 0, 1: 1, 2: 2, 3: 3, 7: 4, 8: 5, 9: 6, 10: 7, 11: 8, 12: 9, 13: 10, 14: 11, 15: 12}
 NUM_COLS = {'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'}
 NUM_FMT = '_ * #,##0.00_ ;_ * \\-#,##0.00_ ;_ * "-"??_ ;_ @_ '
@@ -470,7 +472,7 @@ class BOQExtractor:
             cell_bot.border = Border(left=cell_bot.border.left, right=cell_bot.border.right,
                                      top=cell_bot.border.top, bottom=outer_side)
 
-        wb.save(output_path)
+        clean_save(wb, output_path)
         wb.close()
         print(f"Saved: {output_path} ({out_row - 1} rows)")
         return self

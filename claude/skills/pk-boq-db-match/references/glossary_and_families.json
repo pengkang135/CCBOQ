@@ -1,0 +1,1598 @@
+{
+  "en2cn": {
+    "reinforced concrete": "钢筋混凝土",
+    "cast-in-situ": "现浇",
+    "cast in situ": "现浇",
+    "cast-in-place": "现浇",
+    "precast concrete": "预制混凝土",
+    "precast": "预制",
+    "concrete": "混凝土",
+    "plain concrete": "素混凝土",
+    "lean concrete": "贫混凝土",
+    "screed concrete": "垫层",
+    "blinding": "垫层",
+    "blinding concrete": "混凝土垫层",
+    "coping": "压顶",
+    "infill": "填充",
+    "topping": "面层",
+    "foundation": "基础",
+    "raft foundation": "筏板基础",
+    "pad foundation": "独立基础",
+    "strip foundation": "条形基础",
+    "pile cap": "承台",
+    "pile caps": "承台",
+    "column": "柱",
+    "columns": "柱",
+    "beam": "梁",
+    "beams": "梁",
+    "slab": "板",
+    "slabs": "板",
+    "shear wall": "剪力墙",
+    "core wall": "核心筒",
+    "wall": "墙",
+    "walls": "墙",
+    "cover slab": "盖板",
+    "kerb": "路缘石",
+    "kerbs": "路缘石",
+    "double-tee": "双 T 板",
+    "double tee": "双 T 板",
+    "hollow core": "空心板",
+    "ramp": "坡道",
+    "staircase": "楼梯",
+    "stairs": "楼梯",
+    "stair": "楼梯",
+    "landing": "楼梯平台",
+    "c15 concrete": "C15 混凝土",
+    "c20 concrete": "C20 混凝土",
+    "c25 concrete": "C25 混凝土",
+    "c28 concrete": "C28 混凝土",
+    "c30 concrete": "C30 混凝土",
+    "c35 concrete": "C35 混凝土",
+    "c40 concrete": "C40 混凝土",
+    "c50 concrete": "C50 混凝土",
+    "f'c(mpa)15": "C15",
+    "f'c(mpa)20": "C20",
+    "f'c(mpa)25": "C25",
+    "f'c(mpa)28": "C28",
+    "f'c(mpa)30": "C30",
+    "f'c(mpa)35": "C35",
+    "f'c(mpa)40": "C40",
+    "f'c(mpa)50": "C50",
+    "aac": "加气混凝土",
+    "aac block": "加气混凝土砌块",
+    "autoclaved aerated": "蒸压加气",
+    "autoclaved aerated concrete": "蒸压加气混凝土",
+    "hollow block": "空心砌块",
+    "hollow concrete block": "混凝土空心砌块",
+    "block wall": "砌块墙",
+    "block walling": "砌块",
+    "brickwork": "砖砌",
+    "brick wall": "砖墙",
+    "cement mortar": "水泥砂浆",
+    "mortar": "砂浆",
+    "screed": "找平层",
+    "levelling": "找平",
+    "leveling": "找平",
+    "dsm": "干混砂浆",
+    "dtg mortar": "干拌灌缝砂浆",
+    "dp m15": "DP-M15 砂浆",
+    "waterproof mortar": "防水砂浆",
+    "damp-proof mortar": "防潮砂浆",
+    "grout": "灌浆料",
+    "grouted": "灌浆",
+    "bedding": "垫层",
+    "reinforcement": "钢筋",
+    "rebar": "钢筋",
+    "deformed bar": "螺纹钢",
+    "deformed reinforcement": "螺纹钢筋",
+    "round bar": "光圆钢筋",
+    "welded mesh": "钢筋网片",
+    "wire mesh": "钢丝网",
+    "structural steel": "钢结构",
+    "steel plate": "钢板",
+    "sheet metal": "薄钢板",
+    "i-section": "工字钢",
+    "i beam": "工字梁",
+    "h-section": "H型钢",
+    "channel steel": "槽钢",
+    "angle steel": "角钢",
+    "steel pipe": "钢管",
+    "steel tube": "钢管",
+    "shs": "方管",
+    "handrail": "扶手",
+    "railing": "栏杆",
+    "balustrade": "栏杆",
+    "grab bar": "抓杆",
+    "guardrail": "护栏",
+    "fabrication": "制作",
+    "erection": "安装",
+    "galvanized": "镀锌",
+    "hot-dip galvanized": "热镀锌",
+    "stainless steel": "不锈钢",
+    "gutter": "檐沟",
+    "downpipe": "落水管",
+    "waterstop": "止水带",
+    "waterstop plate": "止水钢板",
+    "anchor bolt": "锚栓",
+    "anchor": "锚栓",
+    "connection bolt": "连接螺栓",
+    "ss400": "SS400",
+    "s235": "S235",
+    "q235": "Q235",
+    "q345": "Q345",
+    "formwork": "模板",
+    "formwork to columns": "柱模板",
+    "formwork to beams": "梁模板",
+    "formwork to walls": "墙模板",
+    "formwork to slabs": "板模板",
+    "formwork to foundations": "基础模板",
+    "formwork to pile caps": "承台模板",
+    "formwork to shear walls": "剪力墙模板",
+    "formwork to copings": "压顶模板",
+    "formwork to kerbs": "路缘石模板",
+    "formwork to staircases": "楼梯模板",
+    "paint": "涂料",
+    "painting": "涂装",
+    "coating": "涂层",
+    "coat": "涂层",
+    "primer": "底漆",
+    "primer coat": "底漆",
+    "intermediate coat": "中间漆",
+    "finish coat": "面漆",
+    "top coat": "面漆",
+    "main coat": "主漆",
+    "bonding agent": "界面剂",
+    "sealer": "封闭剂",
+    "elastomeric primer": "弹性底漆",
+    "alkali-resistant": "抗碱",
+    "intumescent": "膨胀型",
+    "fire-resistive coating": "防火涂料",
+    "fire-resistant coating": "防火涂料",
+    "fire coating": "防火涂料",
+    "fire protection": "防火",
+    "polyurethane": "聚氨酯",
+    "pu": "聚氨酯",
+    "epoxy": "环氧",
+    "epoxy floor": "环氧地坪",
+    "epoxy primer": "环氧底漆",
+    "zinc-rich": "富锌",
+    "zinc rich epoxy": "环氧富锌",
+    "abrasive blast": "喷砂",
+    "sand blast": "喷砂",
+    "elastomeric": "弹性",
+    "putty": "腻子",
+    "flexible putty": "柔性腻子",
+    "anti-crack putty": "抗裂腻子",
+    "inorganic paint": "无机涂料",
+    "inorganic coating": "无机涂层",
+    "acrylic": "丙烯酸",
+    "waterborne": "水性",
+    "waterproof coating": "防水涂料",
+    "damp-resistant coating": "防潮涂料",
+    "textured coating": "质感涂料",
+    "stone-effect coating": "仿石涂料",
+    "road marking": "道路划线",
+    "thermoplastic paint": "热熔涂料",
+    "mio": "云铁",
+    "micaceous iron oxide": "云铁",
+    "waterproofing": "防水",
+    "waterproof membrane": "防水卷材",
+    "waterproofing membrane": "防水卷材",
+    "sbs": "SBS",
+    "sbs bituminous": "SBS 沥青",
+    "bituminous": "沥青",
+    "modified bitumen": "改性沥青",
+    "elastomer-modified": "弹性改性",
+    "asphalt": "沥青",
+    "asphalt pavement": "沥青路面",
+    "tile": "瓷砖",
+    "tiles": "瓷砖",
+    "ceramic tile": "陶瓷砖",
+    "porcelain tile": "抛光砖",
+    "homogeneous tile": "通体砖",
+    "homogeneous": "通体",
+    "anti-slip tile": "防滑砖",
+    "non-slip tile": "防滑砖",
+    "floor tile": "地砖",
+    "wall tile": "墙砖",
+    "granite tile": "花岗岩砖",
+    "marble tile": "大理石砖",
+    "vinyl tile": "PVC 地砖",
+    "vct": "PVC 地砖",
+    "raised floor": "架空地板",
+    "granite": "花岗岩",
+    "granite slab": "花岗岩板",
+    "marble": "大理石",
+    "limestone": "石灰石",
+    "sandstone": "砂岩",
+    "gypsum board": "石膏板",
+    "gypsum": "石膏",
+    "fire-rated gypsum board": "防火石膏板",
+    "double-layer gypsum board": "双层石膏板",
+    "paperboard gypsum": "纸面石膏板",
+    "calcium silicate": "硅酸钙",
+    "calcium silicate board": "硅酸钙板",
+    "cement fiber board": "水泥纤维板",
+    "cement fibre board": "水泥纤维板",
+    "acp": "铝塑板",
+    "aluminum composite panel": "铝塑板",
+    "aluminium composite panel": "铝塑板",
+    "aluminum panel": "铝板",
+    "aluminium panel": "铝板",
+    "perforated aluminum": "穿孔铝板",
+    "aluminum grille": "铝格栅",
+    "acoustic": "吸音",
+    "sound-absorbing": "吸音",
+    "polyester fiber": "聚酯纤维",
+    "aac panel": "加气板",
+    "eps panel": "EPS 板",
+    "wood-plastic composite": "木塑",
+    "false ceiling": "吊顶",
+    "ceiling": "吊顶",
+    "suspended ceiling": "吊顶系统",
+    "ceiling grid": "吊顶龙骨",
+    "light steel keel": "轻钢龙骨",
+    "keel": "龙骨",
+    "gypsum ceiling": "石膏板吊顶",
+    "aluminum ceiling": "铝扣板吊顶",
+    "armstrong": "阿姆斯壮",
+    "partition wall": "隔墙",
+    "partition": "隔墙",
+    "drywall partition": "轻质隔墙",
+    "curtain wall": "幕墙",
+    "unitized curtain wall": "单元式幕墙",
+    "stick curtain wall": "构件式幕墙",
+    "glazing": "玻璃系统",
+    "glass": "玻璃",
+    "insulated glass": "中空玻璃",
+    "laminated glass": "夹胶玻璃",
+    "tempered glass": "钢化玻璃",
+    "low-e": "Low-E",
+    "mullion": "竖梃",
+    "transom": "横梁",
+    "aluminum profile": "铝型材",
+    "aluminium profile": "铝型材",
+    "insulation": "保温",
+    "thermal insulation": "保温",
+    "polystyrene": "聚苯",
+    "eps insulation": "EPS 保温",
+    "xps": "挤塑板",
+    "extruded polystyrene": "挤塑聚苯板",
+    "rockwool": "岩棉",
+    "rock wool": "岩棉",
+    "mineral wool": "岩棉",
+    "pe insulation": "PE 保温",
+    "polyurethane insulation": "聚氨酯保温",
+    "sandwich panel": "夹芯板",
+    "door": "门",
+    "fire door": "防火门",
+    "class a fire door": "甲级防火门",
+    "class b fire door": "乙级防火门",
+    "steel door": "钢门",
+    "steel fire door": "钢制防火门",
+    "timber door": "木门",
+    "wooden door": "木门",
+    "aluminum door": "铝合金门",
+    "aluminium door": "铝合金门",
+    "glass door": "玻璃门",
+    "sliding door": "推拉门",
+    "revolving door": "旋转门",
+    "roller shutter": "卷帘门",
+    "louver": "百叶",
+    "louvre": "百叶",
+    "window": "窗",
+    "aluminum window": "铝合金窗",
+    "double leaf": "双开",
+    "single leaf": "单开",
+    "door frame": "门框",
+    "door leaf": "门扇",
+    "intumescent strip": "膨胀密封条",
+    "flooring": "地面",
+    "floor finish": "地面饰面",
+    "epoxy flooring": "环氧地坪",
+    "self-leveling": "自流平",
+    "self leveling": "自流平",
+    "polished concrete": "抛光混凝土",
+    "concrete floor": "混凝土地面",
+    "skirting": "踢脚",
+    "stainless steel skirting": "不锈钢踢脚",
+    "aluminum skirting": "铝合金踢脚",
+    "prefinished skirting": "预制踢脚",
+    "water closet": "坐便器",
+    "toilet": "坐便器",
+    "wc": "坐便器",
+    "wash basin": "洗手盆",
+    "basin": "洗手盆",
+    "urinal": "小便器",
+    "squatting pan": "蹲便器",
+    "cistern": "水箱",
+    "faucet": "水龙头",
+    "automatic basin faucet": "感应水龙头",
+    "shower": "淋浴",
+    "bathtub": "浴缸",
+    "floor drain": "地漏",
+    "drainage grating": "地沟盖板",
+    "sprinkler": "喷淋",
+    "smoke detector": "烟感",
+    "fire alarm": "火警",
+    "cable tray": "桥架",
+    "cable ladder": "梯级桥架",
+    "conduit": "线管",
+    "pull box": "接线盒",
+    "distribution board": "配电箱",
+    "primary distribution board": "一级配电箱",
+    "secondary distribution board": "二级配电箱",
+    "manhole": "检查井",
+    "duct bank": "电缆排管",
+    "mv manhole": "中压检查井",
+    "lv manhole": "低压检查井",
+    "cable pit": "电缆井",
+    "cable pull pit": "电缆牵引井",
+    "earthing pit": "接地井",
+    "trench": "沟槽",
+    "cable trench": "电缆沟",
+    "excavation": "开挖",
+    "earthwork excavation": "土方开挖",
+    "backfill": "回填",
+    "backfilling": "回填",
+    "earth backfilling": "土方回填",
+    "compaction": "压实",
+    "compacted": "压实",
+    "crushed rock": "碎石",
+    "crushed stone": "碎石",
+    "subbase": "基层",
+    "sub-base": "基层",
+    "cbr": "CBR",
+    "pavement": "路面",
+    "concrete pavement": "混凝土路面",
+    "wheel stop": "车轮挡",
+    "rubber wheel stop": "橡胶车挡",
+    "fence": "围墙",
+    "fencing": "围栏",
+    "steel fencing": "钢制围栏",
+    "guardhouse": "警卫室",
+    "turnstile": "闸机",
+    "landscape": "景观",
+    "planting": "种植",
+    "grass": "草",
+    "sod": "草皮",
+    "tree": "树",
+    "shrub": "灌木",
+    "topsoil": "种植土",
+    "pile load test": "桩载荷试验",
+    "static load test": "静载试验",
+    "low-strain": "低应变",
+    "settlement marker": "沉降观测点",
+    "inclinometer": "测斜仪",
+    "canopy": "雨棚",
+    "shelter": "遮阳棚",
+    "anti-termite": "防白蚁",
+    "sleeve": "套管",
+    "flexible sleeve": "柔性套管",
+    "rigid sleeve": "刚性套管",
+    "expansion joint": "伸缩缝",
+    "division joint": "分格缝",
+    "control joint": "控制缝",
+    "sealant": "密封胶",
+    "silicone sealant": "硅酮密封胶",
+    "counter": "台面",
+    "countertop": "台面",
+    "cubicle": "隔间",
+    "toilet cubicle": "厕所隔间",
+    "vanity": "浴室柜",
+    "signage": "标识",
+    "sign": "标识",
+    "m2": "m2",
+    "m3": "m3",
+    "kg": "kg",
+    "ton": "吨",
+    "tonne": "吨",
+    "mm": "mm",
+    "cm": "cm",
+    "grille": "风口",
+    "diffuser": "散流器",
+    "valve": "阀门",
+    "pump": "水泵",
+    "cable": "电缆",
+    "switch": "开关",
+    "socket": "插座",
+    "panel": "配电箱",
+    "duct": "风管",
+    "pipe": "管道",
+    "light": "灯具",
+    "lamp": "灯具",
+    "fan": "风机",
+    "hose": "软管",
+    "alarm": "报警器",
+    "battery": "电池",
+    "chiller": "冷水机组",
+    "heater": "加热器",
+    "tank": "水箱",
+    "water tank": "水箱",
+    "flush": "冲洗阀",
+    "ball valve": "球阀",
+    "gate valve": "闸阀",
+    "check valve": "止回阀",
+    "globe valve": "截止阀",
+    "butterfly valve": "蝶阀",
+    "pressure gauge": "压力表",
+    "thermostat": "温控器",
+    "busbar": "母线槽",
+    "transformer": "变压器",
+    "generator": "发电机",
+    "ups": "不间断电源",
+    "bms": "楼宇自控",
+    "hvac": "暖通空调",
+    "air conditioning": "空调",
+    "exhaust": "排风",
+    "supply air": "送风",
+    "return air": "回风",
+    "grating": "格栅",
+    "sewage": "污水",
+    "drain": "排水",
+    "water supply": "给水",
+    "waste": "废水",
+    "vent": "通气管",
+    "rainwater": "雨水",
+    "sump": "集水井",
+    "elbow": "弯头",
+    "tee": "三通",
+    "flange": "法兰",
+    "gasket": "垫片",
+    "pipe fitting": "管件",
+    "fire hose": "消防水带",
+    "sprinkler head": "喷头",
+    "heat detector": "温感",
+    "fire extinguisher": "灭火器",
+    "hydrant": "消火栓",
+    "cleanout": "清扫口",
+    "trap": "存水弯",
+    "basin faucet": "面盆龙头",
+    "spray": "喷头",
+    "access panel": "检修口",
+    "gate": "大门",
+    "bollard": "防撞柱",
+    "speed hump": "减速带",
+    "paving": "铺装",
+    "cement": "水泥",
+    "sand": "砂",
+    "aggregate": "骨料",
+    "scaffolding": "脚手架",
+    "geotextile": "土工布",
+    "nonwoven": "无纺布",
+    "steel": "钢材",
+    "block": "砌块",
+    "brick": "砖",
+    "laminate": "抗倍特板",
+    "hardware": "五金",
+    "lock": "门锁",
+    "hinge": "铰链",
+    "handrail bracket": "扶手支架",
+    "gland": "填料函",
+    "flexible connector": "软接头",
+    "expansion bolt": "膨胀螺栓",
+    "stud bolt": "螺栓",
+    "nut": "螺母",
+    "washer": "垫圈",
+    "clamp": "管卡",
+    "hanger": "吊架",
+    "bracket": "支架",
+    "support": "支架",
+    "penetration": "封堵",
+    "firestop": "防火封堵",
+    "conduit fitting": "线管配件",
+    "junction box": "接线盒",
+    "breaker": "断路器",
+    "mccb": "塑壳断路器",
+    "contactor": "接触器",
+    "relay": "继电器",
+    "fuse": "熔断器",
+    "motor": "电动机",
+    "starter": "启动器",
+    "vfd": "变频器",
+    "inverter": "逆变器",
+    "rectifier": "整流器",
+    "charger": "充电器",
+    "sensor": "传感器",
+    "detector": "探测器",
+    "controller": "控制器",
+    "indicator": "指示灯",
+    "beacon": "指示灯",
+    "siren": "警笛",
+    "bell": "电铃",
+    "speaker": "音箱",
+    "microphone": "麦克风",
+    "camera": "摄像机",
+    "monitor": "显示器",
+    "server": "服务器",
+    "switchgear": "开关柜",
+    "busway": "母线槽",
+    "isolator": "隔离开关",
+    "disconnector": "隔离开关",
+    "surge arrester": "避雷器",
+    "lightning": "防雷",
+    "earthing": "接地",
+    "grounding": "接地",
+    "trunking": "线槽",
+    "handhole": "手孔井",
+    "sign board": "标识牌",
+    "billboard": "广告牌",
+    "flagpole": "旗杆",
+    "fountain": "喷泉",
+    "planter": "花池",
+    "lawn": "草坪",
+    "irrigation": "灌溉",
+    "underground": "地下",
+    "overhead": "架空",
+    "plaster": "抹灰",
+    "plastering": "抹灰",
+    "render": "抹灰",
+    "rendering": "抹灰",
+    "smooth plaster": "光面抹灰",
+    "smooth render": "光面抹灰",
+    "float": "抹灰找平",
+    "cement render": "水泥抹灰",
+    "sand cement render": "水泥砂浆抹灰",
+    "cement plaster": "水泥砂浆抹灰",
+    "sand cement plaster": "水泥砂浆抹灰",
+    "lime plaster": "石灰抹灰",
+    "masonry": "砌体",
+    "masonry wall": "砌体墙",
+    "masonry work": "砌体工程",
+    "skimming": "刮腻子",
+    "skim coat": "腻子层",
+    "skim": "刮腻子",
+    "smooth": "光面",
+    "trowel finish": "镘光",
+    "trowelling": "抹灰收光",
+    "stucco": "灰泥",
+    "scratch coat": "打底抹灰",
+    "brown coat": "底灰层",
+    "float coat": "找平层",
+    "gypsum plaster": "石膏抹灰",
+    "plasterboard": "石膏板",
+    "screeding": "找平",
+    "leveling course": "找平层",
+    "undercoat": "底涂",
+    "pile cut off": "截桩头",
+    "cutting off pile": "截桩",
+    "pile head cutting": "截桩头",
+    "pile head trimming": "截桩头",
+    "termite control": "白蚁防治",
+    "anti-termite treatment": "防白蚁处理",
+    "site grading": "场地平整",
+    "surface clearance": "清表",
+    "soil leveling": "场地平整",
+    "grading": "平整"
+  },
+  "family_tags": {
+    "provisional_sum": [
+      "allow a provision",
+      "allow for the design",
+      "allow for maintaining",
+      "allow for providing",
+      "allow for the provision"
+    ],
+    "rebar": [
+      "deformed bar",
+      "reinforcement rebar",
+      "reinforcing bar",
+      "wire mesh",
+      "welded mesh",
+      "reinforcement mesh"
+    ],
+    "structural_steel": [
+      "structural steel",
+      "i-section",
+      "h-section",
+      "channel steel",
+      "steel fabrication"
+    ],
+    "formwork": [
+      "formwork"
+    ],
+    "concrete_grade": [
+      "concrete",
+      "f'c(mpa)",
+      "cast-in-situ",
+      "cast in situ",
+      "precast concrete",
+      "blinding",
+      "reinforced concrete"
+    ],
+    "block_wall": [
+      "aac",
+      "autoclaved aerated",
+      "hollow block",
+      "hollow concrete block",
+      "block wall",
+      "block walling"
+    ],
+    "waterproofing": [
+      "waterproof membrane",
+      "waterproofing",
+      "sbs",
+      "damp-resistant",
+      "damp proof",
+      "waterproof coating",
+      "waterproof mortar",
+      "rubberized bitumen",
+      "cementitious waterproof",
+      "damp-proof membrane",
+      "pe damp-proof"
+    ],
+    "fire_coating": [
+      "intumescent",
+      "fire-resistive coating",
+      "fire coating",
+      "fire proof coating"
+    ],
+    "steel_coating": [
+      "paint to steel",
+      "coating to steelwork",
+      "primer coat",
+      "epoxy primer",
+      "zinc-rich",
+      "polyurethane coat",
+      "structural steel coating",
+      "abrasive blast"
+    ],
+    "wall_paint": [
+      "inorganic paint",
+      "textured coating",
+      "stone-effect coating",
+      "elastomeric primer",
+      "acrylic paint",
+      "main coat",
+      "finish coat",
+      "inorganic primer",
+      "inorganic mineral paint",
+      "one coat of",
+      "two coats of",
+      "mineral paint finish"
+    ],
+    "putty_screed": [
+      "putty",
+      "screed",
+      "mortar bedding",
+      "leveling",
+      "levelling",
+      "cement mortar",
+      "dsm",
+      "bonding agent"
+    ],
+    "gypsum_board": [
+      "gypsum board",
+      "gypsum ceiling",
+      "fire-rated gypsum",
+      "double-layer gypsum",
+      "paperboard gypsum"
+    ],
+    "calcium_silicate_board": [
+      "calcium silicate",
+      "cement fiber",
+      "cement fibre"
+    ],
+    "acoustic_panel": [
+      "acoustic",
+      "sound-absorbing",
+      "sound absorbing",
+      "polyester fiber",
+      "aluminum grille",
+      "perforated aluminum"
+    ],
+    "tile_finish": [
+      "homogeneous tile",
+      "ceramic tile",
+      "porcelain tile",
+      "anti-slip tile",
+      "non-slip tile",
+      "floor tile",
+      "wall tile",
+      "granite tile",
+      "marble tile"
+    ],
+    "stone_finish": [
+      "granite",
+      "marble",
+      "limestone",
+      "sandstone"
+    ],
+    "vinyl_flooring": [
+      "vinyl",
+      "vct",
+      "raised floor"
+    ],
+    "epoxy_flooring": [
+      "epoxy flooring",
+      "epoxy floor",
+      "self-leveling",
+      "polished concrete"
+    ],
+    "ceiling_system": [
+      "false ceiling",
+      "suspended ceiling",
+      "ceiling grid",
+      "aluminum ceiling",
+      "armstrong"
+    ],
+    "curtain_wall": [
+      "curtain wall",
+      "unitized",
+      "mullion",
+      "transom"
+    ],
+    "glass": [
+      "insulated glass",
+      "laminated glass",
+      "tempered glass",
+      "glazing"
+    ],
+    "insulation_board": [
+      "xps",
+      "extruded polystyrene",
+      "polystyrene",
+      "rockwool",
+      "rock wool",
+      "mineral wool",
+      "sandwich panel",
+      "eps insulation",
+      "pe insulation",
+      "foamed-ceramic",
+      "foamed ceramic",
+      "firebreak",
+      "protection board",
+      "nonwoven-fabric",
+      "polyester nonwoven"
+    ],
+    "fire_door": [
+      "fire door",
+      "class a fire",
+      "class b fire",
+      "steel fire door"
+    ],
+    "door_other": [
+      "timber door",
+      "wooden door",
+      "aluminum door",
+      "aluminium door",
+      "glass door",
+      "sliding door",
+      "roller shutter"
+    ],
+    "sanitary": [
+      "water closet",
+      "toilet",
+      "wash basin",
+      "urinal",
+      "squatting pan",
+      "cistern",
+      "faucet",
+      "shower"
+    ],
+    "handrail": [
+      "handrail",
+      "railing",
+      "balustrade",
+      "grab bar",
+      "guardrail"
+    ],
+    "skirting": [
+      "skirting"
+    ],
+    "pit_manhole": [
+      "manhole",
+      "cable pit",
+      "cable pull pit",
+      "earthing pit",
+      "inspection chamber",
+      "duct bank",
+      "downpipe pit",
+      "down-pipe pit",
+      "op - down-pipe",
+      "op - downpipe",
+      "mh -",
+      "is -"
+    ],
+    "trench_drain": [
+      "trench",
+      "cable trench",
+      "open drain",
+      "drainage channel"
+    ],
+    "fence": [
+      "metal fencing",
+      "steel fencing",
+      "fence",
+      "fencing"
+    ],
+    "pavement_road": [
+      "asphalt pavement",
+      "concrete pavement",
+      "road marking",
+      "thermoplastic paint",
+      "wheel stop",
+      "kerb",
+      "thermoplastic road-marking",
+      "road-marking paint"
+    ],
+    "earthwork": [
+      "earthwork excavation",
+      "excavation",
+      "backfill",
+      "backfilling",
+      "earth backfilling",
+      "compaction",
+      "compacted",
+      "crushed rock",
+      "subbase",
+      "surplus excavated",
+      "remove surplus",
+      "site grading",
+      "surface clearance",
+      "compacted crushed rock",
+      "compacted subbase"
+    ],
+    "geotech": [
+      "pile load test",
+      "static load test",
+      "low-strain",
+      "settlement marker",
+      "inclinometer",
+      "pile drilling",
+      "casing",
+      "slurry",
+      "tilting checkpoint",
+      "core drilling test",
+      "cutting off pile heads",
+      "drilling into",
+      "pre-drilling",
+      "proof drilling",
+      "soil test report",
+      "shaft for",
+      "bored length",
+      "sonic logging",
+      "sonic tubes"
+    ],
+    "misc_finish": [
+      "anti-termite",
+      "sleeve",
+      "waterstop",
+      "expansion joint",
+      "silicone sealant",
+      "galvanized sheet-metal",
+      "gutter",
+      "pre-painted steel",
+      "roofing sheet",
+      "polyester nonwoven-fabric",
+      "separation layer"
+    ],
+    "no_family": []
+  },
+  "counts": {
+    "en2cn": 554,
+    "cn2en": 195
+  },
+  "cn2en": {
+    "螺纹钢": [
+      "Rebar",
+      "Deformed Steel Bar",
+      "Deformed Bar"
+    ],
+    "钢筋": [
+      "Steel Bar",
+      "Reinforcing Bar",
+      "Reinforcement Bar"
+    ],
+    "盘螺": [
+      "Coiled Rebar",
+      "Wire Coil Rebar"
+    ],
+    "线材": [
+      "Wire Rod",
+      "Wire"
+    ],
+    "中厚板": [
+      "Steel Plate",
+      "Medium Steel Plate"
+    ],
+    "钢板": [
+      "Steel Plate",
+      "Steel Sheet"
+    ],
+    "热轧卷板": [
+      "Hot Rolled Coil",
+      "HRC"
+    ],
+    "冷轧卷板": [
+      "Cold Rolled Coil",
+      "CRC"
+    ],
+    "不锈钢": [
+      "Stainless Steel",
+      "SS"
+    ],
+    "不锈钢板": [
+      "Stainless Steel Plate"
+    ],
+    "铝合金": [
+      "Aluminum Alloy",
+      "Aluminium Alloy"
+    ],
+    "镀锌钢管": [
+      "Galvanized Steel Pipe",
+      "GI Pipe"
+    ],
+    "钢管": [
+      "Steel Pipe",
+      "Steel Tube"
+    ],
+    "无缝钢管": [
+      "Seamless Steel Pipe"
+    ],
+    "角钢": [
+      "Angle Steel",
+      "Angle Bar",
+      "L-Shape Steel"
+    ],
+    "槽钢": [
+      "Channel Steel",
+      "U-Channel",
+      "Channel Bar"
+    ],
+    "工字钢": [
+      "I-Beam",
+      "I-Steel",
+      "I Section"
+    ],
+    "H型钢": [
+      "H-Beam",
+      "H-Steel",
+      "H Section"
+    ],
+    "C型钢": [
+      "C-Channel",
+      "C Steel"
+    ],
+    "方管": [
+      "Square Tube",
+      "Square Pipe"
+    ],
+    "扁钢": [
+      "Flat Steel",
+      "Flat Bar"
+    ],
+    "圆钢": [
+      "Round Steel",
+      "Round Bar"
+    ],
+    "彩钢板": [
+      "Color Steel Sheet",
+      "Color Coated Steel Plate"
+    ],
+    "波纹管": [
+      "Corrugated Pipe"
+    ],
+    "钢筋网片": [
+      "Steel Mesh",
+      "Rebar Mesh"
+    ],
+    "止水钢板": [
+      "Waterstop Steel Plate",
+      "Waterbar"
+    ],
+    "扎丝": [
+      "Binding Wire",
+      "Tie Wire"
+    ],
+    "铁丝": [
+      "Iron Wire"
+    ],
+    "钢丝绳": [
+      "Steel Wire Rope",
+      "Wire Rope"
+    ],
+    "铁钉": [
+      "Iron Nail",
+      "Nail"
+    ],
+    "射钉": [
+      "Powder Actuated Nail"
+    ],
+    "螺栓": [
+      "Bolt"
+    ],
+    "螺母": [
+      "Nut"
+    ],
+    "垫片": [
+      "Gasket",
+      "Washer"
+    ],
+    "法兰": [
+      "Flange"
+    ],
+    "碳钢平焊法兰": [
+      "Carbon Steel Flat Welding Flange",
+      "CS Weld Neck Flange"
+    ],
+    "不锈钢平焊法兰": [
+      "Stainless Steel Flat Welding Flange",
+      "SS Flange"
+    ],
+    "焊条": [
+      "Welding Rod",
+      "Electrode"
+    ],
+    "切割片": [
+      "Cutting Disc",
+      "Cut-Off Wheel"
+    ],
+    "水泥": [
+      "Cement"
+    ],
+    "混凝土": [
+      "Concrete"
+    ],
+    "商品混凝土": [
+      "Ready-Mix Concrete",
+      "RMC"
+    ],
+    "预拌砂浆": [
+      "Ready-Mixed Mortar",
+      "Mortar"
+    ],
+    "砂浆": [
+      "Mortar"
+    ],
+    "混凝土井": [
+      "Concrete Manhole",
+      "Concrete Well"
+    ],
+    "混凝土模块井": [
+      "Concrete Modular Manhole"
+    ],
+    "预制混凝土管桩": [
+      "Precast Concrete Pipe Pile",
+      "Prestressed Concrete Pipe Pile"
+    ],
+    "桩": [
+      "Pile"
+    ],
+    "管桩": [
+      "Pipe Pile"
+    ],
+    "商品砂浆": [
+      "Ready-Mixed Mortar"
+    ],
+    "河沙": [
+      "River Sand"
+    ],
+    "河砂": [
+      "River Sand"
+    ],
+    "沙子": [
+      "Sand"
+    ],
+    "砂": [
+      "Sand"
+    ],
+    "中砂": [
+      "Medium Sand",
+      "Medium Graded Sand"
+    ],
+    "粗砂": [
+      "Coarse Sand"
+    ],
+    "石粉": [
+      "Stone Powder",
+      "Stone Dust"
+    ],
+    "石子": [
+      "Gravel",
+      "Crushed Stone",
+      "Aggregate"
+    ],
+    "碎石": [
+      "Crushed Stone",
+      "Gravel",
+      "Crushed Aggregate"
+    ],
+    "级配碎石": [
+      "Graded Crushed Stone",
+      "Graded Aggregate"
+    ],
+    "毛石": [
+      "Rubble Stone",
+      "Rip Rap"
+    ],
+    "塑壳断路器": [
+      "Molded Case Circuit Breaker",
+      "MCCB"
+    ],
+    "框架断路器": [
+      "Air Circuit Breaker",
+      "ACB"
+    ],
+    "微型断路器": [
+      "Miniature Circuit Breaker",
+      "MCB"
+    ],
+    "小型断路器": [
+      "Mini Circuit Breaker",
+      "MCB"
+    ],
+    "漏电塑壳断路器": [
+      "Residual Current MCCB",
+      "RCBO MCCB"
+    ],
+    "漏电微型断路器": [
+      "Residual Current Circuit Breaker",
+      "RCBO"
+    ],
+    "塑壳漏电断路器": [
+      "Residual Current MCCB"
+    ],
+    "配电保护塑壳断路器": [
+      "Distribution MCCB",
+      "MCCB Distribution"
+    ],
+    "隔离开关": [
+      "Isolating Switch",
+      "Disconnector"
+    ],
+    "负荷隔离开关": [
+      "Load Break Switch",
+      "LBS"
+    ],
+    "转换开关": [
+      "Changeover Switch",
+      "Transfer Switch"
+    ],
+    "双电源": [
+      "Dual Power",
+      "ATS",
+      "Automatic Transfer Switch"
+    ],
+    "互感器": [
+      "Current Transformer",
+      "CT",
+      "Potential Transformer",
+      "PT",
+      "Instrument Transformer"
+    ],
+    "热继电器": [
+      "Thermal Relay",
+      "Overload Relay"
+    ],
+    "继电器": [
+      "Relay"
+    ],
+    "接触器": [
+      "Contactor"
+    ],
+    "熔断器": [
+      "Fuse"
+    ],
+    "浪涌保护器": [
+      "Surge Protective Device",
+      "SPD",
+      "Surge Arrester"
+    ],
+    "变频器": [
+      "Frequency Converter",
+      "VFD",
+      "Variable Frequency Drive",
+      "Inverter"
+    ],
+    "软启动器": [
+      "Soft Starter"
+    ],
+    "干式变压器": [
+      "Dry-Type Transformer"
+    ],
+    "变压器": [
+      "Transformer"
+    ],
+    "箱式变压器": [
+      "Pad-Mounted Transformer",
+      "Box Transformer"
+    ],
+    "电机": [
+      "Motor",
+      "Electric Motor"
+    ],
+    "发电机": [
+      "Generator"
+    ],
+    "柴油发电机": [
+      "Diesel Generator"
+    ],
+    "电缆": [
+      "Cable"
+    ],
+    "电力电缆": [
+      "Power Cable"
+    ],
+    "控制电缆": [
+      "Control Cable"
+    ],
+    "光缆": [
+      "Optical Cable",
+      "Fiber Optic Cable",
+      "Optical Fiber Cable"
+    ],
+    "电线": [
+      "Wire",
+      "Electric Wire"
+    ],
+    "母线": [
+      "Busbar",
+      "Bus Bar"
+    ],
+    "配电箱": [
+      "Distribution Box"
+    ],
+    "配电柜": [
+      "Distribution Cabinet",
+      "Panelboard"
+    ],
+    "开关柜": [
+      "Switchgear",
+      "Switchboard"
+    ],
+    "配电保护": [
+      "Distribution Protection"
+    ],
+    "桥架": [
+      "Cable Tray"
+    ],
+    "线槽": [
+      "Wire Duct",
+      "Cable Tray"
+    ],
+    "电缆桥架": [
+      "Cable Tray"
+    ],
+    "阀门": [
+      "Valve"
+    ],
+    "闸阀": [
+      "Gate Valve"
+    ],
+    "球阀": [
+      "Ball Valve"
+    ],
+    "蝶阀": [
+      "Butterfly Valve"
+    ],
+    "止回阀": [
+      "Check Valve"
+    ],
+    "安全阀": [
+      "Safety Valve",
+      "Relief Valve"
+    ],
+    "减压阀": [
+      "Pressure Reducing Valve",
+      "PRV"
+    ],
+    "管道": [
+      "Pipe",
+      "Piping"
+    ],
+    "配管": [
+      "Piping",
+      "Conduit"
+    ],
+    "排水管": [
+      "Drainage Pipe",
+      "Drain Pipe"
+    ],
+    "给水管": [
+      "Water Supply Pipe"
+    ],
+    "PE给水管": [
+      "PE Water Pipe",
+      "HDPE Water Pipe"
+    ],
+    "PPR聚丙烯给水管": [
+      "PPR Water Supply Pipe",
+      "PPR Pipe"
+    ],
+    "PVC管": [
+      "PVC Pipe"
+    ],
+    "HDPE双壁波纹管": [
+      "HDPE Double-Wall Corrugated Pipe",
+      "HDPE DWC Pipe"
+    ],
+    "MPP水平定向钻拉管": [
+      "MPP HDD Pipe",
+      "MPP Directional Drilling Pipe"
+    ],
+    "阻燃PVC配线管": [
+      "Flame-Retardant PVC Conduit",
+      "FR PVC Conduit"
+    ],
+    "阻燃PVC配线管直接": [
+      "FR PVC Conduit Coupling",
+      "PVC Conduit Connector"
+    ],
+    "弯头": [
+      "Elbow"
+    ],
+    "三通": [
+      "Tee",
+      "Tee Fitting"
+    ],
+    "变径": [
+      "Reducer"
+    ],
+    "管件": [
+      "Pipe Fitting",
+      "Fitting"
+    ],
+    "接头": [
+      "Coupling",
+      "Joint"
+    ],
+    "抱箍": [
+      "Clamp",
+      "U-Clamp"
+    ],
+    "U型抱箍": [
+      "U-Bolt Clamp"
+    ],
+    "半圆抱箍": [
+      "Half-Round Clamp"
+    ],
+    "拉线抱箍": [
+      "Guy Clamp",
+      "Guy Wire Clamp"
+    ],
+    "拉线棒": [
+      "Guy Rod",
+      "Guy Anchor Rod"
+    ],
+    "十字扣件": [
+      "Swivel Coupler",
+      "Cross Coupler"
+    ],
+    "架管": [
+      "Scaffolding Tube",
+      "Scaffold Tube"
+    ],
+    "水表": [
+      "Water Meter"
+    ],
+    "压力表": [
+      "Pressure Gauge"
+    ],
+    "温度计": [
+      "Thermometer"
+    ],
+    "流量计": [
+      "Flow Meter",
+      "Flowmeter"
+    ],
+    "传感器": [
+      "Sensor"
+    ],
+    "消火栓": [
+      "Fire Hydrant"
+    ],
+    "室内消火栓箱": [
+      "Indoor Fire Hydrant Box",
+      "Fire Hose Cabinet"
+    ],
+    "喷淋": [
+      "Sprinkler"
+    ],
+    "消防": [
+      "Fire Protection",
+      "Fire Fighting"
+    ],
+    "报警": [
+      "Alarm",
+      "Fire Alarm"
+    ],
+    "探测器": [
+      "Detector"
+    ],
+    "空调": [
+      "Air Conditioner",
+      "AC",
+      "Air Conditioning"
+    ],
+    "风机": [
+      "Fan"
+    ],
+    "排烟风机": [
+      "Smoke Exhaust Fan"
+    ],
+    "水泵": [
+      "Water Pump",
+      "Pump"
+    ],
+    "冷却塔": [
+      "Cooling Tower"
+    ],
+    "通风": [
+      "Ventilation"
+    ],
+    "保温": [
+      "Insulation",
+      "Thermal Insulation"
+    ],
+    "防火": [
+      "Fire Resistance",
+      "Fire Protection"
+    ],
+    "瓷砖": [
+      "Ceramic Tile",
+      "Porcelain Tile",
+      "Tile"
+    ],
+    "油漆": [
+      "Paint"
+    ],
+    "乳胶漆": [
+      "Latex Paint",
+      "Emulsion Paint"
+    ],
+    "腻子": [
+      "Putty"
+    ],
+    "涂料": [
+      "Coating",
+      "Paint"
+    ],
+    "防水": [
+      "Waterproofing",
+      "Waterproof"
+    ],
+    "防水卷材": [
+      "Waterproofing Membrane",
+      "Waterproof Membrane"
+    ],
+    "玻璃": [
+      "Glass"
+    ],
+    "门窗": [
+      "Door and Window",
+      "Door & Window"
+    ],
+    "木方": [
+      "Timber",
+      "Wood Stud",
+      "Lumber"
+    ],
+    "模板": [
+      "Formwork",
+      "Shuttering"
+    ],
+    "脚手架": [
+      "Scaffolding",
+      "Scaffold"
+    ],
+    "砖": [
+      "Brick"
+    ],
+    "红砖": [
+      "Red Brick"
+    ],
+    "空心砖": [
+      "Hollow Brick"
+    ],
+    "砌块": [
+      "Block",
+      "Concrete Block"
+    ],
+    "石膏板": [
+      "Gypsum Board",
+      "Plasterboard",
+      "Drywall"
+    ],
+    "吊顶": [
+      "Ceiling",
+      "Suspended Ceiling"
+    ],
+    "石材": [
+      "Stone",
+      "Natural Stone"
+    ],
+    "大理石": [
+      "Marble"
+    ],
+    "花岗岩": [
+      "Granite"
+    ],
+    "挖掘机": [
+      "Excavator"
+    ],
+    "装载机": [
+      "Loader"
+    ],
+    "起重机": [
+      "Crane"
+    ],
+    "塔吊": [
+      "Tower Crane"
+    ],
+    "吊车": [
+      "Crane"
+    ],
+    "推土机": [
+      "Bulldozer"
+    ],
+    "压路机": [
+      "Roller",
+      "Road Roller"
+    ],
+    "泵车": [
+      "Concrete Pump Truck",
+      "Concrete Pump"
+    ],
+    "搅拌车": [
+      "Concrete Mixer Truck"
+    ],
+    "发电机机组": [
+      "Generator Set",
+      "Genset"
+    ],
+    "空压机": [
+      "Air Compressor"
+    ],
+    "土方": [
+      "Earthwork",
+      "Earthmoving"
+    ],
+    "挖土": [
+      "Excavation"
+    ],
+    "回填": [
+      "Backfill"
+    ],
+    "桩基": [
+      "Pile Foundation",
+      "Piling"
+    ],
+    "基础": [
+      "Foundation"
+    ],
+    "土建": [
+      "Civil",
+      "Civil Works",
+      "Civil Engineering"
+    ],
+    "机电": [
+      "MEP",
+      "Mechanical Electrical Plumbing"
+    ],
+    "精装": [
+      "Fine Decoration",
+      "Interior Finishing"
+    ],
+    "幕墙": [
+      "Curtain Wall"
+    ],
+    "屋面": [
+      "Roof",
+      "Roofing"
+    ],
+    "上人屋面": [
+      "Accessible Roof"
+    ],
+    "沥青": [
+      "Asphalt",
+      "Bitumen"
+    ],
+    "防水混凝土": [
+      "Waterproof Concrete"
+    ],
+    "伸缩缝": [
+      "Expansion Joint"
+    ]
+  }
+}

@@ -146,6 +146,9 @@ def extract_quota_unit(unit_raw, db_section):
 # Phase 0 pre-filters
 # ═══════════════════════════════════════════════════════════
 
+# Units that are conceptual/lump-sum — raw strings before normalization, used by pre-filters
+CONCEPTUAL_UNITS_RAW = {'ls', 'l.s.', 'lump sum', 'item', 'lot', 'allow', 'allowance', '项', 'sum', 'lump'}
+
 # Units that map to the canonical "项" (conceptual/lump-sum) — skip matching
 _CONCEPTUAL_CANONICAL_UNITS = {'项'}
 

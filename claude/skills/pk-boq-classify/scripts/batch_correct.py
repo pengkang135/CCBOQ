@@ -19,10 +19,16 @@ Corrections JSON format (array of objects):
 Or pass inline via --inline:
   python batch_correct.py input.xlsx --inline '[{"desc_regex":"B1 Half-brick.*",...}]'
 """
-import openpyxl, sys, json, argparse, re
+import openpyxl
+import sys, json, argparse, re, os
 from collections import defaultdict
 
 sys.stdout.reconfigure(encoding='utf-8')
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'pk-boq', 'scripts'))
+import layout
+from openpyxl_utils import clean_save
 
 
 def load_corrections_from_json(path):
@@ -50,7 +56,7 @@ def apply_corrections(ws, corrections, desc_col, disc_col, cat_col, subcat_col, 
         new_s = corr['new_subcategory']
 
         rule_matched = 0
-        for row in range(1, ws.max_row + 1):
+        for row in range(layout.DATA_START, ws.max_row + 1):
             desc = ws.cell(row=row, column=desc_col).value
             if not desc or not isinstance(desc, str):
                 continue
@@ -89,11 +95,11 @@ def main():
     parser.add_argument('--corrections', '-c', help='Path to corrections JSON file')
     parser.add_argument('--inline', help='Inline corrections JSON string')
     parser.add_argument('--output', '-o', help='Output path (default: input_corrected.xlsx)')
-    parser.add_argument('--sheet', default='ZOO BQ', help='Sheet name (default: ZOO BQ)')
-    parser.add_argument('--desc-col', type=int, default=2, help='Description column 1-based (default: 2 = col B)')
-    parser.add_argument('--disc-col', type=int, default=13, help='Discipline column 1-based (default: 13 = col M)')
-    parser.add_argument('--cat-col', type=int, default=14, help='Category column 1-based (default: 14 = col N)')
-    parser.add_argument('--subcat-col', type=int, default=15, help='Subcategory column 1-based (default: 15 = col O)')
+    parser.add_argument('--sheet', default=layout.SHEET, help='Sheet name')
+    parser.add_argument('--desc-col', type=int, help='Description 列号，默认按表头名定位')
+    parser.add_argument('--disc-col', type=int, help='Discipline 列号，默认按表头名定位')
+    parser.add_argument('--cat-col', type=int, help='Category 列号，默认按表头名定位')
+    parser.add_argument('--subcat-col', type=int, help='Subcategory 列号，默认按表头名定位')
     parser.add_argument('--dry-run', action='store_true', help='Preview only, do not modify file')
     args = parser.parse_args()
 
@@ -107,10 +113,16 @@ def main():
 
     print(f"Loading workbook (this may take a minute)...")
     wb = openpyxl.load_workbook(args.xlsx)
-    ws = wb[args.sheet]
+    ws = layout.get_sheet(wb, args.sheet)
 
+    cols = layout.find_columns(ws)
+    need = layout.require(cols, ['Description', 'Discipline', 'Category', 'Subcategory'])
     applied, per_rule, unmatched = apply_corrections(
-        ws, corrections, args.desc_col, args.disc_col, args.cat_col, args.subcat_col,
+        ws, corrections,
+        args.desc_col or need['Description'],
+        args.disc_col or need['Discipline'],
+        args.cat_col or need['Category'],
+        args.subcat_col or need['Subcategory'],
         dry_run=args.dry_run
     )
 
@@ -129,7 +141,7 @@ def main():
 
     if not args.dry_run:
         out = args.output or args.xlsx.replace('.xlsx', '_corrected.xlsx')
-        wb.save(out)
+        clean_save(wb, out)
         print(f"\nSaved to: {out}")
     else:
         print("\nNo changes written (dry run).")

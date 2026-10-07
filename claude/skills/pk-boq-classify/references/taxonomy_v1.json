@@ -1,0 +1,646 @@
+{
+  "version": "v1-2026-08-01",
+  "project": "CMI MOD2 Data Center (Thailand)",
+  "purpose": "锚定 O~S 五列 (Discipline/Category/Subcategory/Material/Spec) 到企业定额库 A/B/C 三册的分部/子分部体系。BOQ Description 为英文,定额库为中文(B册有 norm_Name_EN),需双语检索。",
+  "language": {
+    "boq_description": "en",
+    "norms_library": "zh + partial_en (B册 norm_Name_EN 覆盖度待测)"
+  },
+  "target_columns": {
+    "O_Discipline": "枚举一级学科,来源于册",
+    "P_Category": "定额库分部 (nrm_division 或 B册 chapter L1)",
+    "Q_Subcategory": "定额库子分部 (nrm_sub_division 或 B册 chapter L2/L3)",
+    "R_Material": "从Description提炼材料主体名词",
+    "S_Spec": "从Description提炼规格/等级/尺寸"
+  },
+  "disciplines": [
+    {
+      "code": "A",
+      "name_zh": "土建与装饰",
+      "name_en": "Civil & Decoration",
+      "source_db": "企业定额_A册_建筑装饰.sqlite",
+      "category_table": "nrm_division",
+      "subcategory_table": "nrm_sub_division",
+      "item_table": "nrm_item",
+      "coverage_note": "主结构 + 室内外装饰; 22个分部, 98子分部, 478子目",
+      "hits_expected": "土方/桩基/砼/钢筋/模板/砌筑/防水/涂料/门窗/幕墙/楼地面/墙柱装饰/天棚/油漆/拆除/措施"
+    },
+    {
+      "code": "B",
+      "name_zh": "机电安装(MEP)",
+      "name_en": "MEP Installation",
+      "source_db": "企业定额_B册_通用安装.sqlite",
+      "category_table": "chapter (chap_PID IS NULL, 12个顶层)",
+      "subcategory_table": "chapter (chap_PID = 顶层.chap_ID, 二级)",
+      "item_table": "Norm (via chap_ID)",
+      "coverage_note": "MOD2 数据中心的核心占比; 12顶层专业, 2294节点树, 12,470子目, 有 norm_Name_EN 双语字段",
+      "hits_expected": "电气/桥架/母线/UPS/变压器/暖通/风管/水管/消防/给排水/弱电/BAS/防腐涂装"
+    },
+    {
+      "code": "C",
+      "name_zh": "室外与市政",
+      "name_en": "External & Municipal",
+      "source_db": "企业定额_C册_市政园林.sqlite",
+      "category_table": "nrm_division",
+      "subcategory_table": "nrm_sub_division",
+      "item_table": "nrm_item",
+      "coverage_note": "室外道路/管沟/围墙/绿化; 15分部, 64子分部, 62子目 (子目稀疏,主要靠子分部命中)",
+      "hits_expected": "土石方/道路/管网/路灯/围墙/景观/园路"
+    },
+    {
+      "code": "PRELIM",
+      "name_zh": "前期/一般/措施",
+      "name_en": "Preliminaries & General",
+      "source_db": null,
+      "coverage_note": "投标须知/合同条款/保险/临时设施等非工程实体条目, 不套定额; 对应 BOQ Dept1 常规=Prelim/General/Contract Conditions",
+      "trigger_dept1": [
+        "Preliminaries",
+        "General",
+        "Contract Conditions",
+        "常规1",
+        "常规2"
+      ]
+    },
+    {
+      "code": "FREE",
+      "name_zh": "未映射",
+      "name_en": "Unmapped",
+      "coverage_note": "AI 判断不属于 A/B/C/PRELIM,或候选池置信度过低; 由 T3 Opus 仲裁"
+    }
+  ],
+  "a_division_catalog": [
+    [
+      "A.01",
+      "场地准备与土石方"
+    ],
+    [
+      "A.02",
+      "地基处理与边坡支护"
+    ],
+    [
+      "A.03",
+      "桩基工程"
+    ],
+    [
+      "A.04",
+      "现浇混凝土及钢筋"
+    ],
+    [
+      "A.05",
+      "预制混凝土与装配式"
+    ],
+    [
+      "A.06",
+      "砌筑工程"
+    ],
+    [
+      "A.07",
+      "金属结构与构件"
+    ],
+    [
+      "A.08",
+      "木结构与木作"
+    ],
+    [
+      "A.10",
+      "屋面工程"
+    ],
+    [
+      "A.11",
+      "防水与防潮"
+    ],
+    [
+      "A.12",
+      "保温、隔热、防腐、防火封堵"
+    ],
+    [
+      "A.13",
+      "门窗栏杆工程"
+    ],
+    [
+      "A.14",
+      "幕墙与外墙饰面"
+    ],
+    [
+      "A.20",
+      "楼地面装饰"
+    ],
+    [
+      "A.21",
+      "墙、柱面装饰与隔断"
+    ],
+    [
+      "A.22",
+      "天棚工程"
+    ],
+    [
+      "A.23",
+      "油漆、涂料、裱糊"
+    ],
+    [
+      "A.24",
+      "其他装饰、家具设备"
+    ],
+    [
+      "A.30",
+      "拆除、改造与修缮"
+    ],
+    [
+      "A.31",
+      "外部场地工程"
+    ],
+    [
+      "A.32",
+      "服务安装辅助工程"
+    ],
+    [
+      "A.33",
+      "措施项目"
+    ]
+  ],
+  "b_top_chapter_catalog": [
+    [
+      "03",
+      "机械设备安装"
+    ],
+    [
+      "04",
+      "热力设备安装"
+    ],
+    [
+      "05",
+      "静置设备与工艺金属结构"
+    ],
+    [
+      "06",
+      "电气安装 (Electrical)"
+    ],
+    [
+      "07",
+      "建筑智能化 (BAS/Communication)"
+    ],
+    [
+      "08",
+      "自动化控制与仪表"
+    ],
+    [
+      "09",
+      "通风与空调 (HVAC)"
+    ],
+    [
+      "10",
+      "工业管道"
+    ],
+    [
+      "11",
+      "消防工程 (Fire Protection)"
+    ],
+    [
+      "12",
+      "给排水/供暖/燃气 (Plumbing)"
+    ],
+    [
+      "13",
+      "通信设备与线路"
+    ],
+    [
+      "14",
+      "防腐涂装保温"
+    ]
+  ],
+  "c_division_catalog": [
+    [
+      "C.01",
+      "土石方工程"
+    ],
+    [
+      "C.02",
+      "道路工程"
+    ],
+    [
+      "C.03",
+      "桥涵工程"
+    ],
+    [
+      "C.04",
+      "隧道工程"
+    ],
+    [
+      "C.05",
+      "管网工程"
+    ],
+    [
+      "C.06",
+      "水处理工程"
+    ],
+    [
+      "C.07",
+      "生活垃圾处理工程"
+    ],
+    [
+      "C.08",
+      "路灯工程"
+    ],
+    [
+      "C.09",
+      "钢筋工程"
+    ],
+    [
+      "C.10",
+      "拆除工程"
+    ],
+    [
+      "C.11",
+      "城市地下综合管廊工程"
+    ],
+    [
+      "C.20",
+      "绿化工程"
+    ],
+    [
+      "C.21",
+      "园路、园桥工程"
+    ],
+    [
+      "C.22",
+      "园林景观工程"
+    ],
+    [
+      "C.33",
+      "措施项目"
+    ]
+  ],
+  "mod2_expected_priority_categories": {
+    "high": [
+      "A.03",
+      "A.04",
+      "A.07",
+      "A.10",
+      "A.11",
+      "A.20",
+      "A.21",
+      "A.22",
+      "A.23",
+      "B.06",
+      "B.07",
+      "B.08",
+      "B.09",
+      "B.11",
+      "B.12"
+    ],
+    "medium": [
+      "A.01",
+      "A.02",
+      "A.05",
+      "A.06",
+      "A.13",
+      "A.14",
+      "A.24",
+      "A.30",
+      "A.31",
+      "A.32",
+      "A.33",
+      "B.05",
+      "B.10",
+      "B.13",
+      "B.14",
+      "C.01",
+      "C.02",
+      "C.05",
+      "C.08"
+    ],
+    "low": [
+      "A.08",
+      "A.12",
+      "B.03",
+      "B.04",
+      "C.03",
+      "C.04",
+      "C.06",
+      "C.07",
+      "C.09",
+      "C.10",
+      "C.11",
+      "C.20",
+      "C.21",
+      "C.22",
+      "C.33"
+    ]
+  },
+  "en_zh_seed_glossary": {
+    "note": "首版关键词映射, T0 完成后由 Opus 扩展; worker 用它做初筛,减少 SQL FTS 的召回噪声。",
+    "civil_A": {
+      "excavation": [
+        "土方",
+        "开挖",
+        "土石方"
+      ],
+      "backfill": [
+        "回填",
+        "填土"
+      ],
+      "bored pile": [
+        "钻孔灌注桩",
+        "灌注桩"
+      ],
+      "cast-in-situ concrete": [
+        "现浇混凝土",
+        "现浇砼"
+      ],
+      "formwork": [
+        "模板"
+      ],
+      "reinforcement": [
+        "钢筋"
+      ],
+      "blinding": [
+        "垫层",
+        "素砼垫层"
+      ],
+      "waterproofing": [
+        "防水"
+      ],
+      "putty": [
+        "腻子",
+        "抹灰"
+      ],
+      "coating / paint": [
+        "涂料",
+        "油漆"
+      ],
+      "sealer": [
+        "密封胶",
+        "封闭剂"
+      ],
+      "gutter": [
+        "天沟",
+        "雨水沟"
+      ],
+      "galvanized sheet": [
+        "镀锌板",
+        "镀锌钢板"
+      ],
+      "curtain wall": [
+        "幕墙"
+      ],
+      "gypsum board": [
+        "石膏板"
+      ],
+      "steel section / I-section / H-section": [
+        "工字钢",
+        "H型钢",
+        "型钢"
+      ],
+      "anchor bolt": [
+        "预埋螺栓",
+        "锚栓"
+      ],
+      "demolition": [
+        "拆除"
+      ]
+    },
+    "mep_B": {
+      "cable tray / ladder": [
+        "电缆桥架",
+        "梯式桥架"
+      ],
+      "conduit": [
+        "穿线管",
+        "线管"
+      ],
+      "busbar / busway": [
+        "母线",
+        "母线槽"
+      ],
+      "transformer": [
+        "变压器"
+      ],
+      "switchgear / MCC / MCB": [
+        "配电柜",
+        "开关柜"
+      ],
+      "UPS": [
+        "UPS",
+        "不间断电源"
+      ],
+      "generator": [
+        "柴油发电机",
+        "发电机组"
+      ],
+      "duct / ductwork": [
+        "风管"
+      ],
+      "AHU / FCU / CRAC / CRAH": [
+        "空调机组",
+        "风机盘管",
+        "精密空调"
+      ],
+      "chiller / cooling tower": [
+        "冷水机组",
+        "冷却塔"
+      ],
+      "pipe / piping": [
+        "管道"
+      ],
+      "valve": [
+        "阀门"
+      ],
+      "pump": [
+        "水泵"
+      ],
+      "sprinkler": [
+        "喷淋头",
+        "自动喷淋"
+      ],
+      "fire alarm": [
+        "火灾报警"
+      ],
+      "FM200 / NOVEC": [
+        "气体灭火"
+      ],
+      "BMS / BAS": [
+        "楼宇自控",
+        "BAS"
+      ],
+      "PDU": [
+        "机架配电",
+        "PDU"
+      ]
+    },
+    "external_C": {
+      "kerb / curb": [
+        "路缘石",
+        "侧石"
+      ],
+      "asphalt": [
+        "沥青"
+      ],
+      "manhole": [
+        "检查井",
+        "窨井"
+      ],
+      "drainage pipe": [
+        "排水管"
+      ],
+      "landscaping / planting": [
+        "绿化",
+        "种植"
+      ],
+      "fence / boundary wall": [
+        "围墙",
+        "围栏"
+      ],
+      "street light": [
+        "路灯"
+      ]
+    },
+    "marine_D": {
+      "note": "D 册水运工程种子术语，取自 D 册 division/sub_division 的中英对照，取特征词不取整名（Works 这类泛词会命中一切）",
+      "dredging": [
+        "疏浚",
+        "挖泥"
+      ],
+      "hydraulic filling / reclamation": [
+        "吹填",
+        "填筑"
+      ],
+      "navigation aid / beacon / buoy": [
+        "航标",
+        "浮标",
+        "灯桩"
+      ],
+      "underwater excavation": [
+        "水下开挖",
+        "水下"
+      ],
+      "driven pile": [
+        "打入桩",
+        "沉桩"
+      ],
+      "caisson": [
+        "沉井",
+        "沉箱"
+      ],
+      "grouting": [
+        "灌浆",
+        "钻孔灌浆"
+      ],
+      "quay / wharf / berth": [
+        "码头",
+        "岸壁",
+        "泊位"
+      ],
+      "breakwater": [
+        "防波堤"
+      ],
+      "revetment": [
+        "护岸",
+        "护坡"
+      ],
+      "riprap / armour": [
+        "抛石",
+        "护面块体"
+      ],
+      "mooring / bollard": [
+        "系船",
+        "系船柱"
+      ],
+      "fender": [
+        "护舷"
+      ],
+      "cargo handling": [
+        "装卸机械",
+        "装卸设备"
+      ],
+      "geotextile": [
+        "土工布",
+        "土工织物"
+      ]
+    },
+    "repair_E": {
+      "note": "E 册房屋修缮种子术语，取自 E 册 division 和 chapter L2 章名。E 册无英文译名，键用中文，靠中文直接子串命中",
+      "demolition / dismantling": [
+        "拆除",
+        "全房拆除"
+      ],
+      "strengthening / retrofit": [
+        "加固",
+        "结构加固"
+      ],
+      "renovation / repair": [
+        "修缮",
+        "翻修"
+      ],
+      "结构加固": [
+        "加固",
+        "结构加固"
+      ],
+      "古建筑": [
+        "古建筑",
+        "仿古"
+      ],
+      "楼地面": [
+        "楼地面"
+      ],
+      "墙柱面": [
+        "墙柱面"
+      ],
+      "天棚": [
+        "天棚"
+      ],
+      "门窗": [
+        "门窗"
+      ],
+      "油漆涂料": [
+        "油漆",
+        "涂料",
+        "裱糊"
+      ],
+      "炉窑砌筑": [
+        "炉窑",
+        "砌筑"
+      ],
+      "站类管道": [
+        "站类管道"
+      ],
+      "建筑智能化": [
+        "建筑智能化",
+        "智能化"
+      ]
+    }
+  },
+  "worker_output_schema": {
+    "row_id": "int (原表行号,如 227)",
+    "discipline": "A | B | C | PRELIM | FREE",
+    "category_code": "如 A.06 / B.06 / C.02 / PRELIM / null",
+    "category_name": "如 混凝土及钢筋 / 电气安装 / 道路工程",
+    "subcategory_code": "如 A.06.01 (若可确定) / null",
+    "subcategory_name": "对应中文子分部名 / null",
+    "material": "英文原词或中文提炼,如 Concrete f'c25 / 现浇砼",
+    "spec": "如 M / M3 单位对应的规格,f'c(MPa)25 / DN100 / 3mm",
+    "candidate_item_codes": [
+      "top-3 定额子目 code (给下游 pk-norms-match 用)"
+    ],
+    "confidence": "0-1",
+    "reason": "一句话理由 (可选,置信度<0.7时必填)"
+  },
+  "confidence_bands": {
+    "high": ">=0.85 → 直接采纳",
+    "medium": "0.60~0.85 → 进 Sonnet 抽检 (10%抽样)",
+    "low": "<0.60 → 强制送 Sonnet 复核, 再低于 0.5 送 Opus 仲裁"
+  },
+  "pipeline": {
+    "T0_taxonomy": "本文件 + candidate_retrieval.py + worker_prompt.md (架构师 Opus, 一次性)",
+    "T1_coordinator": "Sonnet: 读BOQ→追溯Dept→分组→对每组Description跑候选检索→打包分片",
+    "T2_workers": "Haiku × N: 每片输入(Dept上下文+候选池+行列表)→输出JSON按schema",
+    "T3_audit": "Sonnet 抽检+跨组一致性;Opus 疑难仲裁 (<2%行)",
+    "T4_writeback": "Python 批量写 O~S; Opus 检查整体分布合理性",
+    "T5_downstream": "分类完成即可无缝进入 pk-norms-match / pk-boq-db-match 套单价"
+  },
+  "known_risks": [
+    "PRELIM/General 条目占比高(约1/3),不要送 Haiku 分类,直接规则命中",
+    "SECTION HEADER (含 {} 或 【】) 已由 hierarchy 处理,不参与 O~S 填写",
+    "英文单位大小写不一致 (M/m/M3/m3/No./No/Nos),需 unit_normalize",
+    "现有分类列已填一版(质量参差),不做 diff,直接覆写"
+  ]
+}

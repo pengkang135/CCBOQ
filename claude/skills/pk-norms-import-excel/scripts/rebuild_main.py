@@ -203,7 +203,7 @@ print(f"\nTables: {len(pt)}, Items: {ti}")
 
 # Import
 import load_to_sqlite, importlib; importlib.reload(load_to_sqlite)
-db_path = r'F:\BaiduSyncdisk\2.清单定额\Norms-AI\output\db\norms_jts276-1-2019_excel.sqlite'
+db_path = r'E:\Code\Norms-AI\db\refers\norms_jts276-1-2019_excel.sqlite'
 try: os.remove(db_path)
 except: pass
 load_to_sqlite.load(str(op), db_path, 'JTS/T 276-1-2019 主定额', 'JTS/T 276-1-2019-EXCEL', False, 'excel')

@@ -1,0 +1,323 @@
+# 人材机价格表 — 分类规则
+# 规则按顺序匹配，首匹配胜出（优先级从上到下递减）
+# 匹配范围: name=名称列, cat=专业列, remark=备注列
+# L3分类器: 可选，指定用于细分L3的函数名
+
+rules:
+  # ==================== 人工费 ====================
+  - match: "cat contains '混凝土生产'"
+    l1: 【人工费】
+    l2: 《混凝土生产》
+    spec: 劳务分包
+
+  - match: "cat contains '连锁块生产'"
+    l1: 【人工费】
+    l2: 《连锁块生产》
+    spec: 劳务分包
+
+  - match: "name in MANAGEMENT_NAMES"
+    l1: 【人工费】
+    l2: 《管理人员》
+    spec: 劳务分包
+
+  - match: "name == '潜水员'"
+    l1: 【人工费】
+    l2: 《潜水员》
+    spec: 劳务分包
+
+  - match: "cat contains '人工费' and remark contains '月薪' and monthly >= 2000"
+    l1: 【人工费】
+    l2: 《中方人员》
+    spec: 劳务分包
+
+  - match: "cat contains '人工费'"
+    l1: 【人工费】
+    l2: 《日工》
+    l3_classifier: labor_l3
+    spec: 劳务分包
+
+  # ==================== 材料费 ====================
+  - match: "cat contains '周转'"
+    l1: 【材料费】
+    l2: 《周转材料》
+    spec: 建筑装饰
+
+  - match: "cat contains '混凝土配合比'"
+    l1: 【材料费】
+    l2: 《混凝土》
+    l3: "{配合比/单价}"
+    spec: 建筑装饰
+
+  - match: "cat contains '混凝土' and cat not contains '配合比'"
+    l1: 【材料费】
+    l2: 《混凝土》
+    l3_classifier: concrete_l3
+    spec: 建筑装饰
+
+  # 管材（在骨料之前，避免 Rocker pipe 被 rock 误匹配）
+  - match: "name contains [hdpe, pvc, ductile iron, rocker pipe, polyethylene, polypropylene]"
+    l1: 【材料费】
+    l2: 《管材》
+    l3_classifier: pipe_l3
+    spec: 建筑装饰
+
+  # 防腐（在桩基之前，避免 anticorrosive paint for steel tubular pile 被误匹配）
+  - match: "name contains [paint, coating, anode, anticorrosive, anti-corrosive, corrosion, cathodic, sacrificial, epoxy asphalt, polyurethane]"
+    l1: 【材料费】
+    l2: 《防腐材料》
+    spec: 建筑装饰
+
+  # 桩基（在钢材之前，避免 Purchase steel tubular pile 被 steel 误匹配）
+  - match: "name contains [phc pile, spun pile, tubular pile, steel pipe pile, bored pile, sheet pile, precast concrete pile]"
+    l1: 【材料费】
+    l2: 《桩基材料》
+    spec: 专业分包
+
+  # 钢材
+  - match: "name contains [reinforcement, steel plate, steel tubular, pile shoe, shear connector, closing plate, steel sheet, rebar, reinforcing, steel member, steel mesh]"
+    l1: 【材料费】
+    l2: 《钢材》
+    l3_classifier: steel_l3
+    spec: 建筑装饰
+
+  # 混凝土（含 f'c 标记）
+  - match: "name contains [concrete, cement, mortar, grout, grouting, f'c, in-situ, cast in]"
+    l1: 【材料费】
+    l2: 《混凝土》
+    l3_classifier: concrete_l3
+    spec: 建筑装饰
+
+  # 系泊件
+  - match: "name contains [bollard, mooring, cleat, fender, marine fender, scn, supply and installation]"
+    l1: 【材料费】
+    l2: 《系泊件》
+    spec: 建筑装饰
+
+  # 砂石料（排除 rocker）
+  - match: "name not contains 'rocker' and name contains [sand, aggregate, stone, gravel, granular, fill material, backfill, ' rock', boulder, geotextile, geogrid, rubble, underlayer]"
+    l1: 【材料费】
+    l2: 《砂石料》
+    l3_classifier: aggregate_l3
+    spec: 建筑装饰
+
+  # 沥青
+  - match: "name contains [asphalt, bitumen, bituminous]"
+    l1: 【材料费】
+    l2: 《沥青》
+    spec: 建筑装饰
+
+  # 砌块
+  - match: "name contains [block, paver, interlock, interlocking, masonry]"
+    l1: 【材料费】
+    l2: 《砌块》
+    spec: 建筑装饰
+
+  # 木材
+  - match: "name contains [timber, wood, lumber, plywood]"
+    l1: 【材料费】
+    l2: 《木材》
+    spec: 建筑装饰
+
+  # 格宾及护垫
+  - match: "name contains [gabion, reno mattress]"
+    l1: 【材料费】
+    l2: 《格宾及护垫》
+    spec: 建筑装饰
+
+  # 防水材料
+  - match: "name contains [polythene, membrane, waterproof]"
+    l1: 【材料费】
+    l2: 《防水材料》
+    spec: 建筑装饰
+
+  # 接缝及支座
+  - match: "name contains [joint, bearing, seal, filler, waterstop, water bar, bond breaker]"
+    l1: 【材料费】
+    l2: 《接缝及支座》
+    spec: 建筑装饰
+
+  # 排水材料
+  - match: "name contains [drain, drainage, manhole, gully, catchpit, outfall, gatic]"
+    l1: 【材料费】
+    l2: 《排水材料》
+    spec: 建筑装饰
+
+  # 金属管（兜底 pipe）
+  - match: "name contains 'pipe'"
+    l1: 【材料费】
+    l2: 《管材》
+    l3: "{金属管}"
+    spec: 建筑装饰
+
+  # 其他可识别材料
+  - match: "name contains [warning tape, mesh, cube, spare, access box, grating, mix filter]"
+    l1: 【材料费】
+    l2: 《其他材料》
+    spec: 建筑装饰
+
+  # 兜底
+  - match: "cat contains '材料费'"
+    l1: 【材料费】
+    l2: 《其他材料》
+    spec: 建筑装饰
+
+  # ==================== 机械费 ====================
+  - match: "cat contains '建站费用'"
+    l1: 【机械费】
+    l2: 《建站费用》
+    spec: 工程机械
+
+  - match: "cat contains '设备租赁' and IS_SHIP_EQUIP"
+    l1: 【机械费】
+    l2: 《设备租赁》
+    l3: "{船机}"
+    spec: 工程机械
+
+  - match: "cat contains '设备租赁' and IS_EARTHWORK_EQUIP"
+    l1: 【机械费】
+    l2: 《设备租赁》
+    l3: "{土石方机械}"
+    spec: 工程机械
+
+  - match: "cat contains '设备租赁' and IS_HORIZONTAL_EQUIP"
+    l1: 【机械费】
+    l2: 《设备租赁》
+    l3: "{水平运输}"
+    spec: 工程机械
+
+  - match: "cat contains '设备租赁' and IS_VERTICAL_EQUIP"
+    l1: 【机械费】
+    l2: 《设备租赁》
+    l3: "{垂直运输}"
+    spec: 工程机械
+
+  - match: "cat contains '设备租赁' and IS_PILE_EQUIP"
+    l1: 【机械费】
+    l2: 《设备租赁》
+    l3: "{桩基设备}"
+    spec: 工程机械
+
+  - match: "cat contains '设备租赁'"
+    l1: 【机械费】
+    l2: 《设备租赁》
+    l3: "{其他租赁}"
+    spec: 工程机械
+
+  - match: "IS_SHIP_EQUIP"
+    l1: 【机械费】
+    l2: 《自有机械》
+    l3: "{船机}"
+    spec: 工程机械
+
+  - match: "IS_EARTHWORK_EQUIP"
+    l1: 【机械费】
+    l2: 《自有机械》
+    l3_classifier: earthwork_l3
+    spec: 工程机械
+
+  - match: "IS_HORIZONTAL_EQUIP"
+    l1: 【机械费】
+    l2: 《自有机械》
+    l3: "{水平运输}"
+    spec: 工程机械
+
+  - match: "IS_VERTICAL_EQUIP"
+    l1: 【机械费】
+    l2: 《自有机械》
+    l3: "{垂直运输}"
+    spec: 工程机械
+
+  - match: "IS_PILE_EQUIP"
+    l1: 【机械费】
+    l2: 《自有机械》
+    l3: "{桩基设备}"
+    spec: 工程机械
+
+  - match: "IS_CONCRETE_EQUIP"
+    l1: 【机械费】
+    l2: 《自有机械》
+    l3: "{混凝土设备}"
+    spec: 工程机械
+
+  - match: "IS_SMALL_TOOLS"
+    l1: 【机械费】
+    l2: 《自有机械》
+    l3: "{小型机具}"
+    spec: 工程机械
+
+  - match: "IS_STATION_EQUIP"
+    l1: 【机械费】
+    l2: 《建站设备》
+    spec: 工程机械
+
+  - match: "cat contains '机械费'"
+    l1: 【机械费】
+    l2: 《自有机械》
+    l3: "{其他机械}"
+    spec: 工程机械
+
+  # ==================== 兜底 ====================
+  - match: "always"
+    l1: 【其他】
+    l2: 《其他》
+    spec: 建筑装饰
+
+# ==================== 设备分类集合 ====================
+equipment_sets:
+  SHIP_EQUIP: [驳船, 交通船, 平板驳, 起重船, 拖轮, 抓斗船, 开体泊, 打桩船, "起重船（用平板驳及履带吊）"]
+  EARTHWORK_EQUIP: [履带式挖机, 履带式挖掘机, 轮胎式挖掘机, 挖掘装载机, 长臂挖机, 长臂挖掘机, 推土机, 压路机, 平地机, 洒水车, 手扶压路机, 震动锤, 冲击锤, 矿卡车, 矿山车, 跳夯, 平板夯, 振动压路机, 双钢轮小压路机]
+  HORIZONTAL_EQUIP: [自卸车, 运输车, 平板车, 叉车, 随车吊, 电动三轮车]
+  VERTICAL_EQUIP: [履带吊, 汽车吊, 货吊, 龙门吊, 吊车, 汽车泵]
+  PILE_EQUIP: [震动锤, 冲击锤, 导向架, 钢板桩打桩机, 插板机, 块石抛填箱]
+  CONCRETE_EQUIP: [泵车, 拖泵, 混凝土抹面机, 混凝土切缝机]
+  SMALL_TOOLS: [钢筋切断机, 钢筋弯曲机, 钢筋调直机, 手提电焊机, 水下电焊机, 电焊机, 全站仪, 水准仪, 泥浆泵, 空压机, 真空泵, 汽油机抽水泵, 发电机]
+  STATION_EQUIP: [HZS90搅拌站, 地磅, ZLM50装载机, 300KW发电机, "6m³混凝土运输车", 水稳站]
+
+  MANAGER_NAMES: [工长, 测量人员, 翻译, 船长, 大副]
+
+# ==================== L3分类器定义 ====================
+# 以下定义各分类器的子类别匹配规则
+l3_classifiers:
+  labor_l3:
+    "{普通劳务}": [普工, 司索工, 混凝土工]
+    "{技术工种}": [电工, 机修工, 焊工, 电焊工, 热熔焊工, 钢筋工, 模板工, 砼工, 架子工, 瓦工]
+    "{机械操作}": [挖机司机, 自卸车司机, 运输车司机, 机械操作手, 起重工, 桩锤操作手, 罐车司机, 装载机司机]
+
+  concrete_l3:
+    "{铺面/砌块}": [block paving, kerb, paver]
+    "{预制混凝土}": [precast, pre-cast]
+    "{垫层/找平}": [lean concrete, lean mix, cushion, mortar, mattress, sand cement]
+    "{配合比/单价}": [材料单价]
+    "{结构混凝土}": ["cast in", in-situ, "f'c", concrete slab, concrete wall, concrete platform,
+                   concrete surround, concrete encapsulation, box culvert, outfall,
+                   retaining wall, beam, pits, drainage u-channel, cube, curb,
+                   wearing surface, longitudinal, transverse, trench]
+    "{其他混凝土}": [concrete]
+
+  aggregate_l3:
+    "{碎石/骨料}": [aggregate, stone, gravel, granular]
+    "{砂/回填}": [sand, backfill, fill]
+    "{土工材料}": [geotextile, geogrid]
+    "{块石/毛石}": [rock, rubble, boulder, underlayer]
+
+  pipe_l3:
+    "{HDPE/塑料管}": [hdpe, pvc, polyethylene, polypropylene]
+    "{金属管}": [steel pipe, ductile iron]
+    "{检查井}": [manhole, access box]
+    "{Rocker管}": [rocker]
+
+  steel_l3:
+    "{钢筋}": [reinforcement, rebar, reinforcing]
+    "{型钢/构件}": []
+
+  earthwork_l3:
+    "{挖掘机械}": [挖机, 挖掘机, 挖掘装载机]
+    "{压实/桩锤}": [压路机, 手扶, 夯, 震动锤, 冲击锤, 振动]
+    "{平地/洒水}": [平地机, 洒水车]
+    "{运输机械}": [自卸车, 运输车, 矿卡车, 矿山车, 推土机]
+
+  # 以下分类器用于 extra_l3_map（L2>30 但 classify 未返回 L3 时补充分类）
+  turnover_l3:
+    "{吊索具}": [钢丝绳, 铁链, 卡环, 稳钩, 吊带, 挂钩]
+    "{箱/袋/桩}": [抛石铁盒, 吨袋, 锚桩, 试桩]
+    "{其他周转}": []

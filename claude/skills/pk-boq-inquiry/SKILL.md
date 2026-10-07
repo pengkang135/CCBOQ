@@ -6,6 +6,9 @@ license: Proprietary. LICENSE.txt has complete terms
 
 # PK BOQ — 询价包与主材表
 
+> **禁止用 Excel COM 处理表格**（BOQ 技能族硬规则）：不准启动 Excel 来读写、标记、插行、刷新或校验表格，`win32com` 和 COM 版 `excel` MCP 都不行 —— 它会抢占用户正开着的 Excel 实例、逼用户关文件等脚本、还比纯脚本慢。读值用 `fastexcel`，公式文本和保留格式改单元格用 `openpyxl`，插列/插行/搬 sheet/透视表这类结构操作走 zip+XML 层。这是**全局硬规则**（见 `~/.claude/CLAUDE.md` 的「Excel/AI 加速工具集」硬前置），不限 BOQ；BOQ 场景的具体替代做法见 [pk-boq/SKILL.md](../pk-boq/SKILL.md)。
+
+
 > 清单合并/对比/校验等核心操作 → 触发 `pk-boq` 技能
 > 工程造价约定、Excel 兼容性、BOQ 层级体系 → 见 `pk-boq` 技能
 > Excel 结构探测、列自动检测 → 使用 `document-ingest` 技能
@@ -67,7 +70,7 @@ python ../pk-boq/scripts/split_inquiry_boq.py \
 
 关键规则：以模板为骨架、完整复制列结构、Section（如 E.2）为最小保留单元、多方案都保留。
 
-详细工作流 → [../pk-boq/references/inquiry_package_boq.md](../pk-boq/references/inquiry_package_boq.md)
+详细工作流 → [references/inquiry_package_boq.md](references/inquiry_package_boq.md)
 
 ## 图纸分发
 
@@ -86,7 +89,7 @@ find <源目录> -iname "*关键词*"
 
 标准目录结构：`{包编号} {包名称}/ → 1.BQ/ 2.Employer's documents/ 3.Tender Design/ 4.PER/ 5.Site surveys/`
 
-详细工作流 → [../pk-boq/references/inquiry_package_splitting.md](../pk-boq/references/inquiry_package_splitting.md)
+详细工作流 → [references/inquiry_package_splitting.md](references/inquiry_package_splitting.md)
 
 ## build_inquiry_materials.py — 主材表/市场询价表
 
@@ -108,15 +111,15 @@ python ../pk-boq/scripts/build_inquiry_materials.py \
 
 可 `--phase 1/2/3` 分阶段续跑。Phase 1 输出 `items.json`，Phase 2 输出 `consolidated.json`，Phase 3 输出最终 .xlsx + .md。
 
-配置文件格式和归类规则 → [../pk-boq/references/consolidation_rules.md](../pk-boq/references/consolidation_rules.md)
-完整工作流 → [../pk-boq/references/material_inquiry_workflow.md](../pk-boq/references/material_inquiry_workflow.md)
+配置文件格式和归类规则 → [references/consolidation_rules.md](references/consolidation_rules.md)
+完整工作流 → [references/material_inquiry_workflow.md](references/material_inquiry_workflow.md)
 
 ## 参考索引
 
 | 文档 | 内容 |
 |------|------|
-| [../pk-boq/references/inquiry_package_boq.md](../pk-boq/references/inquiry_package_boq.md) | BOQ 清单拆分完整工作流 |
-| [../pk-boq/references/inquiry_package_splitting.md](../pk-boq/references/inquiry_package_splitting.md) | 图纸分发完整工作流 |
-| [../pk-boq/references/consolidation_rules.md](../pk-boq/references/consolidation_rules.md) | 主材归类规则编写指南 |
-| [../pk-boq/references/material_inquiry_workflow.md](../pk-boq/references/material_inquiry_workflow.md) | 主材表提炼完整工作流 |
+| [references/inquiry_package_boq.md](references/inquiry_package_boq.md) | BOQ 清单拆分完整工作流 |
+| [references/inquiry_package_splitting.md](references/inquiry_package_splitting.md) | 图纸分发完整工作流 |
+| [references/consolidation_rules.md](references/consolidation_rules.md) | 主材归类规则编写指南 |
+| [references/material_inquiry_workflow.md](references/material_inquiry_workflow.md) | 主材表提炼完整工作流 |
 | [../pk-boq/references/scripts_reference.md](../pk-boq/references/scripts_reference.md) | 完整 CLI 参数参考 |

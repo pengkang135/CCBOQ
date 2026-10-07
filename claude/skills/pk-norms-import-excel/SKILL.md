@@ -14,6 +14,9 @@ metadata:
 
 # Excel 定额库 → SQLite 导入
 
+> **禁止用 Excel COM 处理表格**（BOQ 技能族硬规则）：不准启动 Excel 来读写、标记、插行、刷新或校验表格，`win32com` 和 COM 版 `excel` MCP 都不行 —— 它会抢占用户正开着的 Excel 实例、逼用户关文件等脚本、还比纯脚本慢。读值用 `fastexcel`，公式文本和保留格式改单元格用 `openpyxl`，插列/插行/搬 sheet/透视表这类结构操作走 zip+XML 层。这是**全局硬规则**（见 `~/.claude/CLAUDE.md` 的「Excel/AI 加速工具集」硬前置），不限 BOQ；BOQ 场景的具体替代做法见 [pk-boq/SKILL.md](../pk-boq/SKILL.md)。
+
+
 将 Excel 版定额标准结构化导入 Norms-AI SQLite 数据库。与 `pk-norms-import`（PDF 路径）共享 DB Schema 和浏览器。
 
 ## 两种文件格式

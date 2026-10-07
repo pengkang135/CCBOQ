@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" viewBox="0 0 680 900" role="img">
+<title>报价单导入工作流</title>
+<desc>前置检查批次号与税率，填报子 agent 产出 manifest 与 raw，代码预检，主会话跑双报告审核并写审核结论，唯一写入口入库，再出 Excel 与 HTML 报告并归档三处，原件复制入百度盘（源文件原位保留）并回写 archiveRef；预检与审核均可打回填报。</desc>
+<style>
+.t{font:14px "Segoe UI",system-ui,sans-serif}
+.ts{font:12px "Segoe UI",system-ui,sans-serif}
+.th{font:500 14px "Segoe UI",system-ui,sans-serif}
+.p rect{fill:#EEEDFE;stroke:#534AB7;stroke-width:.5}
+.p .th{fill:#3C3489}.p .ts{fill:#534AB7}
+.tl rect{fill:#E1F5EE;stroke:#0F6E56;stroke-width:.5}
+.tl .th{fill:#085041}.tl .ts{fill:#0F6E56}
+.g rect{fill:#F1EFE8;stroke:#5F5E5A;stroke-width:.5}
+.g .th{fill:#444441}.g .ts{fill:#5F5E5A}
+.arr{stroke:#5F5E5A;stroke-width:1.5;fill:none}
+.dash{stroke:#888780;stroke-width:1;fill:none;stroke-dasharray:5 4}
+.frame{fill:none;stroke:#888780;stroke-width:.5;stroke-dasharray:4 4}
+.lbl{fill:#444441}
+@media (prefers-color-scheme:dark){
+.p rect{fill:#3C3489;stroke:#AFA9EC}.p .th{fill:#CECBF6}.p .ts{fill:#AFA9EC}
+.tl rect{fill:#085041;stroke:#5DCAA5}.tl .th{fill:#9FE1CB}.tl .ts{fill:#5DCAA5}
+.g rect{fill:#444441;stroke:#B4B2A9}.g .th{fill:#D3D1C7}.g .ts{fill:#B4B2A9}
+.arr{stroke:#B4B2A9}.dash{stroke:#888780}.frame{stroke:#888780}.lbl{fill:#D3D1C7}
+}
+</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+
+<g class="g"><rect x="210" y="40" width="260" height="52" rx="4"/><text class="th" x="340" y="63" text-anchor="middle">⓿ 前置检查</text><text class="ts" x="340" y="81" text-anchor="middle">批次号未占用 · 该国税率已配</text></g>
+<line class="arr" x1="340" y1="92" x2="340" y2="108" marker-end="url(#arrow)"/>
+
+<g class="p"><rect x="190" y="108" width="300" height="60" rx="4"/><text class="th" x="340" y="132" text-anchor="middle">① 填报　data-preparer</text><text class="ts" x="340" y="152" text-anchor="middle">子 agent · 无 DB 写权限 · 标 uncertain</text></g>
+<line class="arr" x1="340" y1="168" x2="340" y2="184" marker-end="url(#arrow)"/>
+
+<g class="g"><rect x="190" y="184" width="300" height="60" rx="4"/><text class="th" x="340" y="208" text-anchor="middle">② precheck-manifest.js</text><text class="ts" x="340" y="228" text-anchor="middle">prepared.by · 价格溯源 · 批次撞车</text></g>
+<line class="arr" x1="340" y1="244" x2="340" y2="266" marker-end="url(#arrow)"/>
+
+<rect class="frame" x="150" y="266" width="440" height="190" rx="8"/>
+<text class="th lbl" x="170" y="288">③ 审核 — 主会话自己做</text>
+
+<g class="tl"><rect x="170" y="300" width="190" height="56" rx="4"/><text class="th" x="265" y="322" text-anchor="middle">review-checklist.md</text><text class="ts" x="265" y="342" text-anchor="middle">填进来的对不对</text></g>
+<g class="tl"><rect x="380" y="300" width="190" height="56" rx="4"/><text class="th" x="475" y="322" text-anchor="middle">recall-report.md</text><text class="ts" x="475" y="342" text-anchor="middle">该填的填了没</text></g>
+<line class="arr" x1="265" y1="356" x2="265" y2="372" marker-end="url(#arrow)"/>
+<line class="arr" x1="475" y1="356" x2="475" y2="372" marker-end="url(#arrow)"/>
+
+<g class="tl"><rect x="245" y="372" width="250" height="54" rx="4"/><text class="th" x="370" y="394" text-anchor="middle">review-notes.md</text><text class="ts" x="370" y="413" text-anchor="middle">逐条回应待判项</text></g>
+
+<path class="arr" d="M190 214 L125 214"/>
+<path class="arr" d="M150 361 L125 361"/>
+<path class="arr" d="M125 361 L125 138 L190 138" marker-end="url(#arrow)"/>
+<text class="ts lbl" x="82" y="290" text-anchor="middle">打回重做</text>
+
+<line class="arr" x1="370" y1="456" x2="370" y2="480" marker-end="url(#arrow)"/>
+
+<g class="g"><rect x="160" y="480" width="360" height="60" rx="4"/><text class="th" x="340" y="504" text-anchor="middle">④ import-manifest --apply --review</text><text class="ts" x="340" y="524" text-anchor="middle">唯一写入口 · 审核凭证不全则拒</text></g>
+
+<g class="g"><rect x="530" y="486" width="110" height="48" rx="4"/><text class="th" x="585" y="506" text-anchor="middle">税率集合</text><text class="ts" x="585" y="524" text-anchor="middle">除税价反算</text></g>
+<path class="dash" d="M530 510 L520 510"/>
+
+<line class="arr" x1="340" y1="540" x2="340" y2="560" marker-end="url(#arrow)"/>
+
+<g class="g"><rect x="220" y="560" width="240" height="52" rx="4"/><text class="th" x="340" y="583" text-anchor="middle">rates 集合</text><text class="ts" x="340" y="601" text-anchor="middle">validator 兜底 · 可整批回滚</text></g>
+
+<path class="arr" d="M340 612 L340 626 L475 626 L475 640" marker-end="url(#arrow)"/>
+<path class="dash" d="M150 400 L70 400 L70 626 L205 626 L205 640" marker-end="url(#arrow)"/>
+
+<g class="g"><rect x="90" y="640" width="230" height="56" rx="4"/><text class="th" x="205" y="662" text-anchor="middle">⑤ build_batch_excel</text><text class="ts" x="205" y="681" text-anchor="middle">源: manifest-enriched</text></g>
+<g class="g"><rect x="360" y="640" width="230" height="56" rx="4"/><text class="th" x="475" y="662" text-anchor="middle">⑥ build-upload-report</text><text class="ts" x="475" y="681" text-anchor="middle">源: MongoDB 查询</text></g>
+
+<path class="arr" d="M205 696 L205 714 L340 714 L340 730" marker-end="url(#arrow)"/>
+<path class="arr" d="M475 696 L475 714 L342 714"/>
+
+<g class="g"><rect x="210" y="730" width="260" height="52" rx="4"/><text class="th" x="340" y="753" text-anchor="middle">⑦ archive-batch</text><text class="ts" x="340" y="771" text-anchor="middle">源目录 · 日期目录 · staging 三处</text></g>
+<line class="arr" x1="340" y1="782" x2="340" y2="800" marker-end="url(#arrow)"/>
+
+<g class="g"><rect x="210" y="800" width="260" height="52" rx="4"/><text class="th" x="340" y="823" text-anchor="middle">⑧ archive-source</text><text class="ts" x="340" y="841" text-anchor="middle">复制入百度盘 · 原位保留 · 回写 archiveRef</text></g>
+
+<g class="p"><rect x="150" y="870" width="14" height="14" rx="2"/></g>
+<text class="ts lbl" x="170" y="881">子 agent</text>
+<g class="tl"><rect x="280" y="870" width="14" height="14" rx="2"/></g>
+<text class="ts lbl" x="300" y="881">主会话</text>
+<g class="g"><rect x="400" y="870" width="14" height="14" rx="2"/></g>
+<text class="ts lbl" x="420" y="881">代码闸门</text>
+</svg>

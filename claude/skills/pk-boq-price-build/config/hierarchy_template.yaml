@@ -1,0 +1,124 @@
+# 人材机价格表 — 分级大纲模板
+# 定义【L1】→《L2》→{L3} 三级结构
+# l3_auto: true 表示该L2下项目超过30项时自动启用L3子分类
+# l3_categories: 预定义的L3子类别（按顺序排列）
+
+hierarchy:
+  【人工费】:
+    - 《日工》:
+        l3_auto: true
+        l3_categories: [普通劳务, 技术工种, 机械操作]
+        spec: 劳务分包
+    - 《中方人员》:
+        l3_auto: false
+        spec: 劳务分包
+    - 《潜水员》:
+        l3_auto: false
+        spec: 劳务分包
+    - 《管理人员》:
+        l3_auto: false
+        spec: 劳务分包
+    - 《混凝土生产》:
+        l3_auto: false
+        spec: 劳务分包
+    - 《连锁块生产》:
+        l3_auto: false
+        spec: 劳务分包
+
+  【材料费】:
+    - 《混凝土》:
+        l3_auto: true
+        l3_categories: [结构混凝土, 预制混凝土, 垫层/找平, 铺面/砌块, 配合比/单价, 其他混凝土]
+        spec: 建筑装饰
+    - 《钢材》:
+        l3_auto: true
+        l3_categories: [钢筋, 型钢/构件, 其他]
+        spec: 建筑装饰
+    - 《桩基材料》:
+        l3_auto: false
+        spec: 专业分包
+    - 《砂石料》:
+        l3_auto: true
+        l3_categories: [碎石/骨料, 砂/回填, 块石/毛石, 土工材料, 其他]
+        spec: 建筑装饰
+    - 《沥青》:
+        l3_auto: false
+        spec: 建筑装饰
+    - 《砌块》:
+        l3_auto: false
+        spec: 建筑装饰
+    - 《木材》:
+        l3_auto: false
+        spec: 建筑装饰
+    - 《管材》:
+        l3_auto: true
+        l3_categories: [HDPE/塑料管, 金属管, Rocker管, 检查井, 其他]
+        spec: 建筑装饰
+    - 《排水材料》:
+        l3_auto: false
+        spec: 建筑装饰
+    - 《防腐材料》:
+        l3_auto: false
+        spec: 建筑装饰
+    - 《防水材料》:
+        l3_auto: false
+        spec: 建筑装饰
+    - 《接缝及支座》:
+        l3_auto: false
+        spec: 建筑装饰
+    - 《系泊件》:
+        l3_auto: false
+        spec: 建筑装饰
+    - 《格宾及护垫》:
+        l3_auto: false
+        spec: 建筑装饰
+    - 《周转材料》:
+        l3_auto: true
+        l3_categories: [吊索具, 箱/袋/桩, 其他周转]
+        spec: 建筑装饰
+    - 《其他材料》:
+        l3_auto: false
+        spec: 建筑装饰
+
+  【机械费】:
+    - 《建站费用》:
+        l3_auto: false
+        spec: 工程机械
+    - 《建站设备》:
+        l3_auto: false
+        spec: 工程机械
+    - 《自有机械》:
+        l3_auto: true
+        l3_categories: [船机, 挖掘机械, 压实/桩锤, 平地/洒水, 运输机械, 水平运输, 垂直运输, 桩基设备, 混凝土设备, 小型机具, 其他机械]
+        spec: 工程机械
+    - 《设备租赁》:
+        l3_auto: true
+        l3_categories: [船机, 土石方机械, 水平运输, 垂直运输, 桩基设备, 其他租赁]
+        spec: 工程机械
+    - 《其他机械》:
+        l3_auto: false
+        spec: 工程机械
+
+# 输出列定义
+output_columns:
+  - {name: 编号, width: 6}
+  - {name: 专业, width: 10}
+  - {name: 名称, width: 48}
+  - {name: 项目特征, width: 22}
+  - {name: 单位, width: 8}
+  - {name: 除税单价, width: 14}
+  - {name: 税金, width: 10}
+  - {name: 含税单价, width: 14}
+  - {name: 日期, width: 12}
+  - {name: 币种, width: 8}
+  - {name: 供应商, width: 25}
+  - {name: 联系人, width: 8}
+  - {name: 电话, width: 12}
+  - {name: 地址, width: 10}
+  - {name: 备注, width: 38}
+
+# L3自动检测阈值
+l3_threshold: 30
+
+# 默认币种
+default_currency: USD

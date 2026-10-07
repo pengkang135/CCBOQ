@@ -34,8 +34,11 @@ Usage:
       --xlsx-out path/to/BQ_project_v7.xlsx \
       --reason "v7: fix plant/insulation misclassifications"
 """
-import argparse, json, pathlib, shutil, sys, glob, datetime
+import argparse, json, pathlib, shutil, sys, glob, datetime, os
 sys.stdout.reconfigure(encoding='utf-8')
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'pk-boq', 'scripts'))
+from openpyxl_utils import clean_save
 
 # Map master field name -> Excel column header the importer would have stored
 # We look up the actual column index from schema.json's column_map.
@@ -196,7 +199,7 @@ def main():
             for field, col_key in FIELD_TO_COL.items():
                 if col_key in col_map:
                     ws.cell(row=row, column=col_map[col_key]).value = rec.get(field)
-        wb.save(out)
+        clean_save(wb, out)
         print(f'Patched xlsx: {out}  ({len(rows_touched)} rows touched)')
 
 if __name__ == '__main__':

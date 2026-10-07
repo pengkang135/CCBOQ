@@ -16,6 +16,8 @@ from pathlib import Path
 import openpyxl
 from openpyxl.styles import Font, Border, Side, Alignment, PatternFill
 
+from openpyxl_utils import clean_save
+
 
 def load_data_module(path: str):
     spec = importlib.util.spec_from_file_location("quotation_data", path)
@@ -135,7 +137,7 @@ def build_xlsx(data: list[tuple], output_path: str, title: str, subtitle: str):
     cell.font = Font(name='Microsoft YaHei', size=9)
     cell.alignment = left_align
 
-    wb.save(output_path)
+    clean_save(wb, output_path)
     return total, min(prices), max(prices)
 
 

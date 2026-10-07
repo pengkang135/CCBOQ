@@ -6,6 +6,9 @@ license: Proprietary. LICENSE.txt has complete terms
 
 # PK BOQ — JSON 主状态 + 分片工作流
 
+> **禁止用 Excel COM 处理表格**（BOQ 技能族硬规则）：不准启动 Excel 来读写、标记、插行、刷新或校验表格，`win32com` 和 COM 版 `excel` MCP 都不行 —— 它会抢占用户正开着的 Excel 实例、逼用户关文件等脚本、还比纯脚本慢。读值用 `fastexcel`，公式文本和保留格式改单元格用 `openpyxl`，插列/插行/搬 sheet/透视表这类结构操作走 zip+XML 层。这是**全局硬规则**（见 `~/.claude/CLAUDE.md` 的「Excel/AI 加速工具集」硬前置），不限 BOQ；BOQ 场景的具体替代做法见 [pk-boq/SKILL.md](../pk-boq/SKILL.md)。
+
+
 > 适用场景：单张 xlsx 表 ≥ 5000 行、需要多轮/多批增量修改的 BOQ 清单类文件（分类、校准、扩列、批注、翻译等）。
 > 反面场景：一次性小改动、纯读取分析 → 直接 xlsx/fastexcel 就够，不要过度设计。
 

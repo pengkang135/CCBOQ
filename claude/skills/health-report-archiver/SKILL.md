@@ -60,7 +60,7 @@ YYYY-MM-DD_内容描述报告.md              # OCR 提取报告
 2. 用中文简述内容（如"产科超声""妊娠激素""门诊复诊病历"）
 3. 复制原图到对应分类子目录，按规范重命名
 4. 生成 OCR 报告 .md 文件（模板参考 [report_templates.md](references/report_templates.md)）
-5. 原图目录中的原始文件保留不动
+5. 归档完成后删除原图目录中的原始图片文件（`SESSION_CONTEXT.md` 等非图片文件保留不动）
 
 ### Phase 5: 收集历史上下文
 

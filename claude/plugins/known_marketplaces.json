@@ -5,6 +5,30 @@
       "repo": "anthropics/claude-plugins-official"
     },
     "installLocation": "C:\\Users\\Kevin\\.claude\\plugins\\marketplaces\\claude-plugins-official",
-    "lastUpdated": "2026-07-20T15:37:49.832Z"
+    "lastUpdated": "2026-09-30T15:03:37.867Z"
+  },
+  "anthropic-agent-skills": {
+    "source": {
+      "source": "github",
+      "repo": "anthropics/skills"
+    },
+    "installLocation": "C:\\Users\\Kevin\\.claude\\plugins\\marketplaces\\anthropic-agent-skills",
+    "lastUpdated": "2026-09-30T15:03:41.613Z"
+  },
+  "ui-ux-pro-max-skill": {
+    "source": {
+      "source": "github",
+      "repo": "nextlevelbuilder/ui-ux-pro-max-skill"
+    },
+    "installLocation": "C:\\Users\\Kevin\\.claude\\plugins\\marketplaces\\ui-ux-pro-max-skill",
+    "lastUpdated": "2026-07-27T00:03:33.021Z"
+  },
+  "1xn-plugins": {
+    "source": {
+      "source": "github",
+      "repo": "daamitt/skill-issue"
+    },
+    "installLocation": "C:\\Users\\Kevin\\.claude\\plugins\\marketplaces\\1xn-plugins",
+    "lastUpdated": "2026-07-27T00:03:39.585Z"
   }
 }

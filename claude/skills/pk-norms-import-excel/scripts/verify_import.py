@@ -74,7 +74,7 @@ def verify(db_path):
 if __name__ == '__main__':
     import argparse
     ap = argparse.ArgumentParser(description='Verify imported data')
-    ap.add_argument('--db', default=r'F:\BaiduSyncdisk\2.清单定额\Norms-AI\output\quota_data.sqlite',
+    ap.add_argument('--db', default=r'E:\Code\Norms-AI\db\quota_data.sqlite',
                     help='Path to SQLite database')
     args = ap.parse_args()
     if not os.path.exists(args.db):

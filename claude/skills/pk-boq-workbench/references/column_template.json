@@ -1,0 +1,392 @@
+{
+  "_description": "报价工作台 CombineBQ 布局 — 机读规格。列位由脚本从 pivot_template.xlsx 的样板行实时提取，本文件不参与生成，只作为 LLM 阶段的速查。",
+  "_layout_note": "列字母是模板当前布局的快照，不是契约。装配时 Main Key 左插、脚手架整块追加在源清单最右侧，绝对列号随源清单宽度变；唯一事实源是 pivot_template.xlsx。改模板后重新生成本文件。",
+  "_generated_from": "references/pivot_template.xlsx",
+  "_sheets": [
+    "CombineBQ",
+    "CostSummary",
+    "MainQty",
+    "UniqueBQ",
+    "UniqueShot"
+  ],
+  "sheet": "CombineBQ",
+  "header_row": 3,
+  "factor_row": 2,
+  "group_row": 1,
+  "data_start_row": 4,
+  "range_name": "分类定义区",
+  "groups": [
+    "EXPORT",
+    "COST",
+    "AI",
+    "SUBCONTRACTOR"
+  ],
+  "group_anchors": {
+    "EXPORT": "F",
+    "COST": "M",
+    "AI": "R",
+    "SUBCONTRACTOR": "AE"
+  },
+  "aliases": {
+    "Qty": [
+      "Qty",
+      "Quantity"
+    ]
+  },
+  "columns": [
+    {
+      "col": "A",
+      "header": "Main Key",
+      "group": null,
+      "type": "formula",
+      "formula_on": [
+        "item"
+      ]
+    },
+    {
+      "col": "B",
+      "header": "No.",
+      "group": null,
+      "type": "source",
+      "formula_on": []
+    },
+    {
+      "col": "C",
+      "header": "Description",
+      "group": null,
+      "type": "source",
+      "formula_on": []
+    },
+    {
+      "col": "D",
+      "header": "Unit",
+      "group": null,
+      "type": "source",
+      "formula_on": []
+    },
+    {
+      "col": "E",
+      "header": "Qty",
+      "group": null,
+      "type": "source",
+      "formula_on": []
+    },
+    {
+      "col": "F",
+      "header": "Factor",
+      "group": "EXPORT",
+      "type": "manual",
+      "formula_on": []
+    },
+    {
+      "col": "G",
+      "header": "Labor",
+      "group": "EXPORT",
+      "type": "formula",
+      "formula_on": [
+        "item"
+      ]
+    },
+    {
+      "col": "H",
+      "header": "Material",
+      "group": "EXPORT",
+      "type": "formula",
+      "formula_on": [
+        "item"
+      ]
+    },
+    {
+      "col": "I",
+      "header": "Equipment",
+      "group": "EXPORT",
+      "type": "formula",
+      "formula_on": [
+        "item"
+      ]
+    },
+    {
+      "col": "J",
+      "header": "Rate",
+      "group": "EXPORT",
+      "type": "manual",
+      "formula_on": []
+    },
+    {
+      "col": "K",
+      "header": "Amount",
+      "group": "EXPORT",
+      "type": "formula",
+      "formula_on": [
+        "item",
+        "l1"
+      ]
+    },
+    {
+      "col": "M",
+      "header": "Labor",
+      "group": "COST",
+      "type": "formula",
+      "formula_on": [
+        "item"
+      ]
+    },
+    {
+      "col": "N",
+      "header": "Material",
+      "group": "COST",
+      "type": "manual",
+      "formula_on": []
+    },
+    {
+      "col": "O",
+      "header": "Equipment",
+      "group": "COST",
+      "type": "manual",
+      "formula_on": []
+    },
+    {
+      "col": "P",
+      "header": "Rate",
+      "group": "COST",
+      "type": "manual",
+      "formula_on": []
+    },
+    {
+      "col": "Q",
+      "header": "Amount",
+      "group": "COST",
+      "type": "formula",
+      "formula_on": [
+        "item",
+        "l1"
+      ]
+    },
+    {
+      "col": "R",
+      "header": "Discipline",
+      "group": "AI",
+      "type": "ai",
+      "formula_on": []
+    },
+    {
+      "col": "S",
+      "header": "SortKey",
+      "group": "AI",
+      "type": "ai",
+      "formula_on": []
+    },
+    {
+      "col": "T",
+      "header": "Category",
+      "group": "AI",
+      "type": "ai",
+      "formula_on": []
+    },
+    {
+      "col": "U",
+      "header": "Subcategory",
+      "group": "AI",
+      "type": "ai",
+      "formula_on": []
+    },
+    {
+      "col": "V",
+      "header": "Element",
+      "group": "AI",
+      "type": "ai",
+      "formula_on": []
+    },
+    {
+      "col": "W",
+      "header": "BQ KEY",
+      "group": "AI",
+      "type": "formula",
+      "formula_on": [
+        "item"
+      ]
+    },
+    {
+      "col": "X",
+      "header": "CleanDescription",
+      "group": "AI",
+      "type": "formula",
+      "formula_on": [
+        "item",
+        "l1"
+      ]
+    },
+    {
+      "col": "Y",
+      "header": "Norm Rate",
+      "group": "AI",
+      "type": "formula",
+      "formula_on": [
+        "item"
+      ]
+    },
+    {
+      "col": "Z",
+      "header": "Norm Amount",
+      "group": "AI",
+      "type": "formula",
+      "formula_on": [
+        "item"
+      ]
+    },
+    {
+      "col": "AA",
+      "header": "Ref Rate",
+      "group": "AI",
+      "type": "formula",
+      "formula_on": [
+        "item"
+      ]
+    },
+    {
+      "col": "AB",
+      "header": "Ref Amount",
+      "group": "AI",
+      "type": "formula",
+      "formula_on": [
+        "item",
+        "l1"
+      ]
+    },
+    {
+      "col": "AE",
+      "header": "Labor",
+      "group": "SUBCONTRACTOR",
+      "type": "manual",
+      "formula_on": []
+    },
+    {
+      "col": "AF",
+      "header": "Material",
+      "group": "SUBCONTRACTOR",
+      "type": "manual",
+      "formula_on": []
+    },
+    {
+      "col": "AG",
+      "header": "Equipment",
+      "group": "SUBCONTRACTOR",
+      "type": "manual",
+      "formula_on": []
+    },
+    {
+      "col": "AH",
+      "header": "Rate",
+      "group": "SUBCONTRACTOR",
+      "type": "manual",
+      "formula_on": []
+    },
+    {
+      "col": "AI",
+      "header": "Amount",
+      "group": "SUBCONTRACTOR",
+      "type": "formula",
+      "formula_on": [
+        "item",
+        "l1"
+      ]
+    }
+  ],
+  "spacer_columns": [
+    "L",
+    "AC",
+    "AD"
+  ],
+  "key_columns": [
+    "Main Key",
+    "BQ KEY",
+    "CleanDescription"
+  ],
+  "left_inserted": [
+    "Main Key"
+  ],
+  "ai_columns": [
+    "Discipline",
+    "SortKey",
+    "Category",
+    "Subcategory",
+    "Element"
+  ],
+  "rate_columns": [
+    "Norm Rate",
+    "Norm Amount",
+    "Ref Rate",
+    "Ref Amount"
+  ],
+  "removed_in_this_version": [
+    "AI Rate",
+    "AI Amount",
+    "Misc",
+    "占比",
+    "表1 (tables/table1.xml)"
+  ],
+  "renamed_in_this_version": {
+    "合并报表": "CombineBQ",
+    "Unique Shot": "UniqueShot",
+    "Quantity": "Qty",
+    "报价 Rate": "Rate",
+    "报价 Amount": "Amount"
+  },
+  "row_types": {
+    "l1": {
+      "mark": "【】",
+      "formula_cols": [
+        "K",
+        "Q",
+        "X",
+        "AB",
+        "AI"
+      ]
+    },
+    "l2": {
+      "mark": "《》",
+      "note": "同 l1，汇总改用 跨度 500"
+    },
+    "l3": {
+      "mark": "{}",
+      "formula_cols": [
+        "X"
+      ]
+    },
+    "item": {
+      "mark": "无标记且 Qty>0",
+      "formula_cols": [
+        "A",
+        "G",
+        "H",
+        "I",
+        "K",
+        "M",
+        "Q",
+        "W",
+        "X",
+        "Y",
+        "Z",
+        "AA",
+        "AB",
+        "AI"
+      ]
+    },
+    "note": {
+      "mark": "无标记且无量",
+      "formula_cols": [
+        "X"
+      ]
+    },
+    "total": {
+      "mark": "【TOTAL】",
+      "formula_cols": [
+        "K",
+        "Q",
+        "AB",
+        "AE",
+        "AI"
+      ]
+    }
+  }
+}

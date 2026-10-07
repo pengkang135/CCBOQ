@@ -79,6 +79,9 @@ foreach ($entry in $manifest) {
     }
 }
 
+Get-ChildItem $TempDir -Recurse -Directory -Filter "temp" | Where-Object { $_.FullName -notmatch '\\\.git\\' } | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+Get-ChildItem $TempDir -Recurse -File | Where-Object { $_.Name -match '\.bak' -and $_.FullName -notmatch '\\\.git\\' } | Remove-Item -Force
+
 # Security scan
 Write-Host ""
 Write-Host "Security scan..." -ForegroundColor Yellow

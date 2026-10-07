@@ -25,6 +25,7 @@
     th { background: #0077B6; color: white; padding: 10px 8px; text-align: left; font-weight: 500; white-space: nowrap; position: sticky; top: 0; z-index: 1; }
     td { padding: 8px; border-bottom: 1px solid #e8e8e8; }
     tr:hover td { background: #f0f7fa; }
+    .group-row td { background: #E2EFDA; font-weight: 600; }
     .num { text-align: right; font-variant-numeric: tabular-nums; font-family: 'Consolas', 'Courier New', monospace; }
     .footer { text-align: center; color: #999; font-size: 12px; margin-top: 20px; padding: 15px; }
     @media print { body { background: white; } .header, .summary { break-inside: avoid; } }
@@ -34,7 +35,7 @@
   <div class="container">
     <div class="header">
       <h1>{{REPORT_TITLE}}</h1>
-      <p>上传时间: {{GENERATED_TIME}} | 数据来源: {{SUPPLIER_COUNT}}家供应商原始报价单 | 项目: Evolution Data Center</p>
+      <p>上传时间: {{GENERATED_TIME}} | 数据来源: {{SUPPLIER_COUNT}}家供应商原始报价单 | 项目: {{PROJECT_NAME}}</p>
     </div>
 
     <div class="summary">
@@ -67,19 +68,17 @@
             <tr>
               <th>编号</th>
               <th>专业</th>
+              <th>分类</th>
               <th>名称</th>
               <th>项目特征</th>
               <th>单位</th>
               <th>除税单价</th>
-              <th>税金(7%)</th>
+              <th>税金</th>
               <th>含税单价</th>
-              <th>日期</th>
               <th>币种</th>
               <th>供应商</th>
-              <th>联系人</th>
-              <th>电话</th>
-              <th>地址</th>
-              <th>备注</th>
+              <th>项目名称</th>
+              <th>日期</th>
             </tr>
           </thead>
           <tbody>
